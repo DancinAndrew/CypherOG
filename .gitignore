@@ -1,0 +1,9 @@
+.venv/
+chroma_db/
+pgdata/
+data/.ingest_manifest.json
+__pycache__/
+*.py[cod]
+.env
+.DS_Store
+docs/
