@@ -1,0 +1,366 @@
+**Boogaloo** is a [freestyle](https://en.wikipedia.org/wiki/Freestyle_dance "Freestyle dance"), improvisational [street dance](https://en.wikipedia.org/wiki/Street_dance "Street dance"), closely related to [popping](https://en.wikipedia.org/wiki/Popping "Popping") dance and [turfing](https://en.wikipedia.org/wiki/Turfing "Turfing"). It is best known for the dance move known as [the Robot](https://en.wikipedia.org/wiki/Robot_(dance) "Robot (dance)"); it is also related to the later [electric boogaloo](https://en.wikipedia.org/wiki/Electric_boogaloo_(dance) "Electric boogaloo (dance)") dance.<sup id="cite_ref-:0_1-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-:0-1"><span>[</span>1<span>]</span></a></sup>
+
+Boogaloo dancers use illusions, restriction of muscles, stops, [robotic movements](https://en.wikipedia.org/wiki/Robot_(dance) "Robot (dance)"), and wiggling to create a soulful, passionate, animated form of street dance.<sup id="cite_ref-2"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-2"><span>[</span>2<span>]</span></a></sup> The style also incorporates foundational [popping](https://en.wikipedia.org/wiki/Popping "Popping") techniques, which were initially referred to as "Posing Hard".<sup id="cite_ref-Fuhrer,_M._2014_3-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Fuhrer,_M._2014-3"><span>[</span>3<span>]</span></a></sup><sup id="cite_ref-auto2_4-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto2-4"><span>[</span>4<span>]</span></a></sup>
+
+### Chicago Record Hops
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=2 "Edit section: Chicago Record Hops")\]
+
+The Boogaloo was initially a social dance within the [African American](https://en.wikipedia.org/wiki/African_American "African American") community in Chicago; it also appealed to white teenagers. Between 1965 and 1966, it was described as “a total new look compared to previous (social) dances...the entire body moved in a pulsating motion from side to side. The rhythmic impulse seemed to have centered in the upper torso, shoulders, and head...”<sup id="cite_ref-auto4_5-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto4-5"><span>[</span>5<span>]</span></a></sup>
+
+The Boogaloo dance step has also been described as a “single-step combination made up of a smooth repetitive side-to-side movement, based on the soul music dance beat on a <sup><b>4</b></sup>  
+<sub><b>4</b></sub> time signature, it consists of lunging motion to the side on the downbeat, held for two counts...accented by a distinct arm swing where the hand is raised to eye level...then combined with a distinctive backward head-nod to the beat...on the third musical beat, the body and head abruptly shift back and lunge in the opposite direction, before shifting once again on the fourth beat.”<sup id="cite_ref-6"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-6"><span>[</span>6<span>]</span></a></sup>
+
+The boogaloo dance craze would inspire a number of soul dance records, such as “Boo-Ga-Loo” by Robert “Tom” Tharpe and Jerry “Jerrio” Murray, as well as Fantastic Johnny-C's “Boogaloo Down Broadway”.<sup id="cite_ref-7"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-7"><span>[</span>7<span>]</span></a></sup> Tharpe created “Boo-Ga-Loo” after seeing local African American teenagers dancing the Boogaloo at a Chicago record hop hosted by radio DJ Herb “Cool Gent” Kent.<sup id="cite_ref-auto4_5-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto4-5"><span>[</span>5<span>]</span></a></sup><sup id="cite_ref-8"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-8"><span>[</span>8<span>]</span></a></sup>
+
+In 1966, soul and [funk](https://en.wikipedia.org/wiki/Funk "Funk") musician [James Brown](https://en.wikipedia.org/wiki/James_Brown "James Brown") released a boogaloo dance single, "James Brown's Boogaloo". He danced his interpretation of the boogaloo on [Where the Action Is](https://en.wikipedia.org/wiki/Where_the_Action_Is "Where the Action Is") on national TV.<sup id="cite_ref-auto5_9-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto5-9"><span>[</span>9<span>]</span></a></sup>
+
+## The Soul Dance Era (1960s)
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=4 "Edit section: The Soul Dance Era (1960s)")\]
+
+### The Italian (also known as the Ditalian)
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=5 "Edit section: The Italian (also known as the Ditalian)")\]
+
+In 1966, Larry Thompson, a local dancer in Oakland, California, created a new boogaloo style. Thompson was inspired by the boogaloo social dance, James Brown, the Temptations, and Fred Astaire.<sup id="cite_ref-auto5_9-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto5-9"><span>[</span>9<span>]</span></a></sup> Thompson was also inspired by watching a dancer from _[The Hy-Lit](https://en.wikipedia.org/wiki/Hy_Lit "Hy Lit") Show_ named Harold Hazzard: "The move this guy did on the show was a Boogaloo style step with flailing arm moves that would cross the body then end in a freeze with the chest sticking out. This was a good step because we could use it to go into the [Camel Walk](https://en.wikipedia.org/wiki/Camel_Walk "Camel Walk") and into the Skate."<sup id="cite_ref-Urban_Artistry_Preservatory_Project_2019_10-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Urban_Artistry_Preservatory_Project_2019-10"><span>[</span>10<span>]</span></a></sup><sup id="cite_ref-11"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-11"><span>[</span>11<span>]</span></a></sup><sup id="cite_ref-auto5_9-2"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto5-9"><span>[</span>9<span>]</span></a></sup><sup id="cite_ref-12"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-12"><span>[</span>12<span>]</span></a></sup>
+
+Thompson formed a dance group called Pirate and the Easy Walkers, together with Cornell "Tony Rome" Reese, Wayne "Freddy Snow" Dillard, and Levi Warner.<sup id="cite_ref-auto5_9-3"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto5-9"><span>[</span>9<span>]</span></a></sup> The Easy Walkers were unique because they mixed different steps of social dances in a uniform boogaloo style. They also innovated challenge steps such as the "Ditalian". In the Ditalian, dancers would shuffle a combination of cha-cha steps, stomp, and end by pointing their right hand to challenge another dancer. The Ditalian was created by Danny Boy Reese, who was the younger brother of Easy Walker's member Cornell Reese.<sup id="cite_ref-auto5_9-4"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto5-9"><span>[</span>9<span>]</span></a></sup>
+
+From 1967 to 1968, soul dancers in Sobrante Park in Oakland, California, would challenge Pirate and the Easy Walkers through "face offs".<sup id="cite_ref-auto5_9-5"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto5-9"><span>[</span>9<span>]</span></a></sup>
+
+### 3-D - Dinosaur - Animation
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=6 "Edit section: 3-D - Dinosaur - Animation")\]
+
+In 1967, 1968, & 1969, a style known as 3-D, Dinosaurin', or Animating developed. The group One Plus One imitated [Ray Harryhausen](https://en.wikipedia.org/wiki/Ray_Harryhausen "Ray Harryhausen")'s stop-motion DynoRama movies, incorporating these movements as slap-stick crowd entertainment.<sup id="cite_ref-Urban_Artistry_Preservatory_Project_2019_10-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Urban_Artistry_Preservatory_Project_2019-10"><span>[</span>10<span>]</span></a></sup><sup id="cite_ref-auto2_4-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto2-4"><span>[</span>4<span>]</span></a></sup> Albert "Iron Man" Milton, a member of the group, took particular influence from [20 Million Miles to Earth](https://en.wikipedia.org/wiki/20_Million_Miles_to_Earth "20 Million Miles to Earth"), imitating the dinosaur-like creature birthed in the movie and dancing to James Brown.<sup id="cite_ref-Hill,_B._2014_13-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Hill,_B._2014-13"><span>[</span>13<span>]</span></a></sup>
+
+A second generation of animated dancers in the 1970s innovated this style with a less comical approach to their dance, and focused on intricately detailed dinosaur movement. They specialized in sudden stopping-in-motion techniques called "dime-stops", as well as minute stop-motion effects and posing. Dancers from the group Soulful Movements, such as Ted Williams, Steve Williams & Tony Newsome were masters of this Boogaloo animated style.<sup id="cite_ref-Urban_Artistry_Preservatory_Project_2019_10-2"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Urban_Artistry_Preservatory_Project_2019-10"><span>[</span>10<span>]</span></a></sup><sup id="cite_ref-Hill,_B._2014_13-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Hill,_B._2014-13"><span>[</span>13<span>]</span></a></sup>
+
+|                                     External videos                                      |                                     External videos                                      |
+|------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "Boogaloo dancer Reo Robot demonstrates Dinosaur and Robot" on YouTube | ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "Boogaloo dancer Reo Robot demonstrates Dinosaur and Robot" on YouTube |
+
+In 1964, a Boogaloo dancer named John Murphy imitated the movements of the robot in the 1954 sci-fi movie _[Tobor the Great](https://en.wikipedia.org/wiki/Tobor_the_Great "Tobor the Great")_. He moved from West Oakland to East Oakland and introduced The Robot in various school talent shows. Murphy is credited with introducing the Robot to the Boogaloo community, influencing and teaching popular dancers such as Derrick Lovings of Derrick & Company, Newberry, Boogaloo Dan, and the Robotroids.<sup id="cite_ref-14"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-14"><span>[</span>14<span>]</span></a></sup> In 1972, John Murphy helped form the Boogaloo dance group The Black Messengers and developed a robotic boogaloo.<sup id="cite_ref-15"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-15"><span>[</span>15<span>]</span></a></sup>
+
+## Funk dance movement (1970s)
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=8 "Edit section: Funk dance movement (1970s)")\]
+
+### High school mascots
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=9 "Edit section: High school mascots")\]
+
+In the 1970s, Oakland high schools would host dance competitions to select their high school mascots. Mascots competed in their school's costumes, such as the Fremont Tigers, Castlemont Knights, and Oakland Technical Bulldogs.<sup id="cite_ref-:1_16-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-:1-16"><span>[</span>16<span>]</span></a></sup> While in costume, every mascot created in-character steps and developed "hitting" techniques to be noticed in large rallies. Competing high schools would have a mascot dance-off during basketball and football games.
+
+For example, Donald "Duck" Mathews was the Fremont High School's Tiger mascot. During half-time football shows, he would grab his tail, point, and pose to taunt the opponents' mascot, while performing wiggling or worming movements with his chest.<sup id="cite_ref-Urban_Artistry_Preservatory_Project_2019_10-3"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Urban_Artistry_Preservatory_Project_2019-10"><span>[</span>10<span>]</span></a></sup> Mathews became notable for worming, wiggling, and posing while taunting school opponents as the Tiger mascot. Fremont High would be known to popularize the "Oakland Hit," allowing his headpiece to shake during each hit. This inspired future vibrating Boogaloo hat effects.<sup id="cite_ref-:1_16-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-:1-16"><span>[</span>16<span>]</span></a></sup>
+
+Other innovative dancers in this era include Gregory Holm from Castlemont High, Donald Jones, Henry Fischer, Lil Willie, Larry Robertson and John Murphy at Fremont High, and Ronald Nerves at Oakland Technical High School.<sup id="cite_ref-Stephens,_L._2015_17-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Stephens,_L._2015-17"><span>[</span>17<span>]</span></a></sup><sup id="cite_ref-18"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-18"><span>[</span>18<span>]</span></a></sup><sup id="cite_ref-auto2_4-2"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto2-4"><span>[</span>4<span>]</span></a></sup><sup id="cite_ref-19"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-19"><span>[</span>19<span>]</span></a></sup>
+
+### Cartoon Influence and Posing
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=10 "Edit section: Cartoon Influence and Posing")\]
+
+In 1967, while living in Oakland, Jerry Rentie would innovate soul boogaloo styles with new funk movements inspired by "mimicking toys, cartoons, movies... everywhere we would cut a step (e.g., creating a step). We took the Ditallion from soft and sliding to a step with a stomp, a bounce, a hop, and a skip."<sup id="cite_ref-auto2_4-3"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto2-4"><span>[</span>4<span>]</span></a></sup>
+
+Rentie would also innovate the concept of "the Freeze". He explains, "The Freeze was a part of a step whereas in doing it you would stop and that pause was to lead into or accent the next movement. Lock It Down was how we called freezing so hard to the point that we would jiggle when we would freeze."<sup id="cite_ref-auto2_4-4"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto2-4"><span>[</span>4<span>]</span></a></sup> The Freeze was the predecessor to the "popping" or "hitting" techniques of the late 70s.
+
+Rentie referred to their new Boogaloo style as "Bug'n". He recalls, "When we were Bug'n, we meant Boogaloo in the term of our dance style, but it was not the James Brown Boogaloo anymore".<sup id="cite_ref-auto2_4-5"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto2-4"><span>[</span>4<span>]</span></a></sup>
+
+In the early 1970s, dancers from the Black Messengers group innovated a new Boogaloo technique called "Posing Hard". They would end their Boogaloo poses and dime-stops with a hard "hit" - freezing in place until their muscles vibrated. This technique would influence the modern day "popping" technique within the [Popping](https://en.wikipedia.org/wiki/Popping "Popping") dance form.<sup id="cite_ref-ReferenceA_20-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-ReferenceA-20"><span>[</span>20<span>]</span></a></sup><sup id="cite_ref-Hill,_B._2014_13-2"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Hill,_B._2014-13"><span>[</span>13<span>]</span></a></sup>
+
+Since Boogaloo dancers would dance to the changing sounds of funk, Posing Hard matched the rhythm and intensity of the beat with their body's vibrations. Dancers chanted "BAM!" or "BOOM!" with each new pose.<sup id="cite_ref-ReferenceA_20-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-ReferenceA-20"><span>[</span>20<span>]</span></a></sup>
+
+### Oakland Talent Shows & Group Routines
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=12 "Edit section: Oakland Talent Shows & Group Routines")\]
+
+|                                                                           External videos                                                                            |                                                                           External videos                                                                            |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "The Black Messengers as Mechanical Device performing Boogaloo group steps on the Gong Show, aired on national TV in 1977 (4-min mark)" on YouTube | ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "The Black Messengers as Mechanical Device performing Boogaloo group steps on the Gong Show, aired on national TV in 1977 (4-min mark)" on YouTube |
+
+In East Oakland and West Oakland, federally-funded community development districts hosted talent shows. During these shows, Boogaloo dancers would showcase routines alongside live bands and singers.<sup id="cite_ref-Mar,_Alan_D._2012_21-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Mar,_Alan_D._2012-21"><span>[</span>21<span>]</span></a></sup><sup id="cite_ref-Davey,_D._2015_22-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Davey,_D._2015-22"><span>[</span>22<span>]</span></a></sup> Throughout the 1960 and 1970s, Oakland had numerous teenage funk bands that created the musical landscape for Boogaloo dancers. Some Boogaloo groups had their own band to perform with; East Oakland often had three to four funk bands on every block.<sup id="cite_ref-Davey,_D._2015_22-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Davey,_D._2015-22"><span>[</span>22<span>]</span></a></sup>
+
+### Black Power Movement
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=13 "Edit section: Black Power Movement")\]
+
+Throughout the late 1960s and early 1970s, [Oakland](https://en.wikipedia.org/wiki/Oakland,_California "Oakland, California") was the center of the [Black Power Movement](https://en.wikipedia.org/wiki/Black_Power_movement "Black Power movement"), including the creation of the [Black Panther Party](https://en.wikipedia.org/wiki/Black_Panther_Party "Black Panther Party"). Boogaloo dance groups such as the Black Resurgents performed for Black Panther community rallies and events.<sup id="cite_ref-Mar,_Alan_D._2012_21-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Mar,_Alan_D._2012-21"><span>[</span>21<span>]</span></a></sup><sup id="cite_ref-23"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-23"><span>[</span>23<span>]</span></a></sup> With the advent of the liberation spirit of [funk music](https://en.wikipedia.org/wiki/Funk_Music "Funk Music") and [Black Power](https://en.wikipedia.org/wiki/Black_Power "Black Power"), Boogaloo group names such as The Black Messengers, The Black Resurgents, Black Mechanics, and Black Operators came to signify Black pride and self-determination.<sup id="cite_ref-Mar,_Alan_D._2012_21-2"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Mar,_Alan_D._2012-21"><span>[</span>21<span>]</span></a></sup>
+
+In East Oakland, to outreach to militant youth, the Allen Temple Baptist Church created a partnership with the Black Panthers. The Black Panthers would host Oakland socials at their Temple church hall; these programs featured Boogaloo dancers such as the Black Messengers.<sup id="cite_ref-24"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-24"><span>[</span>24<span>]</span></a></sup>
+
+#### The Temple (Oakland Community School)
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=14 "Edit section: The Temple (Oakland Community School)")\]
+
+Another central venue for Oakland's Boogaloo dancers was the Oakland Community School (OCS). The Black Panthers operated this school as part of their community "survival programs". As local Nation of Islam members hosted services in this venue on the weekends, this venue also came to be known as "the Temple".
+
+The Temple hosted numerous talent shows that featured Boogaloo groups such as the Black Messengers, as well as funk bands and singers. As part of the Black Panthers' curriculum, the venue's motto was “We serve the people every day. We serve the people, body and soul.” Directed by Ericka Huggins and Donna Howell, OCS provided youth with culturally relevant education and challenged the public school system’s perceptions of what it meant to be Black and poor.<sup id="cite_ref-25"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-25"><span>[</span>25<span>]</span></a></sup>
+
+## Notable Boogaloo dance groups
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=15 "Edit section: Notable Boogaloo dance groups")\]
+
+Boogaloo dance groups incorporated various formations with different styles; here is a compiled list of active Boogaloo dance groups during the 1960s and 1970s.<sup id="cite_ref-26"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-26"><span>[</span>26<span>]</span></a></sup><sup id="cite_ref-Hill,_B._2014_13-3"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Hill,_B._2014-13"><span>[</span>13<span>]</span></a></sup>
+
+-   Pirate & the Easy Walkers
+-   One Plus One
+-   The Five Clowns
+
+-   Continental Five
+-   The Robotroids (Later "Granny & Robotroid Inc")
+-   Aces of Soul
+-   Mystic Robots
+-   The Black Messengers (Also known as "Mechanical Device")
+-   Soulful Movements
+-   The Black Resurgents
+-   Exotic Movements
+-   Electronical 4
+-   SS Enterprise
+
+-   Derrick & Company
+-   Gentlemen of Production
+-   The Black Mechanics
+
+### 1976 to 1980s groups outside of Oakland (Boogaloo influenced from Oakland foundations)
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=19 "Edit section: 1976 to 1980s groups outside of Oakland (Boogaloo influenced from Oakland foundations)")\]
+
+-   Green Machine
+-   Saturn 5
+-   Black Operators
+
+-   Granny & the Robotroids
+-   Black Velvet
+-   Live Inc
+
+-   Soul Sisters Incorporated
+-   The Emergens
+-   The Prime Ministers
+-   Phase II
+-   Disco Derby Dancers
+
+-   Ace Tre Lockers
+-   Electronic Boogaloo Lockers (Later Electric Boogaloos)
+
+-   Scooby Brothers
+-   Scott Brothers
+-   Sunshine Lockers
+
+-   Fantastic Four
+
+|                                    External videos                                     |                                    External videos                                     |
+|----------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "Boogaloo: An Intro to Basic Movements with Chuck Powell" on YouTube | ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "Boogaloo: An Intro to Basic Movements with Chuck Powell" on YouTube |
+
+### Soul Boogaloo (Early Funk Boogaloo movements)
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=27 "Edit section: Soul Boogaloo (Early Funk Boogaloo movements)")\]
+
+-   The Italian aka. The Ditallion
+-   The Harold (Later Swinging Arms)
+-   Cha-cha-cha (3-step, 2-step)
+-   Fancy Feet
+-   The Swoop
+-   Swinging / Throwin' the Arms
+-   Wigglin' / Wormin'
+-   Side to Side (Footwork)
+-   Hops
+
+-   Breakdown / Break-up
+-   Chinese Robot
+-   Posin'
+-   Hittin / BAM
+-   The Slot
+-   The Baby Doll
+
+-   Dynorama / Dinosaurin'
+-   Vibratin / Tremblin
+-   3-D / Tickin
+-   The Moonwalk
+-   Puppet
+-   Old Man / Old Man Rudy
+-   The Medusa
+-   The Stedford
+-   The Million-Dollar Man
+-   The Lean
+-   Levitating
+-   Backslide
+-   Looney Cartoony
+
+-   Creepin
+-   3-D
+-   The Bounce
+-   Dime-stopping
+-   Posing Hard
+-   Falling Man
+-   Broken Man
+-   Stopping-in-the Air
+
+### Group Movement Techniques & Traditions
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=31 "Edit section: Group Movement Techniques & Traditions")\]
+
+-   Dominoes
+-   Stepping
+-   Canework
+
+Boogaloo relies on the swing and groove of live [funk](https://en.wikipedia.org/wiki/Funk "Funk") records. Below are notable songs Boogaloo dancers dance to:
+
+-   James Brown "Cold Sweat" Pt. 1 & 2
+-   James Brown “There Was a Time”
+-   James Brown "Soul Power"
+-   James Brown "Mind Power"
+-   Average White Band "Pick up the Pieces"
+-   Parliament & Funkadelic "Flashlight"
+-   George Duke "Reach for It"
+-   Cameo "Rigor Mortis"
+-   Donald Byrd and the Blackbyrds "Unfinished Business"
+
+|                                      External videos                                       |                                      External videos                                       |
+|--------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "SF and Oakland Hip Hop Histories Come Alive in this Dance Demo" on KQED | ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "SF and Oakland Hip Hop Histories Come Alive in this Dance Demo" on KQED |
+
+### Connections to Strutting
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=34 "Edit section: Connections to Strutting")\]
+
+In 1975, the Oakland Boogaloo group Robotroids performed at a talent show in San Francisco. Eventually, the Robotroids would join Debrah "Granny" Johnson. Through the combination of robotic dance moves of Lorenzo "Tony" Johnson and Donald “Rubber-band Man” Jones & Alfred “Baby Boy” Jones', they would refer to this style as Strutting in San Francisco. Strutting was done in a solo through swift arm angles (The Fillmore) and group choreography. Boogaloo Dancers such as Benjamin James from Live, Inc. were also instrumental in the evolution of Boogaloo to Strutting.<sup id="cite_ref-auto1_27-0"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto1-27"><span>[</span>27<span>]</span></a></sup><sup id="cite_ref-28"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-28"><span>[</span>28<span>]</span></a></sup>
+
+### Connections to Richmond Robot
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=35 "Edit section: Connections to Richmond Robot")\]
+
+Oakland Boogaloo groups as well as prominent San Francisco, and San Jose dancers, would compete in talent shows held in Richmond, California; this would be a cultural center for regional dance influences, by the late 1970s Richmond would be an epicenter of performers such as the Posing Puppets, Richmond Robots, Androids, Audionauts, Criminons, Lady Mechanical Robots, and Green Machine.<sup id="cite_ref-29"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-29"><span>[</span>29<span>]</span></a></sup><sup id="cite_ref-Mar,_Alan_D._2012_21-3"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Mar,_Alan_D._2012-21"><span>[</span>21<span>]</span></a></sup> Groups from Richmond would refer to their style as Richmond Robottin.
+
+### Connection to Turfing
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=36 "Edit section: Connection to Turfing")\]
+
+The 60s and 70s Boogaloo generations have similar storytelling and animated movements and share the same neighborhoods and families as today's Turf dancers who practice a street-style [Turfing](https://en.wikipedia.org/wiki/Turfing "Turfing").<sup id="cite_ref-Stephens,_L._2015_17-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Stephens,_L._2015-17"><span>[</span>17<span>]</span></a></sup> Turf dancers cite inspiration from the previous generations of Boogaloo; they come from a long lineage of dancers in the Bay Area, specifically from Oakland, California.<sup id="cite_ref-30"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-30"><span>[</span>30<span>]</span></a></sup><sup id="cite_ref-31"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-31"><span>[</span>31<span>]</span></a></sup><sup id="cite_ref-32"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-32"><span>[</span>32<span>]</span></a></sup>
+
+[Popping](https://en.wikipedia.org/wiki/Popping "Popping") would be eventually adapted from earlier Boogaloo movements to influence dancers in [Fresno](https://en.wikipedia.org/wiki/Fresno,_California "Fresno, California"), [California](https://en.wikipedia.org/wiki/California "California"), in the late 1970s by way of California high-school gatherings of track & meet events called the West Coast Relays.<sup id="cite_ref-:0_1-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-:0-1"><span>[</span>1<span>]</span></a></sup><sup id="cite_ref-33"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-33"><span>[</span>33<span>]</span></a></sup> Often, the best boogaloo dancers in Oakland would be chosen as high school mascots: all of the surrounding high school mascots would compete against each other with a live school band during the half-time show.<sup id="cite_ref-34"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-34"><span>[</span>34<span>]</span></a></sup>
+
+## Original Boogaloo Reunion BBQ
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=38 "Edit section: Original Boogaloo Reunion BBQ")\]
+
+An annual event held in Oakland honors the contributions of the Boogaloo generation and hosts an intergenerational event for dancers in the Popping and Hip hop community to meet the original Boogaloo generation. Many Bay Area styles represented through Boogaloo, Robot, and Strutting are also showcased through different dancers at this event.<sup id="cite_ref-Davey,_D._2015_22-2"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Davey,_D._2015-22"><span>[</span>22<span>]</span></a></sup>
+
+|                                                External videos                                                 |                                                External videos                                                 |
+|----------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------|
+| ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "Black Resurgents perform live on The Jay Payton Show (24:47 min marker) on Internet Archive | ![video icon](https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nuvola_apps_kaboodle.svg/20px-Nuvola_apps_kaboodle.svg.png) Watch: "Black Resurgents perform live on The Jay Payton Show (24:47 min marker) on Internet Archive |
+
+Television
+
+-   1976: "Soul Is" & "The Jay Payton Show" - The Boogaloo group - The Black Resurgents were frequent dancers on a local syndicated dance Oakland show, displaying solo and group routines.<sup id="cite_ref-35"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-35"><span>[</span>35<span>]</span></a></sup>
+-   Granny & the Robotroids were one of the first Boogaloo groups on national TV performing on Chuck Barris' _[Gong Show](https://en.wikipedia.org/wiki/Gong_Show "Gong Show")_ in 1976.<sup id="cite_ref-auto1_27-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-auto1-27"><span>[</span>27<span>]</span></a></sup>
+-   1977 & 1978: The Black Messengers, as Mechanical Device, performed on the _Gong Show_ and displayed their style of "Posing Hard" The group choreography also includes "Domino" steps, creeping, cane work, and the famous M&M routine choreographed by Chuck Powell. Kerney Mayers also displays a signature solo with vibrating and trembling techniques. The Black Messengers were declared _Gong Show_ winners on both occasions.<sup id="cite_ref-Fuhrer,_M._2014_3-1"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-Fuhrer,_M._2014-3"><span>[</span>3<span>]</span></a></sup>
+-   1991: MC Hammer, a popular rapper from Oakland who grew up watching the Boogaloo group the Black Resurgents,<sup id="cite_ref-36"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-36"><span>[</span>36<span>]</span></a></sup> includes Boogaloo choreography and fashion in his music video "This is The Way We Roll". The music video also features a Boogaloo dancer "Frosty".<sup id="cite_ref-37"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-37"><span>[</span>37<span>]</span></a></sup>
+
+## Notable boogaloo dancers
+
+\[[edit](https://en.wikipedia.org/w/index.php?title=Boogaloo_(funk_dance)&action=edit&section=40 "Edit section: Notable boogaloo dancers")\]
+
+-   Albert Milton aka "Iron Man"
+-   Jerry Rentie "The Worm"
+-   Michael Enoch "The Mad"
+-   Larry Thompson "Pirate"
+-   Cornell "Tony Rome" Reese,
+-   Wayne "Freddy Snow" Dillard
+-   Levi Warner
+-   Danny Boy Reese
+-   Donald Mathews "Duck"
+-   Patricia Scott
+-   Red (Patricia Scott's brother)
+-   Henry Fischer
+-   Gregory Holm
+
+-   Steve Williams
+-   Ted Williams
+-   Kerney Mayers
+-   Chuck Powell
+-   Donald “Rubber-band Man” Jones
+-   Alfred “Baby Boy” Jones
+-   John Murphy
+-   Jorey "Monk" Walker
+-   Michael Carter
+-   Randy Pennington
+-   William Bilal "Boogaloo Bill"
+-   Noah Johnson
+-   Gaston Ducote
+-   Ricky Gantt
+-   Lil Ricky
+-   Ronald Nerves
+-   Paul Reid
+-   Amelia
+-   Tony Newsome
+-   Kenny Chambers
+-   Derrick Lovings
+-   Anthony Hamilton
+-   Darryl Hamilton "Hamo"
+-   Newberry
+-   Rosie
+-   Will Randolph III
+-   Vic Randolph
+-   Larry Robertson
+-   Ted Wincher
+-   Ben James
+
+-   Dan Hodges "Boogaloo Dan"
+-   Andrew "PopDog" Paris
+-   Ben James
+-   Dan "Boo the Bot" Martin
+-   Boogaloo Vic
+-   Boogaloo Dana
+-   Pierre Hudson
+-   Chris James
+-   Darrin Hodges "Dubb"
+-   Reo Robot
+-   Dennis "Mechanical Man" Newsome
+-   Walter "Sundance" Freeman<sup id="cite_ref-38"><a href="https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_note-38"><span>[</span>38<span>]</span></a></sup>
+
+## Social dance
+
+1.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-:0_1-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-:0_1-1) Guzman-Sanchez, T. (2012) "Oakland Funk Boogaloo to Popping". Underground Dance Masters: Final History of a Forgotten Era.
+2.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-2 "Jump up")** The Preservatory Project (2016) Boogaloo Traditions: Interview with Boogaloo Vic & Boogaloo Dana.
+3.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Fuhrer,_M._2014_3-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Fuhrer,_M._2014_3-1) Fuhrer, M. (2014) American Dance: The Complete Illustrated History. Voyaguer Press.
+4.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto2_4-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto2_4-1) [<sup><i><b>c</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto2_4-2) [<sup><i><b>d</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto2_4-3) [<sup><i><b>e</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto2_4-4) [<sup><i><b>f</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto2_4-5) Guzman-Sanchez, T. (2012) "The Oakland Funk Boogaloo Generation". Underground Dance Masters: Final History of a Forgotten Era.
+5.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto4_5-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto4_5-1) Pruter, R. _Chicago Soul_. University of Illinois Press. 1992, p. 204.
+6.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-6 "Jump up")** Guzman-Sanchez, T. (2012) Underground Dance Masters: Final History of a Forgotten Era.
+7.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-7 "Jump up")** Rudland, D. _Let's do the Boogaloo_. Liner Notes. Various artists. BGP Records, 2017.
+8.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-8 "Jump up")** Wang, O. (2008) "Boogaloo Nights" _The Nation_.
+9.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto5_9-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto5_9-1) [<sup><i><b>c</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto5_9-2) [<sup><i><b>d</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto5_9-3) [<sup><i><b>e</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto5_9-4) [<sup><i><b>f</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto5_9-5) Guzman-Sanchez, T. (2012) "1965 & Soul Boogaloo". Underground Dance Masters: Final History of a Forgotten Era.
+10.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Urban_Artistry_Preservatory_Project_2019_10-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Urban_Artistry_Preservatory_Project_2019_10-1) [<sup><i><b>c</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Urban_Artistry_Preservatory_Project_2019_10-2) [<sup><i><b>d</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Urban_Artistry_Preservatory_Project_2019_10-3) Urban Artistry Preservatory Project (2019) Boogaloo Traditions ft. Boogaloo Dana: Boogalooin out of Oakland.
+11.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-11 "Jump up")** Interview (2015), Part Two w-Zurriane + Oaklands own, Dancer, & Good Citizen, Larry Thompson. Hamps Corner of America. Blog Talk Radio, Retrieved Online: ([http://www.blogtalkradio.com/hampscornerofamerica/2015/04/08/part-two-w-zurriane-oaklands-own-dancer-good-citizen-larry-thompson](http://www.blogtalkradio.com/hampscornerofamerica/2015/04/08/part-two-w-zurriane-oaklands-own-dancer-good-citizen-larry-thompson)).
+12.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-12 "Jump up")** "Harold & Company: Stars of the Hy-Lit Show" Headlining Act and Dance Exhibition hosted by Erlton Lounge. 1967, Courier Post, New Jersey.
+13.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Hill,_B._2014_13-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Hill,_B._2014_13-1) [<sup><i><b>c</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Hill,_B._2014_13-2) [<sup><i><b>d</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Hill,_B._2014_13-3) Hill, B. & Boogaloo Conservatory TV (2014) Part 2 Interview with The Black Messengers: Chuck Powell, Kerney Mayers & Steve Harris.
+14.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-14 "Jump up")** National Hiphop Congress (2014) Interview with Boogaloo Dan, John Murphy, Will Randolph (& James Miller) recorded at 4th Annual Boogaloo BBQ.
+15.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-15 "Jump up")** Guzman-Sanchez, T. (2012) "The Next Evolution in Oakland". Underground Dance Masters: Final History of a Forgotten Era.
+16.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-:1_16-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-:1_16-1) Arnold, E. (2020) "Oakland’s original boogaloo speak out, in hopes of reclaiming their culture" Oaklandside.
+17.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Stephens,_L._2015_17-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Stephens,_L._2015_17-1) Stephens, L. (2015) OURTV series: Boogaloo Dance History in Oakland.
+18.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-18 "Jump up")** Castlemont High School Year Book, 1972.
+19.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-19 "Jump up")** "Fremont High School" [Rap Atlas: Oakland. Complex Magazine](https://www.complex.com/pop-culture/2011/02/rap-atlas-oakland/oaklandcoliseum).
+20.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-ReferenceA_20-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-ReferenceA_20-1) Hill, B. & Boogaloo Conservatory TV (2014) Part 1 Interview with The Black Messengers: Chuck Powell, Kerney Mayers & Steve Harris.
+21.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Mar,_Alan_D._2012_21-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Mar,_Alan_D._2012_21-1) [<sup><i><b>c</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Mar,_Alan_D._2012_21-2) [<sup><i><b>d</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Mar,_Alan_D._2012_21-3) Mar, Alan D. (2012) The Funk Behind Bay Area Street Dance. Department of Ethnic Studies. San Francisco State University.
+22.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Davey,_D._2015_22-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Davey,_D._2015_22-1) [<sup><i><b>c</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-Davey,_D._2015_22-2) Davey, D. (2015) "Oakland’s Boogaloo Reunion BBQ : A History Lesson in West Coast Street Dance".
+23.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-23 "Jump up")** Vincent, R. (2013) Party Music: The Inside Story of the Black Panthers' Band and How Black Power Transformed Soul Music. Chicago Review Press.
+24.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-24 "Jump up")** Smith, J Alfred (2004) On the Jericho road: a memoir of racial justice, social action, and prophetic ministry. Reverend J. Alfred Smith Sr. with Harry Louis Williams. InterVarsity Press.
+25.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-25 "Jump up")** Easley, Shani. (2016) "Black Panthers’ Oakland Community School: A Model for Liberation" Written for the Black Organizing Project.
+26.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-26 "Jump up")** Oakland Boogaloo Conservatory.
+27.  ^ [Jump up to: <sup><i><b>a</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto1_27-0) [<sup><i><b>b</b></i></sup>](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-auto1_27-1) Guzman-Sanchez, T. (2012) "Oakland to San Francisco". Underground Dance Masters: Final History of a Forgotten Era. Praeger.
+28.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-28 "Jump up")** ["SF and Oakland Hip Hop Histories Come Alive in this Dance Demo"](https://www.kqed.org/arts/10145702/sf-and-oakland-hip-hop-histories-come-alive-in-this-dance-demo). _KQED_. November 14, 2014.
+29.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-29 "Jump up")** Bragin, N. (2015) "Popping and Other Dis/Appearing Acts" Black Power of Hiphop Dance: On Kinesthetic Politics. UC Berkeley.
+30.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-30 "Jump up")** Phaneuf, W. (2013 Aug 21) "Turfing Grows Up." Eastbay Express.
+31.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-31 "Jump up")** Bragin, N. (2015) Black Power of Hiphop Dance: On Kinesthetic Politics. UC Berkeley.
+32.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-32 "Jump up")** KQED Arts “How Turf Dancing became synonymous with Oakland.” If Cities Could Dance Series. 2019. [\[1\]](https://www.kqed.org/arts/13856335/if-cities-could-dance-oakland)
+33.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-33 "Jump up")** Higa, B. & Wiggins, C. (1996) "Electric Kingdom" The history of popping and locking, from the people who made it happen. _Rap Pages_. Sep. 1996: 52-67. Print.
+34.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-34 "Jump up")** Thompson, L. Interview (2015), Part Two w-Zurriane + Oaklands own, Dancer, & Good Citizen, Larry Thompson. Hamps Corner of America. Blog Talk Radio, Retrieved Online: ([http://www.blogtalkradio.com/hampscornerofamerica/2015/04/08/part-two-w-zurriane-oaklands-own-dancer-good-citizen-larry-thompson](http://www.blogtalkradio.com/hampscornerofamerica/2015/04/08/part-two-w-zurriane-oaklands-own-dancer-good-citizen-larry-thompson)).
+35.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-35 "Jump up")** Payton, J. "Soul Is". The Jay Payton Show. KEMO TV (1976). Digitized by California Audiovisual Preservation Project. The Jay Payton Video Collection. Donated to the African American and Library of Oakland. Retrieved online via [https://archive.org/details/caolaam\_000083](https://archive.org/details/caolaam_000083)
+36.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-36 "Jump up")** Wheeler, D. "Out the Trunk: The Bay" Hiphop Evolution. Netflix Series. Aired on 19 October 2018.
+37.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-37 "Jump up")** Burrel, Louis (1991) "This is the way we roll". Bust It Records. Published by Capitol Records, Inc.
+38.  **[^](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance)#cite_ref-38 "Jump up")** Suhalia "The Oakland Boogaloo & Walter "Sundance" Freeman. Salimpour School.
+
+-   [The Oakland Boogaloo Conservatory](https://oaklandboogaloo.com/)
+-   [A little dance history: Popping, Boogaloo, Robot, Strutting, Fillmore, Etc.](http://www.onecypher.com/2003/12/04/popping-boogaloo-robot-strutting-fillmore-etc/)
+-   [KQED Feature: SF & Oakland Hiphop Histories Come Alive in this Dance Demo](https://www.kqed.org/arts/10145702/sf-and-oakland-hip-hop-histories-come-alive-in-this-dance-demo)

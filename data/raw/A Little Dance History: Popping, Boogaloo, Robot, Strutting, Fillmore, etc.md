@@ -1,0 +1,75 @@
+## Dance History
+
+_\*Disclaimer: This dance history section is based on our own research, interviews, discussions with pioneers and also knowledgeable dancers in the community. Everything written here is aimed primarily towards the non-dancers, or those who aren’t well informed about these dance styles and seek to learn more. Our goal is to try and provide them with a starting point for more insight and also help point them in the right direction for more information. If you’d like to contribute to any of these dance history sections, feel free to contact us. Enjoy!_
+
+Many dancers from different areas have contributed to this genre of dance. We’re including those pioneers by region. This is not in a particular chronological order, and this is the best we can do for now, so we’ll keep adding/editing as we learn more.
+
+We compiled a bunch of clips below so you can just see for yourself. The different pioneers of these styles.
+
+————-
+
+**OAKLAND, CA (late 60s)**  
+A dancer named Albert Milton aka Iron Man, performs a robot/pantomine style dance on the local Jay Payton TV Show. I’m still trying to hunt this footage down
+
+————-
+
+**SAN FRANCISCO, LOS ANGELES, CA**  
+A mime duo named Robert Shields and Lorene Yarnell were known for their amazing ability to do realistic robotic movements, that resembled animatronics. They eventually had their own tv show in the late 70s and were also known as the Clinkers on that show.
+
+————
+
+**BAY AREA STYLES (BOOGALOO ROBOTING STRUTTING):**
+
+Bay Area, California, specifically the Oakland/San Francisco/Richmond areas, were known for contributing the Fillmore, Boogaloo, Roboting, Strutting and Stepping styles where the roots of popping point towards the Bay Area. Notable groups range from 1 Plus 1, The Black Resurgents, Black Messengers, Derrick & Co, Close Encounters of the Funkiest Kind, Granny & The Robotroids, Demons of the Mind/Medea Sirkas, Midnight Persuasion, Casualistics, Dr. Grave & the Cemetary Slaves, and later Jam Patrol, Audionauts, PT-3000, Playboyz Inc.
+
+The Black Resurgents perform on tv’s The Gong Show as “Mechanical Device” in the 1970s. I am still digging to find this footage. More research to follow on this
+
+For more info, visit the BRSAA site [here](http://brsaa.com/)
+
+Here is a playlist that showcases the Bay Area styles:  
+<iframe width="480" height="385" src="http://www.youtube.com/embed/4ZPKwpvT83Q?list=PLC109325D53C7D368&amp;hl=en_US" frameborder="0" allowfullscreen=""></iframe>
+
+—————-
+
+**FRESNO, CA**
+
+A dancer by the name of Sam “Boogaloo Sam” Solomon of Fresno CA is known for his boog style (distinct isolation and rolling of the hips, legs, etc) and popping, (muscles quickly flexing and relaxing to the beat).
+
+Boogaloo Sam started a group in the mid 70s called The Electric Boogaloo Lockers, and they are now called the Electric Boogaloos. According to the EB’s, their reference to popping was coined by Boogaloo Sam when he would mouth the word “pop” as he popped.
+
+A few noteable names (among many): Boogaloo Sam, Popin Pete, Skeeter Rabbit, Suga Pop, Mr. Wiggles, Jazzy J, Creepin Cid, Puppet Boozer, Robot Dane.
+
+For more info on the Electric Boogaloos, visit their website [here](http://www.electricboogaloos.com/)
+
+Check out this playlist of Boogaloo Sam and other Electric Boogaloo clips
+
+<iframe width="480" height="270" src="http://www.youtube.com/embed/8ifbd3-KVIo?list=PL90401BF6ADDE5821&amp;hl=en_US" frameborder="0" allowfullscreen=""></iframe>
+
+———————–  
+———————–  
+**POPLOCKIN’**  
+Out of Compton, CA, some notable names include a dancer named Dan Martin a.k.a. “Boo”. He is originally from Richmond, and took onto the East Oakland style of Boogaloo through John Murphy of The Black Messengers. Boo was one of the first ones to take it to LA around 1976 and influenced other dancers such as Tangerine, Boppin’ Andre and Robot Prince.
+
+**BOPPIN’**  
+A style that re-innovated the robot by blending it with another dance called the popcorn, hitting, and mime. Noteable names include Boppin’ Andre, Robot Prince, and Tangerine. Found a great interview with Andre on [4dapoppers.com](http://www.4dapoppers.com/modules.php?name=Content&pa=showpage&pid=28)
+
+———————–  
+**G-STYLE**  
+From what I’ve read around, this style is described as more “freestyle” mentality. A lot more waving involved and hard hits. I believe it also comes out of the Pomona area.  
+\*still researching on this.  
+Notable names include Slick Dogg, Dolla Bill, Tempo.
+
+———————–
+
+**\*Resources:**  
+[Mrwiggles.biz](http://www.mrwiggles.biz/hip_hop_timeline.htm) has a great history time line that breaks down some real knowledge on bboying, popping, and locking. It’s the most informative one that I’ve run into in my opinion.
+
+Pop Tart’s youtube channel [The Strutter’s Room](http://www.youtube.com/user/SFSTRUTTER/ "The Strutter's Room") has really good footage and information on Strutting. The Stutter’s Room full DVD is now posted on his channel as well.
+
+Other great sites are [westcoastpoppin.com](http://www.westcoastpoppin.com/), and [4dapoppers.com](http://www.4dapoppers.com/). You can also find the popping threads on [freestylesession.com](http://www.freestylesession.com/) and find a lot of interesting posts on popping.
+
+A more recent documentary released called “BRS, Boogaloo Robotting Strutting”. Features Pop Tart interviewing some of the Bay Area OGs and their stories on their dance style.
+
+Another documentary, History of a Forgotten Era also has some interviews with Boogaloo Sam and I believe there is an updated version that added some Bay Area OGs as well.
+
+More research and updates to follow.

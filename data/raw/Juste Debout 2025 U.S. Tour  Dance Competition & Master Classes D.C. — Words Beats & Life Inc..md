@@ -1,0 +1,112 @@
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763769636349-FQVF0A94QSQP4D8713JU/image-asset.jpeg)
+
+## **Juste Debout  
+U.S. Tour 2026**
+
+##   
+Returns December 2026
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763769731704-FAZMSL4J1W6QQX21JLRZ/unsplash-image-tgrBcf7S_dY.jpg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/69728287-78d7-4bc8-b006-5add0d628c02/20180304_Juste_Debout_2018_LittleShao_3081_HD.png)
+
+The **iconic dance competition** and **masterclass series** returns to Washington, D.C. as part of **The Way You Move Festival**
+
+Experience world-class street dance, masterclasses, live DJ sets, and the U.S. Prelims, where the nation’s top dancers compete for a chance to represent the USA at the Juste Debout 2027 Finals in Paris.
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763771758115-VZYUH78KRN0U7Z3K6989/image-asset.jpeg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763770804103-JBQ6SV1ZS81NQJX5BW5B/image-asset.jpeg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763769964907-2GX0U1YY5EV0WNUZE5K3/image-asset.jpeg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763769813921-C6JMZZHSJI8LHL4NK80X/image-asset.jpeg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763773919109-5S2N426RX32PZ2W58ZYL/image-asset.jpeg)
+
+## **Juste Debout 2025 Photo Gallery**
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763770761394-FK9GERHV97975MBRZ303/image-asset.jpeg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763773965691-3Z41S0ZM7UFMJ1P1KE3X/image-asset.jpeg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/b1bbb964-a47e-4c81-86f4-a63f5c8c657c/unsplash-image-36aGnv29Ss0.jpg)
+
+**Date, Time & Location:  
+**Announced in 2026
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/962ebfd5-03d1-4866-b0c8-2292dd353e13/unsplash-image-36aGnv29Ss0.jpg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/b1bbb964-a47e-4c81-86f4-a63f5c8c657c/unsplash-image-36aGnv29Ss0.jpg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/962ebfd5-03d1-4866-b0c8-2292dd353e13/unsplash-image-36aGnv29Ss0.jpg)
+
+## **U.S. Prelims Overview**
+
+The nation’s leading dancers face off for a chance to represent the USA at the **Juste Debout 2027 Finals** in Paris.
+
+**What to Expect:**
+
+-   Competition categories: **Popping, Locking, House, Hip-Hop**
+    
+-   High-energy duo battles with **live DJ sets**
+    
+-   Judged by a panel of **renowned street dancers**
+    
+-   The biggest street dance competition of the year — **raw energy, epic battles, and non-stop creativity.**
+    
+
+Four winning dance duos will receive an **all-expenses-paid trip to Paris** to compete at the **Juste Debout Finals** at the Accor Arena in March 2027.
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/841f0a48-d7df-4a8a-af5e-6d927d7abb56/juste_debout.png)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/962ebfd5-03d1-4866-b0c8-2292dd353e13/unsplash-image-36aGnv29Ss0.jpg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1755293700044-CZYE7WRO4X8F0X0PQGV6/juste+debout.png)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/2abb62ea-15c7-4e8f-a66a-02df262b2724/unsplash-image-pC2xOplxsVs.jpg)
+
+## **Dancer Registration— Compete for a Trip to Paris**
+
+### **Registration Opens November 2026**
+
+### **Registration Opens November 2026**
+
+-   **Duos only** — no solo dancers or groups larger than two
+    
+-   **Advance registration required** — _no onsite registration_
+    
+-   Return here November 2026 to register & secure your competition spot
+    
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/16effc67-5813-4135-906f-c9aef5ee1cf0/unsplash-image-tgrBcf7S_dY.jpg)
+
+**Date,Time & Location:  
+**Coming November 2026
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763779923704-ZGEI3325PB80QHR9A2EX/unsplash-image-tgrBcf7S_dY.jpg)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763770831671-YDIKEXD5CU03TSDE3ZWV/unsplash-image-tgrBcf7S_dY.jpg)
+
+Take your skills to the next level with **exclusive Juste Debout master classes** in **hip-hop, house, popping and locking**, taught by the same international judges who preside over the U.S. Prelims and World Finals.
+
+  
+Learn from **world-renowned dancers** and gain insider knowledge on technique, style and performance — the same expertise that fuels champions on the global stage.
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1755233758436-08L1VCA8QHCAERRCE371/justedebout3.jpeg)
+
+## **Juste Debout D.C. Master Class Schedule + Sign up Drops November 2026**
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1abe4e96-fe9d-492f-8777-bab6bf71e1de/_B%26W_TheWayYouMove_RichardSoben+%281%29.png)
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/0bc7a2b0-94cf-4022-aa5f-9a619d4dcee0/image-asset.jpg)
+
+Part of **The Way You Move Dance Festival** happening in **Washington, D.C. in December 2026.** From youth battles to professional duos and international competitions, D.C. becomes the center of **hip-hop dance culture**.
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/1763769161379-79GKQL2BHTIWH0IGUEFE/image-asset.jpeg)
+
+<iframe src="https://www.youtube.com/embed/yMsmD13XRks?wmode=opaque&amp;enablejsapi=1&amp;origin=https%3A%2F%2Fwblinc.org" height="480" width="854" scrolling="no" frameborder="0" allowfullscreen="" data-gtm-yt-inspected-8="true" id="639163162" data-gtm-yt-inspected-33256654_43="true" data-gtm-yt-inspected-22="true" title="Juste Debout '25-'26 tour | Washington DC Prelims preview" tabindex="-1"></iframe>
+
+### **Sponsors & Partners**
+
+![](https://images.squarespace-cdn.com/content/v1/5d3f3257212fe70001096ef8/512c659d-0370-4168-ab5f-8728af7946b1/Untitled+design+-+2025-11-30T151634.231.png)

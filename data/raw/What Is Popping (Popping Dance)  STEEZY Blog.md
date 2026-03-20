@@ -1,0 +1,255 @@
+Popping [dance](https://www.steezy.co/) is a style of dance that started in the late 1960’s and 70’s.
+
+This dance style is characterized by sudden tensing and releasing of the muscles ("hitting") to the rhythm of beats in music.
+
+**_Learn how to create the hit:_** [**_How to Learn Popping_**](https://www.steezy.co/posts/how-to-learn-popping)
+
+## History of Popping Dance
+
+Origins of dance styles can get tricky, because OG’s have different accounts and interpretations of that story according to their regions and circles of influence.
+
+While there are several moving parts of Popping's history that sometimes conflict or overlap, one clear part of the dance style's origin is that it started among groups of teenage friends in deindustrializing parts of the city.
+
+The dancers would come up with moves, practice them, then show them off at clubs or in dance battles.
+
+In addition to being a hobby, Popping dance gave dancers an escape, an identity, and a family.
+
+Over time, the word “Popping” (which is also often referred to as “hitting,”) started being used to describe the collection of moves and techniques invented by the OG Poppers.
+
+## Key moves in Popping Dance
+
+#### Animation
+
+Animation was inspired by the _Dynamation_ films by Ray Harryhausen. It is meant to simulate an animated character moving frame-by-frame.
+
+The technique involves abrupt tensing of the muscles to create a stop-motion illusion.
+
+#### The Boogaloo
+
+The Boogaloo, invented by Boogaloo Sam, is a loose, fluid motion that gives the impression of the body having no bones.
+
+It incorporates isolated circular rolls of body parts.
+
+![https://s3.amazonaws.com/steezy/class-videos/boogie-frantick-footwork-beg.mp4](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41a771bce3c934c8d2d_5e28eb1164852b6445d5f93c_boogaloo.gif)
+
+#### The Robot / Botting
+
+When you imitate a robot or mannequin using several different Popping dance techniques.
+
+![what is popping dance?](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41bb1b1b224d3029e39_5e28eb1174cbda0d81156931_therobot.gif)
+
+#### Dime Stop
+
+Moving at a steady pace, then coming to a clean halt without any shaking or reverb.
+
+The effect comes from being able stop suddenly and seemingly out of nowhere, or "stopping on a dime".
+
+![what is popping dance?](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41a451668ca0f7cc70f_5e28eb11b4a1ac0906775055_dimestop2.gif)
+
+#### Gliding / Floating / Sliding
+
+Footwork techniques that create the illusion that your feet are moving smoothly across the floor.
+
+The backslide (which people commonly confuse as the Moonwalk), is a move that incorporates this technique.
+
+![what is popping dance?](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e27046e7505e3b05d6f0_5e28d1338f75274f7c71098e_boogieglide.gif)
+
+#### Hitting / Popping
+
+Flexing your muscle groups suddenly. You can hit continuously to a steady rhythm, combined with different poses and pathways.
+
+![what is popping dance?](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41abe93065b552aae87_5e28eb1174cbda7c53156932_hits-1.gif)
+
+Practice your hits in [Clay's "7 Days of Hits" Program on STEEZY](https://try.steezy.co/clay-boonthanakit-7-days-of-hits-4/?utm_source=Steezy%20Blog&utm_medium=Post&utm_content=What%20Is%20Popping&utm_campaign=Clay%20Boonthanakit%207%20Days%20of%20Hits&classid=&programid=&affiliate=)!
+
+#### Isolation
+
+When you keep the rest of your body still while you separate and move a part of it.
+
+![what is popping dance](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e27033208db998ac8f82_5e28d132c0e4fc4b1c5b173d_isolation.gif)
+
+#### Miming
+
+Inspired by classic mimes, miming is when you utilize isolations to create pictures and illusions of an object or scenery that isn't actually there.
+
+#### Scarecrow
+
+Moving and hitting with pictures that imitate a puppet or scarecrow with strings attached to your joints.
+
+![what is popping dance](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41bfcf76d252d5ffd21_5e28eb1164852b1862d5f93d_scarecrow.gif)
+
+#### Snaking
+
+Fluid rolls of the chest and body. It's a style that involves full body waves as if you're slithering around with your body like a snake.
+
+#### Strobing
+
+Moving and stopping your body quickly in steady increments using dime stops to make it look like you’re moving within a strobe light.
+
+Poppers common use pedestrian movements (such as walking) with strobing.
+
+![what is popping dance?](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41b771bce40c34c8d2e_5e28eb120ab615844f51159a_strobing-1.gif)
+
+#### Strutting
+
+Struttin' is a dance style that originated from San Francisco. It involves hitting angles with your limbs as you hit.
+
+![what is popping dance?](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41bbe93062f662aae8e_5e28eb1264852bf41ed5f93e_struttin.gif)
+
+#### Ticking
+
+Ticking is a series of hits. You break up your pathway of movement into small increments and hit/pop at each one.
+
+![what is popping dance?](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41bf772771bc8d609e8_5e28eb1274cbda78ad156933_tick.gif)
+
+#### Waving
+
+Fluidly move your body or parts of your body to imitate literal waves in the ocean.
+
+![](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41b63c088760ac25821_5e9656edf6a9974868c002b6_ezgif.com-optimize%2520(8).gif)
+
+![what is popping dance](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e26f17cfe43cd3c415f3_5e28d1338f7527772b71098f_armwaves.gif)
+
+#### Tutting
+
+Tutting or ‘King Tut’ is when the you create angular shapes and pictures with your body parts, usually your arms or hands.
+
+Its name and moves were inspired by ancient Egyptian hieroglyphics.
+
+![what is popping dance](https://cdn.prod.website-files.com/5e2b8863ba7fff8df8949888/5ea9e41b63c08819abc25822_5e28eb1245b607de1ace086a_giphy-2.gif)
+
+## Notable Poppers and Popping crews
+
+## Boogaloo Sam
+
+In 1975, Sam Solomon (AKA Boogaloo Sam) created a dance called the Boogaloo in Fresno, California.
+
+His brother, Timothy Earl Solomon, was a huge influence in Sam's dance style.
+
+Later, in 1978, their family moved down to Long Beach, California, where he and other dancers formed the Electric Boogaloo Lockers.
+
+<iframe src="https://www.youtube.com/embed/RCYtEm7A9Ow?rel=0?ecver=2" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+_Interview with Boogaloo Sam of The Electric Boogaloo Lockers_
+
+Some members of the Electric Boogaloos included of Pop’in Pete, Skeeter Rabbit, Suga Pop, Mr. Wiggles, Cedric Williams (AKA Creep’n Sid), Gary Allen (AKA Scarecrow Scally), Marvin “Puppet” Boozer and Dane “Robot” Parker.
+
+## Tick’n Will and Darnell Twist-o-Flex McDowell
+
+William Green Jr. (AKA Tick’n Will) met his best friend Ricky Darnell “Twist-o-Flex” McDowell in the West Fresno projects in the 1970’s.
+
+They started making up dance moves and called themselves the Ace Tre Lockers, even though they didn’t Lock.
+
+> “We didn’t call it Popping because to us it was just dance moves.”
+
+– Will (_Underground Dance Masters, 110_)
+
+The two would invent their own dance moves, and added their own interpretation to existing dance moves.
+
+From then, they'd prepare dozens of steps and enter local battles.
+
+Will and Darnell came up with different variations of Popping dance, as well as techniques for Ticking, Creeping, and the Backslide.
+
+Some examples include The Old Man, Twist-o Flex and Neck-o Flex. In 1976, Will and Darnell met Sam Solomon at Roeding Park in Fresno.
+
+They started practicing together at the Mary Ella Brown Community Center, learning and drawing from each others’ flavor.
+
+The group named themselves the Electric Boogaloo Lockers.
+
+## The Electric Boogaloos (The Electric Boogaloo Lockers)
+
+Once formed, the crew started performing together at local talent shows and started to expand to different areas.
+
+They quickly gained popularity for their originality and talent in all of Northern California.
+
+When the group moved down to Long Beach, they introduced the style to Southern California dancers – recruiting newer members and polishing both their technique and group performance routines.
+
+The Electric Boogaloos also performed on the streets of Hollywood, trying to get discovered to work in the entertainment industry.
+
+They met and started working with Jeff Kutash in 1978, who produced dance shows in casinos.
+
+Their tour, titled “_Jeff Kutash’s Dancin’ Machine featuring the Electric Boogaloo_” was testing for the group.
+
+The production repeatedly misrepresented their identity, and they felt compromised as dancers trying to stay true to themselves.
+
+For this and other reasons, members eventually stopped working under Kutash.
+
+The Electric Boogaloos still continued to dance, innovating a number of different Popping dance moves.
+
+Fluid motions, incorporating rolls of the hips, knees, and head were signature characteristics of their dance style.
+
+The Popping dance crew appeared on national television on a show called _Hot City_, were featured at the Chicago Playboy Club, and performed opening numbers for various vocal artists.
+
+But the most pivotal appearance of The Electric Boogaloos was their debut on _Soul Train_ in 1979.
+
+<iframe allowfullscreen="true" frameborder="0" scrolling="no" src="https://www.youtube.com/embed/rkejPbx9zSI"></iframe>
+
+_Sam, Pop’in Pete, Creepin Ced, Puppet Boozer and Dane “Robot” Parker on Soul Train_
+
+## Popping dance in the media
+
+_“As you may know, these very creative young men have invented a dancing style that’s becoming very popular, and it’s described as ‘Popping,’”_ said Don Cornelius in his introduction of the Electric Boogaloos.
+
+Soul Train helped to popularize and publicize Popping dance.
+
+The Electric Boogaloos' performances served as a catalyst for developing different styles of Popping dance in other parts of the country.
+
+Popping and other street styles then started to be featured in Hollywood films, such as _Beat Street_, and _Breakin’._
+
+<iframe src="https://www.youtube.com/embed/KuSV26wate4?rel=0?ecver=2" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+_Bruno “Pop N' Taco” Falcon in 1984’s "Breakin’"_
+
+The Electric Boogaloo dancers also appeared on another music variety show called _Solid Gold._
+
+__Though sometimes misrepresented, the media helepd put street dance and Popping on the radar of a national audience.
+
+Notably, Michael Jackson had learned from Pop’in Pete and Pop N' Taco.
+
+In 1983, he performed the Backslide on national television (but incorrectly called it the “Moonwalk").
+
+## Popping dance in the present
+
+Popping dance is related to hip hop dancing and the other street/funk dance styles (such as Waacking and Locking), but is its own distinct style of dance.
+
+It is often performed in battles and cyphers, or incorporated into choreography.
+
+These Popping OGs' foundations have been viewed, learned, and modified by generations of dancers all over the world.
+
+Poppers aim to maintain the authenticity of the techniques and traditions of the dance style.
+
+With a better understanding of these origin stories, all dancers can learn to innovate their own Popping style while staying true to the integrity of the culture.
+
+## Helpful Popping dance videos:
+
+<iframe src="https://www.youtube.com/embed/v=GB-tx_1-XJM?rel=0?ecver=2" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+_Interview with Pop’in Pete & Suga Pop_
+
+_Beneath the Surface: An In-Depth Look at Popping & Boogaloo - PART 2_
+
+<iframe src="https://www.youtube.com/embed/YUcVYRrczR8?rel=0?ecver=2" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+
+_Pop'in Pete Real Talk_
+
+If you want to learn how to Pop, then take our [**Popping program on STEEZY Studio**](https://try.steezy.co/boogie-frantick-popping-fundamentals/?utm_source=STEEZY%20Blog&utm_medium=Article&utm_campaign=What%20Is%20Popping) with renowned Popper, Boogie Frantick!
+
+You'll learn the basics of hitting, waving, isolation, glides, and more.
+
+[**Sign up today for a free 7-day trial**](https://app.steezy.co/register/)**!**
+
+
+
+##### What To Read Next:
+
+[What is Jazz Dance](https://www.steezy.co/posts/what-is-jazz-dance)
+
+[How to Twerk](https://www.steezy.co/posts/how-to-twerk-with-your-hands-on-your-knees)
+
+[How to Dance at a Club](https://www.steezy.co/posts/how-to-dance-at-a-club-or-party)
+
+[Hip hop Dance Moves](https://www.steezy.co/posts/10-basic-dance-moves-anyone-can-learn)
+
+[What is Salsa](https://www.steezy.co/posts/lets-salsa-learn-salsa-dance-history)
+
+[What is Ballet](https://www.steezy.co/posts/what-is-ballet)

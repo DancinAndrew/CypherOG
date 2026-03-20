@@ -1,0 +1,37 @@
+## LINE-UP POPPING FOREVER:
+
+Judges:   
+**MT Pop**  
+**Ricky**  
+**Poppin C**  
+  
+DJ's:  
+**Lucas Benjamin**  
+**Nobunaga  
+Hero** (preselections)  
+  
+Hosts:   
+**JNM the Naked MC**  
+**John Agesilas  
+Alysha** (preselections)
+
+## WANT TO PARTICIPATE?
+
+If you want to participate in the battles, you first need to register at Paradiso and participate in the Preselections. The Top 24 best dancers from the preselection will go through to the actual battle.
+
+Minimum age for participation is 15 years.
+
+⮕ Registration for participating dancers open from 10:00  
+⮕ Preselections Popping Forever from 12:00 - 13:30 (doors open at 11:00)  
+⮕ Battle Popping Forever from 14:30 - 19:00
+
+## How do the SDF Battles work?
+
+**Preselections**: Everyone is welcome at the Preselections: whether you're participating or just there to enjoy the vibe. Dancers will hit the floor and have 45 seconds to show what they've got, hoping to impress the three judges and earn a spot in the Top 24.
+
+**Battles**: In the Battles, those Top 24 dancers will go head-to-head in 1vs1 rounds to reach the Top 12, Top 6, and ultimately the Top 3. They will face off against the three Judges, who step into the battle themselves: the so called legendary Judge Battles. Don't talk about it — be about it!  
+**New! Duo-mode:** This year, SDF is flipping the script with an all-new concept. From the Judge Battles on, we switch to Duo Mode - 2vs2 battles! Each Top 3 dancer and each Judge chooses a partner from the Top 24 to form a duo. Together, they’ll battle side by side for the title. Yes... a duo takes the win!  
+**  
+Audience vote:** And you, our audience in Paradiso and online, play a vital role… In the Semi-Finals and Final, it's up to the duos themselves to answer the legendary question: Did you win or lose? But if they can’t agree, you will have the final vote to crown our Forever champions!
+
+<iframe src="https://www.youtube.com/embed/fwgcVIHX29s?autoplay=0&amp;playsinline=1&amp;modestbranding=1&amp;rel=0&amp;mute=0&amp;enablejsapi=1" allowfullscreen="" allow="autoplay; fullscreen; picture-in-picture"></iframe>

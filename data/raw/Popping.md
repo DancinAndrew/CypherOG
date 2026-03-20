@@ -1,0 +1,13 @@
+## ![](https://www.thesubath.com/pageassets/burban/educational_pages/popping/Screenshot-2020-08-26-at-10.38.07-AM.png)
+
+Popping is a dance style that originated in the U.S. in the 60-70s, and is characterised by the sudden contracting and releasing of a dancer’s muscles to the rhythm of the beat (also called hitting). There are many different interpretations and overlaps of how popping started, but one undeniable catalyst was the work of Boogaloo Sam. Boogaloo Sam founded the group [‘The Electric Boogaloos’](https://www.redbull.com/nz-en/popping-history-electric-boogaloos-members) in 1977, which his brother Poppin’ Pete and Skeeter Rabbit were also a part of. All of these guys were major pioneers in popping and brought popping influences into the mainstream. Poppin’ Pete would even go on to choreograph for Michael Jackson for over two decades. 
+
+\*It should be noted that Boogaloo is also a style of dance, also widely known as invented by Boogaloo Sam.
+
+Popping has evolved a lot to come into its current form. It started off being done to funk and disco music, but now poppers have branched out to dubstep and other electronic beats. Popping moves can also be seen in today’s choreography. 
+
+As with any dance style, it comes with its own vocabulary. Steezy has a great [article](https://www.steezy.co/posts/what-is-popping-dance) on moves you may come across in popping, such as animation, boogaloo, robotics, gliding and ticking- complete with gifs! Some of these moves can also be considered styles of their own. 
+
+Here’s some videos of popping :) 
+
+<iframe height="150" src="https://www.youtube.com/embed/LaRywNL333c" title="vid1" width="250"></iframe><iframe height="150" src="https://www.youtube.com/embed/BkfDjRwBaaQ" title="vid2" width="250"></iframe><iframe height="150" src="https://www.youtube.com/embed/fHeneea0qGk" title="vid3" width="250"></iframe>

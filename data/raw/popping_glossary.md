@@ -1,0 +1,86 @@
+# Popping & Funk Style 術語辭典（完整中英對照）
+
+> 個人整理，基於多年 Popping 訓練經驗與社群知識。最後更新：2025
+
+---
+
+## 基礎技術術語
+
+| 英文術語 | 中文 | 定義 |
+|---|---|---|
+| **Pop / Hit** | 爆點 / 擊打 | 肌肉快速收縮再放鬆，產生瞬間爆發感的基本動作。是 Popping 的核心技術，所有 Popping 動作都建立在 Pop 上。 |
+| **Isolation** | 身體分離 | 身體某一部位在其他部位靜止時單獨移動，製造機械感或波浪感。例如：頭部、胸部、臀部的獨立控制。 |
+| **Musicality** | 音樂感 / 樂感 | 舞蹈動作與音樂節奏、旋律、歌詞的對應關係。是 Popping 評分中的最高級別標準。 |
+| **Foundation** | 基礎 | 指舞者對 Popping 基本動作（Pop、Isolation、基本站姿）的扎實程度。 |
+| **Hit** | 定格打點 | 同 Pop，有時特指視覺上明確的爆點瞬間，強調清晰度（clarity）。 |
+| **Dime Stop** | 硬停 / 瞬間定格 | 動作突然完全靜止，如同貨幣（dime）般精準落點。展現對身體的完全控制。 |
+| **Slow Motion** | 慢動作 | 以極低速度移動，考驗身體控制力和肌肉持續張力。 |
+| **Strobing** | 閃爍 | 以極快速度的 stop-and-go，模擬閃光燈效果。 |
+| **Gliding** | 滑步 | 身體像在地面上飄移的移動方式，常見於 Popping 地板動作。 |
+| **Floating** | 漂浮 | 製造身體懸浮感，通常結合 Slow Motion 和 Isolation。 |
+
+---
+
+## 主要流派術語
+
+| 流派 | 英文 | 定義 |
+|---|---|---|
+| **Boogaloo** | Boogaloo | Popping 的源頭之一，源自 1970s 加州 Richmond。強調身體流動性（fluidity），以臀部、膝蓋的圓形律動為核心，比 Popping 更柔軟流暢。由 Sam Solomon（Boogaloo Sam）創立。 |
+| **Waving** | 波浪 | 波浪動作從身體一端傳遞到另一端，模擬波浪或電流通過身體的感覺。分為 arm wave（手臂波）、body wave（全身波）等。 |
+| **Tutting** | 圖坦卡門 | 以方形、直角為基礎的動作語彙，手臂和手指形成幾何圖案，靈感來自古埃及壁畫藝術。 |
+| **Animation** | 動畫 | 模仿卡通或定格動畫角色的動作方式，結合 Strobing、Slow Motion、Dime Stop，製造逐格播放感。 |
+| **Turfing** | 地盤舞 | 源自加州奧克蘭（Oakland）的街舞風格，結合 Popping、Gliding、Mime（默劇）元素，強調講故事和社區認同。TURFERS = Taking Up Room For Everyone Right. |
+| **Locking** | 鎖舞 | 由 Don Campbell 在 1970s 洛杉磯創立，與 Popping 常被合稱為 Funk Styles。特點是突然「鎖定」（lock）在某個姿勢後快速釋放，配合 Funk 音樂的節奏感。 |
+| **Robot** | 機器人 | 模仿機器人移動方式，強調機械感、精準的角度控制和停頓。 |
+| **Liquid / Liquid Popping** | 流體 Popping | 結合 Waving 和 Popping，製造流體般的柔滑感，兼具流動性和爆點。 |
+| **Snaking** | 蛇形 | 脊椎波浪狀運動，製造蛇游動的視覺效果。 |
+| **Scarecrow** | 稻草人 | 雙臂水平展開，製造稻草人懸掛的外型，常結合 Waving。 |
+
+---
+
+## Battle 與文化術語
+
+| 術語 | 定義 |
+|---|---|
+| **Cypher（舞圈）** | 圍成圓形的自由即興舞蹈空間。每位舞者輪流進入圓圈展示，觀眾形成外圈。是街舞文化中最基本的社交和練習形式。 |
+| **Battle** | 兩位舞者（或兩隊）的對抗性表演，由評審或觀眾判定勝負。 |
+| **1v1** | 單人對單人的 battle 形式。 |
+| **Crew Battle** | 多人隊伍對抗，通常 3v3 或 5v5。 |
+| **Judge / 裁判** | 評估 battle 勝負的專業舞者，通常來自同一舞蹈社群。 |
+| **Popping 評分標準（HHI/Juste Debout）** | Musicality（樂感）、Originality（原創性）、Foundation（基礎）、Technique（技術）、Execution（執行）、Floor Work（地板動作）、Showmanship（舞台表現力）、Creativity（創造力）、Costume（服裝）。 |
+| **OG（Original Gangster）** | 指某個流派或文化的元老、先驅人物。對 Popping 社群有深遠影響的前輩。 |
+| **Popper** | 跳 Popping 的舞者。 |
+| **Locker** | 跳 Locking 的舞者。 |
+| **Funk Styler** | 跳 Funk Styles（包含 Popping 和 Locking）的舞者。 |
+| **Freestyle（即興）** | 不預先編排，隨音樂即興創作的舞蹈表演。 |
+| **Choreography（編舞）** | 預先設計好的舞蹈動作序列。 |
+
+---
+
+## 地名與歷史術語
+
+| 術語 | 定義 |
+|---|---|
+| **Fresno（佛雷斯諾）** | 加州中部城市，Popping 的誕生地。Boogaloo Sam 在此創立 Electric Boogaloo 風格，約 1970s 中期。 |
+| **Richmond** | 加州東灣城市，Boogaloo 的起源地。Sam Solomon 在此早期發展 Boogaloo 動作。 |
+| **Oakland（奧克蘭）** | 加州東灣城市，Turfing 的發源地。 |
+| **Los Angeles（洛杉磯）** | 加州最大城市，Locking 和早期 Hip-Hop 文化的重要發展地。 |
+| **Funk（放克音樂）** | 1960-70s 興起的非裔美國音樂流派，融合 R&B、Jazz、Soul 元素，強調節奏性（groove）。代表人物：James Brown、Parliament-Funkadelic、Sly & The Family Stone。Funk 音樂是 Popping 和 Locking 的靈魂來源。 |
+
+---
+
+## 重要人物快速參照
+
+| 人物 | 別名 | 主要貢獻 |
+|---|---|---|
+| Sam Solomon | Boogaloo Sam | 創立 Electric Boogaloos 團體，發展 Boogaloo 和 Popping 技術，1970s Fresno。 |
+| Timothy Solomon | Popin' Pete | Boogaloo Sam 的弟弟，Electric Boogaloos 創始成員，以細膩的 Popping 著稱。 |
+| Michael Wayne Davis | Skeeter Rabbit | Electric Boogaloos 創始成員，以 Boogaloo 和 Worm 動作知名。 |
+| Larry Vazquez | Sugar Pop / Suga Pop | Electric Boogaloos 成員，以流暢的 Liquid 和 Animation 風格著稱。 |
+| Darryl James | Dane 1 | Electric Boogaloos 成員。 |
+| Nate Johnson | Nate "Robot" Johnson | Electric Boogaloos 成員，Robot 風格代表人物。 |
+| Salah Benlemqawanssa | Salah | 法國摩洛哥裔 Popper，以流暢 Waving 和舞台魅力著稱，多次 Juste Debout 冠軍。 |
+| Marquese Scott | NONSTOP | 美國 Popper，以 Animation 和 Slow Motion 的網路影片知名。 |
+| Elijah Gatewood | Mr. Wiggles | 美國 B-boy 和 Popper，Hip-Hop 文化教育者。 |
+| Don Campbell | Campbellock | Locking 創始人，1970s 洛杉磯。 |
+| James Brown | — | Funk 音樂之父，Popping/Locking 舞者的最大音樂影響來源。 |
