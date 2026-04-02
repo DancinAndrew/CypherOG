@@ -1,166 +1,147 @@
-# Everything Claude Code (ECC) — Agent Instructions
+# CypherOG — Agent 與協作說明
 
-This is a **production-ready AI coding plugin** providing 36 specialized agents, 150 skills, 68 commands, and automated hook workflows for software development.
+本專案在根目錄沿用 **Everything Claude Code (ECC)** 的工作流；實際打包內容以 **`.cursor/`** 為準（**25** 個 agent、**約 27** 個 skill、**約 55** 個 slash command）。
 
-**Version:** 1.9.0
+**索引（請優先閱讀）：**
+
+| 路徑 | 內容 |
+|------|------|
+| `.cursor/commands/README.md` | 全部 `/` 指令對照表 |
+| `.cursor/skills/README.md` | 各 skill 在做什麼、HW3 優先建議 |
+| `.cursor/agents/README.md` | 各 agent 角色與使用時機 |
+
+**ECC 參考版本：** 1.9.0
+
+## 本專案重點（HW3）
+
+- **主題**：課程作業「個人知識 RAG」— 資料收集 → chunk → embedding → 向量庫 → `rag_query` / LiteLLM → `skill_builder` → `skill.md`。
+- **技術棧**：以 **Python（≥3.10）** 為主；詳細必繳與評分請對齊 `HW3_Describtion.MD` 與 `README.md`。
+- **優先委派**：與 Python、資料管線、測試、文件、資安相關時，優先依下表與 `.cursor/rules/`（尤其 `python-*.md`）。
 
 ## Core Principles
 
-1. **Agent-First** — Delegate to specialized agents for domain tasks
-2. **Test-Driven** — Write tests before implementation, 80%+ coverage required
-3. **Security-First** — Never compromise on security; validate all inputs
-4. **Immutability** — Always create new objects, never mutate existing ones
-5. **Plan Before Execute** — Plan complex features before writing code
+1. **Agent-First** — 複雜或跨領域工作交給對應 agent 定義（`.cursor/agents/*.md`）
+2. **Test-Driven** — 新功能／修 bug 以測試優先；覆蓋率目標依作業與 `README` 聲明（ECC 預設常見為 80%+）
+3. **Security-First** — API Key 僅能出現在 `.env`，勿提交金鑰；輸入與檔案路徑需驗證
+4. **Immutability** — 偏好不可變與純函數式更新，避免隱性共享狀態
+5. **Plan Before Execute** — 大改動先規劃再實作
 
-## Available Agents
+## Available Agents（25，檔案於 `.cursor/agents/`）
 
 | Agent | Purpose | When to Use |
 |-------|---------|-------------|
-| planner | Implementation planning | Complex features, refactoring |
-| architect | System design and scalability | Architectural decisions |
-| tdd-guide | Test-driven development | New features, bug fixes |
-| code-reviewer | Code quality and maintainability | After writing/modifying code |
-| security-reviewer | Vulnerability detection | Before commits, sensitive code |
-| build-error-resolver | Fix build/type errors | When build fails |
-| e2e-runner | End-to-end Playwright testing | Critical user flows |
-| refactor-cleaner | Dead code cleanup | Code maintenance |
-| doc-updater | Documentation and codemaps | Updating docs |
-| cpp-reviewer | C++ code review | C++ projects |
-| cpp-build-resolver | C++ build errors | C++ build failures |
-| docs-lookup | Documentation lookup via Context7 | API/docs questions |
-| go-reviewer | Go code review | Go projects |
-| go-build-resolver | Go build errors | Go build failures |
-| kotlin-reviewer | Kotlin code review | Kotlin/Android/KMP projects |
-| kotlin-build-resolver | Kotlin/Gradle build errors | Kotlin build failures |
-| database-reviewer | PostgreSQL/Supabase specialist | Schema design, query optimization |
-| python-reviewer | Python code review | Python projects |
-| java-reviewer | Java and Spring Boot code review | Java/Spring Boot projects |
-| java-build-resolver | Java/Maven/Gradle build errors | Java build failures |
-| loop-operator | Autonomous loop execution | Run loops safely, monitor stalls, intervene |
-| harness-optimizer | Harness config tuning | Reliability, cost, throughput |
-| rust-reviewer | Rust code review | Rust projects |
-| rust-build-resolver | Rust build errors | Rust build failures |
-| pytorch-build-resolver | PyTorch runtime/CUDA/training errors | PyTorch build/training failures |
-| typescript-reviewer | TypeScript/JavaScript code review | TypeScript/JavaScript projects |
+| planner | 功能拆解、重構規劃 | 複雜需求、多階段實作 |
+| architect | 系統設計、擴展性 | 架構決策、技術選型 |
+| tdd-guide | TDD、覆蓋率 | 新功能、修 bug、重構 |
+| code-reviewer | 品質、可維護性 | 寫完或改完程式碼後 |
+| security-reviewer | 漏洞與設定風險 | 認證、輸入、API、敏感資料 |
+| build-error-resolver | 建置／型別錯誤 | 編譯或型別失敗時 |
+| e2e-runner | E2E（Playwright 等） | 有需要 UI／瀏覽器流程時 |
+| refactor-cleaner | 死碼、重複、精簡 | 維護、瘦身 |
+| doc-updater | 文件、codemap | README、架構圖更新 |
+| docs-lookup | 官方文件／API 範例 | 查庫用法（常搭配 Context7 MCP） |
+| database-reviewer | PostgreSQL／遷移／查詢 | 向量庫以外的 schema、SQL |
+| python-reviewer | Python 風格、型別、安全 | **本專案主語言** |
+| typescript-reviewer | TS/JS 審查 | 若專案內有前端／Node 腳本 |
+| pytorch-build-resolver | PyTorch 訓練／推理錯誤 | 僅在用到 PyTorch 時 |
+| performance-optimizer | 效能、記憶體、瓶頸 | 明顯慢或資源問題 |
+| loop-operator | 自主迴圈監控與介入 | 長程自動化任務 |
+| harness-optimizer | Agent 設定、成本、吞吐 | 調整 harness／規則時 |
+| gan-planner | GAN：一行需求展開成規格 | 實驗性產品／設計迭代 |
+| gan-generator | GAN：依規格實作並迭代 | 搭配 gan-evaluator |
+| gan-evaluator | GAN：Playwright 等評分回饋 | 搭配 gan-generator |
+| opensource-forker | 開源 fork 去機敏、模板化 | 開源流程第一階段 |
+| opensource-packager | 開源 README、LICENSE、模板 | 開源流程第三階段 |
+| opensource-sanitizer | 開源前掃描外洩與風險 | 公開 release 前 |
+| healthcare-reviewer | 醫療資訊系統合規 | 僅醫療相關程式碼 |
+| chief-of-staff | 多渠道訊息分類與草稿 | 個人通訊工作流（非一般寫碼） |
 
 ## Agent Orchestration
 
-Use agents proactively without user prompt:
-- Complex feature requests → **planner**
-- Code just written/modified → **code-reviewer**
-- Bug fix or new feature → **tdd-guide**
-- Architectural decision → **architect**
-- Security-sensitive code → **security-reviewer**
-- Autonomous loops / loop monitoring → **loop-operator**
-- Harness config reliability and cost → **harness-optimizer**
+可主動委派（無需使用者逐句指定）：
 
-Use parallel execution for independent operations — launch multiple agents simultaneously.
+- 複雜功能 → **planner**
+- 剛改完程式 → **code-reviewer**
+- 新功能或修 bug → **tdd-guide**
+- 架構決策 → **architect**
+- 敏感路徑 → **security-reviewer**
+- 長程 loop → **loop-operator**
+- Harness 調参 → **harness-optimizer**
+
+獨立子任務可並行（多個 agent 讀不同檔案時）。
 
 ## Security Guidelines
 
-**Before ANY commit:**
-- No hardcoded secrets (API keys, passwords, tokens)
-- All user inputs validated
-- SQL injection prevention (parameterized queries)
-- XSS prevention (sanitized HTML)
-- CSRF protection enabled
-- Authentication/authorization verified
-- Rate limiting on all endpoints
-- Error messages don't leak sensitive data
+**Commit 前：**
 
-**Secret management:** NEVER hardcode secrets. Use environment variables or a secret manager. Validate required secrets at startup. Rotate any exposed secrets immediately.
+- 禁止硬編碼金鑰；僅用環境變數或秘密管理
+- 使用者與檔案輸入需驗證；資料庫參數化查詢
+- 錯誤訊息不洩漏內部路徑或金鑰
 
-**If security issue found:** STOP → use security-reviewer agent → fix CRITICAL issues → rotate exposed secrets → review codebase for similar issues.
+**若發現外洩：** 停手 → **security-reviewer** 思路修復 → 旋轉金鑰 → 搜尋同類問題。
 
 ## Coding Style
 
-**Immutability (CRITICAL):** Always create new objects, never mutate. Return new copies with changes applied.
+**Immutability：** 優先回傳新物件，避免就地修改共享結構。
 
-**File organization:** Many small files over few large ones. 200-400 lines typical, 800 max. Organize by feature/domain, not by type. High cohesion, low coupling.
+**檔案：** 依功能／模組切分，單檔不宜過大；與 `HW3` 必繳結構一致。
 
-**Error handling:** Handle errors at every level. Provide user-friendly messages in UI code. Log detailed context server-side. Never silently swallow errors.
+**錯誤：** 邊界捕捉、記錄足夠上下文；不要靜默吞掉例外。
 
-**Input validation:** Validate all user input at system boundaries. Use schema-based validation. Fail fast with clear messages. Never trust external data.
+## Testing
 
-**Code quality checklist:**
-- Functions small (<50 lines), files focused (<800 lines)
-- No deep nesting (>4 levels)
-- Proper error handling, no hardcoded values
-- Readable, well-named identifiers
+- 以 **pytest** 與作業要求為主；模組與整合測試優先。
+- **E2E**：僅在確實有瀏覽器／端到端需求時再動用 **e2e-runner**（本 HW 核心多為 CLI／管線）。
 
-## Testing Requirements
-
-**Minimum coverage: 80%**
-
-Test types (all required):
-1. **Unit tests** — Individual functions, utilities, components
-2. **Integration tests** — API endpoints, database operations
-3. **E2E tests** — Critical user flows
-
-**TDD workflow (mandatory):**
-1. Write test first (RED) — test should FAIL
-2. Write minimal implementation (GREEN) — test should PASS
-3. Refactor (IMPROVE) — verify coverage 80%+
-
-Troubleshoot failures: check test isolation → verify mocks → fix implementation (not tests, unless tests are wrong).
+**TDD 迴圈（通用）：** 先失敗測試 → 最小實作通過 → 重構。
 
 ## Development Workflow
 
-1. **Plan** — Use planner agent, identify dependencies and risks, break into phases
-2. **TDD** — Use tdd-guide agent, write tests first, implement, refactor
-3. **Review** — Use code-reviewer agent immediately, address CRITICAL/HIGH issues
-4. **Capture knowledge in the right place**
-   - Personal debugging notes, preferences, and temporary context → auto memory
-   - Team/project knowledge (architecture decisions, API changes, runbooks) → the project's existing docs structure
-   - If the current task already produces the relevant docs or code comments, do not duplicate the same information elsewhere
-   - If there is no obvious project doc location, ask before creating a new top-level file
-5. **Commit** — Conventional commits format, comprehensive PR summaries
+1. **Plan** — planner：依賴與風險、分階段
+2. **TDD** — tdd-guide：測試先行
+3. **Review** — code-reviewer / python-reviewer：處理 HIGH／CRITICAL
+4. **知識存放** — 架構與操作以 `README.md`、程式註解為主；避免重複開頂層說明檔，除非使用者要求
 
-## Workflow Surface Policy
+## Workflow Surface
 
-- `skills/` is the canonical workflow surface.
-- New workflow contributions should land in `skills/` first.
-- `commands/` is a legacy slash-entry compatibility surface and should only be added or updated when a shim is still required for migration or cross-harness parity.
+- **`/.cursor/skills/`**：流程與領域手冊；詳見 **`/.cursor/skills/README.md`**。需要長流程時 `@` 對應 `SKILL.md`。
+- **`/.cursor/agents/`**：角色／審查清單；詳見 **`/.cursor/agents/README.md`**。用 `@` 或請模型依該角色執行。
+- **`/.cursor/commands/`**：斜線指令；詳見 **`/.cursor/commands/README.md`**。與 skill 重複時以 skill 為準。
 
-## Git Workflow
+## Git
 
-**Commit format:** `<type>: <description>` — Types: feat, fix, refactor, docs, test, chore, perf, ci
+**Commit：** `<type>: <description>`（feat, fix, refactor, docs, test, chore, perf, ci）
 
-**PR workflow:** Analyze full commit history → draft comprehensive summary → include test plan → push with `-u` flag.
+**PR：** 變更要旨、測試方式、如何重現。
 
-## Architecture Patterns
+## Architecture（依專案類型取捨）
 
-**API response format:** Consistent envelope with success indicator, data payload, error message, and pagination metadata.
-
-**Repository pattern:** Encapsulate data access behind standard interface (findAll, findById, create, update, delete). Business logic depends on abstract interface, not storage mechanism.
-
-**Skeleton projects:** Search for battle-tested templates, evaluate with parallel agents (security, extensibility, relevance), clone best match, iterate within proven structure.
+- 若有 **REST／HTTP**：一致錯誤格式、分頁、版本化可參考通用後端模式。
+- **本 repo 以 CLI、資料管線、RAG、LiteLLM 為主**時：以模組邊界、可重跑腳本、`data_update` 冪等等為架構核心，不必硬套網頁 API 信封。
 
 ## Performance
 
-**Context management:** Avoid last 20% of context window for large refactoring and multi-file features. Lower-sensitivity tasks (single edits, docs, simple fixes) tolerate higher utilization.
+- 長上下文任務避免在視窗末端做超大重構。
+- 建置失敗 → **build-error-resolver**，小步修正並重跑。
 
-**Build troubleshooting:** Use build-error-resolver agent → analyze errors → fix incrementally → verify after each fix.
-
-## Project Structure
+## Project Structure（本專案與 ECC）
 
 ```
-agents/          — 36 specialized subagents
-skills/          — 150 workflow skills and domain knowledge
-commands/        — 68 slash commands
-hooks/           — Trigger-based automations
-rules/           — Always-follow guidelines (common + per-language)
-scripts/         — Cross-platform Node.js utilities
-mcp-configs/     — 14 MCP server configurations
-tests/           — Test suite
+（作業必繳） data/, data_update.py, rag_query.py, skill_builder.py, skill.md, README.md, requirements.txt, .env.example
+.cursor/
+  agents/README.md — agent 總覽
+  agents/*.md      — 25 個 agent 定義
+  skills/README.md — skill 總覽
+  skills/*/SKILL.md— 領域與流程手冊
+  commands/README.md — `/` 指令總覽
+  commands/*.md  — 斜線指令本體（約 55 個）
+  rules/         — 專案規則（common + python 等）
+  hooks/         — 事件掛鉤（需在 Cursor 啟用）
+  mcp-configs/   — MCP 範本（需自行合併與填 key）
 ```
-
-`commands/` remains in the repo for compatibility, but the long-term direction is skills-first.
 
 ## Success Metrics
 
-- All tests pass with 80%+ coverage
-- No security vulnerabilities
-- Code is readable and maintainable
-- Performance is acceptable
-- User requirements are met
+- 作業階段要求與 CI 通過（見 `HW3_Describtion.MD`）
+- 無金鑰外洩；測試與文件可復現
+- 程式可讀、模組責任清楚
