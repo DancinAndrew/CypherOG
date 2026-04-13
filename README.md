@@ -1,4 +1,4 @@
-# HW3 — CypherOG：街舞知識 RAG 系統
+# CypherOG：街舞知識 RAG 系統
 
 > **知識庫主題：Popping & Funk Style 街舞**
 > 開發環境：Python 3.12.13
@@ -152,8 +152,8 @@ Popping 歷史文章中有大量「A 人物→B 事件→C 影響」的連貫敘
 |------|---------|
 | **multilingual-MiniLM-L12-v2（選用）** | 384 維、完全本地免費、原生中英混合、~420MB 首次下載後離線可用 |
 | all-MiniLM-L6-v2（HuggingFace） | 英文精準度較高，但對「鎖定」「震動」等中文 Popping 術語語義捕捉弱 |
-| nomic-embed-text（Ollama） | 需另行安裝 Ollama server，增加環境依賴；768 維較大但本作業規模效益不明顯 |
-| text-embedding-3-small（OpenAI） | 付費，課程規定 LiteLLM 配額不涵蓋 Embedding，直接排除 |
+| nomic-embed-text（Ollama） | 需另行安裝 Ollama server，增加環境依賴；768 維較大但本專案規模效益不明顯 |
+| text-embedding-3-small（OpenAI） | 付費，且本地執行目標下不引入外部 API 依賴，直接排除 |
 
 **中英文混合處理的具體考量：**
 
@@ -164,7 +164,7 @@ Popping 歷史文章中有大量「A 人物→B 事件→C 影響」的連貫敘
 - 本地：延遲穩定（~50ms/batch on M1）、無配額限制、可離線、不洩漏資料
 - API（HuggingFace Inference API / OpenAI）：無需下載模型、尺寸更大的模型可用，但有速率限制和費用，CI 環境需要網路和 API Key
 
-本作業選本地，理由是可重現性（助教 clone 後不需要額外 API Key 即可執行 embedding）。
+本專案選本地，理由是可重現性（clone 後不需要額外 API Key 即可執行 embedding）。
 
 ---
 
@@ -172,14 +172,14 @@ Popping 歷史文章中有大量「A 人物→B 事件→C 影響」的連貫敘
 
 **選用 ChromaDB（Pure Python 持久化向量庫）**
 
-| 方案 | 特色 | 本作業適配性 |
+| 方案 | 特色 | 適配性評估 |
 |------|------|------------|
-| **ChromaDB（選用）** | Pure Python、零 Docker、cosine / L2 / IP 距離、支援 metadata filter | ✅ 最佳：pip install 即用，無需 server，助教環境零設定 |
-| pgvector | SQL 查詢力強、業界主流 | ❌ 需 Docker + PostgreSQL，增加驗收環境複雜度 |
+| **ChromaDB（選用）** | Pure Python、零 Docker、cosine / L2 / IP 距離、支援 metadata filter | ✅ 最佳：pip install 即用，無需 server，零設定即可運行 |
+| pgvector | SQL 查詢力強、業界主流 | ❌ 需 Docker + PostgreSQL，增加環境複雜度 |
 | Qdrant | REST API、高效能、Docker 或 cloud | ❌ 需 Docker 且非 Python-native |
 | FAISS | 純記憶體、最快 | ❌ 重啟後資料消失，不符合 `--rebuild` 後可持久查詢的冪等性需求 |
 
-ChromaDB 使用 HNSW 索引，在本作業 ~400 個 chunks 的規模下查詢延遲 < 5ms，且支援 `where` 條件的 metadata 過濾（實驗 Combo E 的 section_title 過濾即利用此功能），已完全滿足需求。
+ChromaDB 使用 HNSW 索引，在本專案 ~400 個 chunks 的規模下查詢延遲 < 5ms，且支援 `where` 條件的 metadata 過濾（實驗 Combo E 的 section_title 過濾即利用此功能），已完全滿足需求。
 
 ---
 
@@ -331,7 +331,7 @@ DEFAULT_QUESTIONS = [
 
 1. **問題對應章節**：每個問題的檢索結果直接對應 skill.md 的一個必要章節（`## Core Concepts`、`## Key Trends` 等），LLM 只需「填空」而非從無到有。這樣的設計讓輸出格式高度穩定。
 2. **人物與組織分開**：Popping 世界有大量人名（Boogaloo Sam、Popin' Pete）和組織名（Electric Boogaloos、Infinite Force），合在一題容易稀釋；分開兩題讓 LLM 有更充分的素材。
-3. **Example Q&A 前置驗證**：第 6 個問題直接要求 5 組問答，相當於對知識庫做了即時品質驗證——如果 RAG 找不到答案，LLM 會在 Q&A 中標注「資料未涵蓋」，讓評分者能清楚看到知識庫的實際覆蓋範圍。
+3. **Example Q&A 前置驗證**：第 6 個問題直接要求 5 組問答，相當於對知識庫做了即時品質驗證——如果 RAG 找不到答案，LLM 會在 Q&A 中標注「資料未涵蓋」，讓使用者能清楚看到知識庫的實際覆蓋範圍。
 4. **Source References 確定性生成**：最後一章節（`## Source References`）不依賴 LLM，而是直接掃描 `data/raw/` 目錄，確定性地列出所有 43 份文件，消除 LLM 可能遺漏來源的幻覺風險。
 
 8 次 RAG 查詢結果（top-k=8，比原本的 5 更多素材）統一送入 LiteLLM，強制按照規範格式輸出完整的 skill.md。
@@ -344,7 +344,7 @@ DEFAULT_QUESTIONS = [
 
 本專案以 **Python 3.12.13** 開發，需要 Python ≥ 3.10。
 
-> ⚠️ **為什麼一定要用虛擬環境？** 在 Ubuntu 22.04+ 等現代 Linux 發行版中，直接執行 `pip install` 會遭遇 `error: externally-managed-environment`，系統禁止在全域 Python 環境安裝套件。**解法是建立虛擬環境**，能避免不同專案的套件版本互相汙染。
+> ⚠️ **為什麼一定要用虛擬環境？** 在 Ubuntu 22.04+ 等現代 Linux 發行版中，直接執行 `pip install` 會遭遇 `error: externally-managed-environment`，系統禁止在全域 Python 環境安裝套件。**解法是建立虛擬環境**，能避免不同專案的套件版本互相污染。
 
 ```bash
 # Step 0：確認 Python 版本（需 >= 3.10）
@@ -353,14 +353,14 @@ python3 --version
 
 # Step 1：建立虛擬環境（擇一）
 python3 -m venv .venv                    # ✅ 推薦：標準 venv，無需額外安裝
-# conda create -n hw3 python=3.12        # 或使用 conda
+# conda create -n cyphog python=3.12     # 或使用 conda
 
 # Step 2：啟動虛擬環境
 source .venv/bin/activate                # Linux / macOS
 # .venv\Scripts\activate                 # Windows（若適用）
 
 # 啟動後，命令列提示符會出現 (.venv) 前綴，代表成功進入虛擬環境
-# (.venv) user@host:~/hw3-build-your-personal-rag$
+# (.venv) user@host:~/CypherOG$
 
 # Step 3：安裝套件
 pip install -r requirements.txt
@@ -368,7 +368,7 @@ pip install -r requirements.txt
 
 > **注意**：`torch` 首次安裝可能需要 3–5 分鐘，視網路速度而定。`sentence-transformers` 模型（約 420MB）會在第一次執行 `data_update.py` 時自動從 HuggingFace 下載，之後完全離線可用。
 
-`requirements.txt` 第一行已標註 Python 版本，供助教確認相容性：
+`requirements.txt` 第一行已標註 Python 版本：
 
 ```
 # Python >= 3.10 required (developed with 3.12.13)
@@ -398,7 +398,7 @@ CHROMA_PERSIST_DIR=./chroma_db
 
 ### 4-3. 完整執行流程
 
-> ⚠️ **這是評分時最關鍵的章節。** 以下每一行指令均可在乾淨環境 `git clone` 後直接複製貼上執行，按順序逐步操作即可完整複現系統。
+> 以下每一行指令均可在乾淨環境 `git clone` 後直接複製貼上執行，按順序逐步操作即可完整複現系統。
 
 ```bash
 # ① 確認 Python 版本
@@ -413,7 +413,7 @@ pip install -r requirements.txt
 
 # ④ 設定環境變數
 cp .env.example .env
-# 請將 .env 中的 LITELLM_API_KEY 和 LITELLM_BASE_URL 填入助教提供的值
+# 請將 .env 中的 LITELLM_API_KEY 和 LITELLM_BASE_URL 填入你的值
 
 # ⑤ 啟動 Vector DB（本專案使用 ChromaDB，此步驟跳過）
 # ChromaDB 為 Pure Python，不需要 Docker，pip install 後即可直接使用
@@ -453,12 +453,12 @@ python data_update.py --rebuild
 
 | 變數 | 必填 | 說明 | 預設值 |
 |------|------|------|--------|
-| `LITELLM_API_KEY` | ✅ | 助教提供的 LiteLLM API Key | — |
-| `LITELLM_BASE_URL` | ✅ | 助教提供的 OpenAI-compatible endpoint | — |
+| `LITELLM_API_KEY` | ✅ | LiteLLM API Key | — |
+| `LITELLM_BASE_URL` | ✅ | OpenAI-compatible endpoint URL | — |
 | `LITELLM_MODEL` | 選填 | LLM 模型名稱 | `gemini-2.5-flash` |
 | `EMBEDDING_MODEL` | 選填 | sentence-transformers 模型名稱 | `paraphrase-multilingual-MiniLM-L12-v2` |
 | `CHROMA_PERSIST_DIR` | 選填 | ChromaDB 持久化路徑 | `./chroma_db` |
-| `CHROMA_COLLECTION` | 選填 | ChromaDB 集合名稱 | `hw3_rag` |
+| `CHROMA_COLLECTION` | 選填 | ChromaDB 集合名稱 | `cypher_og` |
 | `CHUNK_SIZE` | 選填 | Chunk 最大字元數 | `600` |
 | `CHUNK_OVERLAP` | 選填 | Chunk 前綴 overlap 字元數 | `100` |
 | `MAX_DISTANCE` | 選填 | cosine 距離過濾閾值（越小越嚴格） | `0.65` |
@@ -489,7 +489,7 @@ python data_update.py --rebuild
 | popping_style_taxonomy.md（個人整理風格分類體系） | Markdown | 個人著作 | 1 份 |
 | **合計** | | | **43 份** |
 
-所有資料均為合法公開來源或個人著作，無付費牆內容，符合課程合規要求。
+所有資料均為合法公開來源或個人著作，無付費牆內容。
 
 ---
 
