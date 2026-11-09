@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""資料清理、chunk、embedding、寫入向量庫。支援 --rebuild 與增量更新（檔案 hash）。"""
+"""資料清理、chunk、embedding、寫入向量庫，並維護該 collection 的 BM25 索引。
+
+支援 --rebuild 全量重建與增量更新（檔案 hash）；兩者結束時 BM25 索引都會與向量庫同步。
+--rebuild 會從 data/raw 重新抽取並改寫已提交的 data/processed；加 --reuse-processed 則直接以
+data/processed 的文字建索引，不改動 data/（與實驗及 experiments/corpus_pin.json 使用同一份文字）。
+"""
 
 from __future__ import annotations
 
@@ -18,10 +23,16 @@ from rag_common import (
     DATA_PROCESSED,
     DATA_RAW,
     MANIFEST_PATH,
+    describe_exception,
     embed_texts,
     get_chroma_collection,
+    refresh_bm25_index,
+    resolve_collection_name,
     save_bm25_index,
+    text_sha256,
 )
+
+SUPPORTED_SUFFIXES = frozenset({".md", ".txt", ".markdown", ".pdf"})
 
 
 def _sha256_file(path: Path) -> str:
@@ -37,7 +48,11 @@ def _load_manifest() -> dict[str, str]:
         return {}
     try:
         return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as exc:
+        print(
+            f"[data_update] 警告：ingest manifest 無法解析（{type(exc).__name__}），視為空白並重新處理所有檔案。",
+            file=sys.stderr,
+        )
         return {}
 
 
@@ -151,47 +166,80 @@ def _processed_path_for(raw_path: Path) -> Path:
     return DATA_PROCESSED / f"{raw_path.stem}.txt"
 
 
+def list_raw_documents() -> list[Path]:
+    """data/raw 內所有支援格式的原始文件（依路徑排序）。"""
+    return sorted(
+        p for p in DATA_RAW.iterdir() if p.is_file() and p.suffix.lower() in SUPPORTED_SUFFIXES
+    )
+
+
+def _load_document_text(raw: Path, reuse_processed: bool) -> str:
+    """取得文件清理後的文字：reuse_processed 時優先讀 data/processed/<stem>.txt（不寫入任何檔案）。"""
+    if reuse_processed:
+        processed = _processed_path_for(raw)
+        if processed.is_file():
+            return processed.read_text(encoding="utf-8")
+    return extract_clean_text(raw)
+
+
+def _clear_collection(coll, collection_name: str | None) -> None:
+    """刪除 collection 內所有 chunk；失敗時拋 RuntimeError（chromadb 對重複 id 的 add 不會覆寫舊文字）。"""
+    try:
+        ids = coll.get(include=[]).get("ids") or []
+        if ids:
+            coll.delete(ids=ids)
+    except Exception as exc:
+        name = resolve_collection_name(collection_name)
+        raise RuntimeError(
+            f"清空 collection {name!r} 失敗（{type(exc).__name__}）；中止重建，避免新舊 chunk 混雜。"
+        ) from exc
+
+
 def rebuild_processed_and_index(
     chunk_fn: Callable[[str], list[str]] | None = None,
     collection_name: str | None = None,
-) -> None:
-    """全量重建：清空 processed/、清空 Chroma collection、重新 chunk + embed + 寫入。
+    reuse_processed: bool = False,
+    write_processed: bool = True,
+) -> dict[str, str]:
+    """全量重建：清空 Chroma collection、重新 chunk + embed + 寫入，並重建該 collection 的 BM25 索引。
+
     chunk_fn: 自訂切割函式 (text -> list[str])；為 None 時使用預設 chunk_text。
     collection_name: 指定 Chroma collection；為 None 時使用 rag_common.CHROMA_COLLECTION。
+    reuse_processed: True 時優先讀取既有的 data/processed/<stem>.txt（不存在才從 data/raw 抽取，僅存於記憶體），
+        不刪除、不寫入 data/processed，也不動 ingest manifest；False 時一律從 data/raw 重新抽取。
+    write_processed: 只在 reuse_processed=False 時有作用。True（預設，CLI --rebuild）時清空 data/processed
+        與 ingest manifest 並寫回新抽取的文字；False 時新抽取的文字只存於記憶體，不動 data/ 下任何檔案
+        （experiment_runner 的 --re-extract 如此使用）。
+    清空 collection 失敗時拋 RuntimeError，且在此之前不會動到 data/processed。
+    回傳 {processed 檔名: 本次建索引所用文字的 sha256}，供實驗記錄語料指紋。
     """
-    if DATA_PROCESSED.exists():
-        shutil.rmtree(DATA_PROCESSED)
-    DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
-    if MANIFEST_PATH.is_file():
-        MANIFEST_PATH.unlink()
-
+    persist = write_processed and not reuse_processed
     coll = get_chroma_collection(collection_name)
-    try:
-        existing = coll.get(include=[])
-        ids = existing.get("ids") or []
-        if ids:
-            coll.delete(ids=ids)
-    except Exception:
-        pass
+    _clear_collection(coll, collection_name)
+
+    if persist:
+        if DATA_PROCESSED.exists():
+            shutil.rmtree(DATA_PROCESSED)
+        DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
+        if MANIFEST_PATH.is_file():
+            MANIFEST_PATH.unlink()
 
     _chunk = chunk_fn or (lambda t: chunk_text(t, CHUNK_SIZE, CHUNK_OVERLAP))
 
     manifest: dict[str, str] = {}
-    raws = sorted(
-        p
-        for p in DATA_RAW.iterdir()
-        if p.is_file() and p.suffix.lower() in {".md", ".txt", ".markdown", ".pdf"}
-    )
+    text_hashes: dict[str, str] = {}
     all_ids: list[str] = []
     all_docs: list[str] = []
     all_metas: list[dict] = []
 
-    for raw in raws:
+    for raw in list_raw_documents():
         rel = raw.relative_to(DATA_RAW)
-        text = extract_clean_text(raw)
+        text = _load_document_text(raw, reuse_processed)
         out = _processed_path_for(raw)
-        out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(text, encoding="utf-8")
+        if persist:
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(text, encoding="utf-8")
+        text_hashes[out.name] = text_sha256(text)
         digest = _sha256_file(raw)
         manifest[str(rel)] = digest
 
@@ -217,28 +265,36 @@ def rebuild_processed_and_index(
     if all_docs:
         embs = embed_texts(all_docs)
         coll.add(ids=all_ids, documents=all_docs, metadatas=all_metas, embeddings=embs)
-        # 同步建立 BM25 索引（混合搜尋支援）
-        save_bm25_index(all_docs, all_ids)
+    # 每個 collection 一份 BM25 索引；語料為空時也覆寫，避免留下舊索引
+    save_bm25_index(all_docs, all_ids, collection_name)
 
-    _save_manifest(manifest)
+    if persist:
+        _save_manifest(manifest)
+    return text_hashes
 
 
 def incremental_update(
     chunk_fn: Callable[[str], list[str]] | None = None,
     collection_name: str | None = None,
 ) -> None:
+    """增量更新：只重新處理 hash 變動的檔案，最後依 collection 現況重建 BM25 索引。
+
+    ingest manifest 是全域的（不分 collection / persist 目錄）；collection 為空時 manifest 不適用，
+    視為所有檔案都已變動。刪除舊 chunk 失敗時拋 RuntimeError（避免新舊文字混雜）。
+    """
     DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
     manifest = _load_manifest()
     coll = get_chroma_collection(collection_name)
+    if manifest and coll.count() == 0:
+        print(
+            f"[data_update] 注意：collection {resolve_collection_name(collection_name)!r} 是空的，"
+            "ingest manifest 不適用，全部文件重新處理。",
+            file=sys.stderr,
+        )
+        manifest = {}
     _chunk = chunk_fn or (lambda t: chunk_text(t, CHUNK_SIZE, CHUNK_OVERLAP))
 
-    raws = sorted(
-        p
-        for p in DATA_RAW.iterdir()
-        if p.is_file() and p.suffix.lower() in {".md", ".txt", ".markdown", ".pdf"}
-    )
-
-    for raw in raws:
+    for raw in list_raw_documents():
         rel = raw.relative_to(DATA_RAW)
         rel_s = str(rel)
         digest = _sha256_file(raw)
@@ -254,8 +310,10 @@ def incremental_update(
             existing = coll.get(where={"source_file": base})
             if existing and existing.get("ids"):
                 coll.delete(ids=existing["ids"])
-        except Exception:
-            pass
+        except Exception as exc:
+            raise RuntimeError(
+                f"刪除 {base} 的舊 chunk 失敗（{type(exc).__name__}）；中止更新，避免新舊 chunk 混雜。"
+            ) from exc
 
         chunks = _chunk(text)
         if not chunks:
@@ -282,6 +340,8 @@ def incremental_update(
         manifest[rel_s] = digest
 
     _save_manifest(manifest)
+    # 詞彙索引與向量庫同步，避免 Hybrid Search 用到過期的 BM25 索引
+    refresh_bm25_index(collection_name)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -293,18 +353,26 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="清空 data/processed、重設向量集合並全量重建索引",
     )
-    return p.parse_args(argv)
+    p.add_argument(
+        "--reuse-processed",
+        action="store_true",
+        help="搭配 --rebuild：以已提交的 data/processed 文字建索引，不刪除、不改寫 data/processed 與 manifest",
+    )
+    args = p.parse_args(argv)
+    if args.reuse_processed and not args.rebuild:
+        p.error("--reuse-processed 只能搭配 --rebuild 使用")
+    return args
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     try:
         if args.rebuild:
-            rebuild_processed_and_index()
+            rebuild_processed_and_index(reuse_processed=args.reuse_processed)
         else:
             incremental_update()
     except Exception as e:
-        print(f"[data_update] 錯誤: {e}", file=sys.stderr)
+        print(f"[data_update] 錯誤（{describe_exception(e)}）", file=sys.stderr)
         return 1
     print("data_update 完成。")
     return 0

@@ -4,6 +4,7 @@
 策略說明（由 experiment_runner.py 實驗選出最優組合）：
 - 預設 prompt_style="cot"（Chain-of-Thought），比 "strong" 更能抑制幻覺
 - 支援 --expand-query 查詢擴展：用 LLM 將查詢改寫為多角度子查詢，提高召回率
+- 支援 --hybrid：向量檢索 + BM25 詞彙檢索，以標準 Reciprocal Rank Fusion 融合
 - 支援 --prompt-style {weak,strong,cot} 切換 prompt 策略
 """
 
@@ -12,21 +13,31 @@ from __future__ import annotations
 import argparse
 import os
 import sys
+from collections.abc import Sequence
 from textwrap import dedent
 
-from dotenv import load_dotenv
+import numpy as np
 
-from rag_common import embed_texts, get_chroma_collection, litellm_chat_completion, load_bm25_index
+# rag_common 匯入時會載入本 repo 的 .env（只讀 <repo>/.env，不往上層目錄搜尋）
+from rag_common import (
+    REBUILD_HINT,
+    effective_llm_model,
+    embed_texts,
+    get_chroma_collection,
+    litellm_chat_completion,
+    load_bm25_index,
+    resolve_collection_name,
+    tokenize_for_bm25,
+)
 
-load_dotenv()
-
-DEFAULT_MODEL = os.environ.get("LITELLM_MODEL", "gemini-2.5-flash")
+DEFAULT_MODEL = effective_llm_model()
 DEFAULT_TOP_K = 5
 DEFAULT_PROMPT_STYLE = "cot"   # 實驗結果：CoT > strong > weak（Combo E 最優）
 MAX_HISTORY_TURNS = 6  # 最多保留 3 輪 user+assistant（各 3 則）
 MAX_QUERY_LEN = 500    # 防止 prompt injection 超長注入
 # Chroma cosine distance：0=完全相同，1=完全不似；> 閾值的 chunks 視為不相關
 MAX_DISTANCE = float(os.environ.get("MAX_DISTANCE", "0.65"))
+RRF_K = 60  # Cormack et al. (2009) 建議的 RRF 常數
 
 
 def _sanitize_query(query: str) -> str:
@@ -34,12 +45,16 @@ def _sanitize_query(query: str) -> str:
     return query[:MAX_QUERY_LEN]
 
 
-def expand_query(query: str, model: str) -> list[str]:
+def expand_query(query: str, model: str | None, *, strict: bool = False) -> list[str]:
     """用 LLM 將查詢改寫為最多 3 個不同角度的子查詢（Query Expansion）。
 
     策略：街舞領域有大量專有名詞（中英混用），擴展查詢能產生跨語言版本，
     提高向量檢索的召回率。例如：「震感舞是誰發明的？」→ 擴展出
     「Popping dance origin creator」、「Boogaloo Sam Fresno history」等。
+
+    回傳 [原始查詢, 子查詢...]。LLM 呼叫或解析失敗時：strict=False（CLI 預設）在 stderr 警告並
+    退回 [query]；strict=True（實驗用）直接拋出原例外，呼叫端才能把該題記為擴展失敗，
+    而不是默默以純向量檢索冒充 Query Expansion。
     """
     prompt = dedent(f"""\
         請將以下問題改寫為 3 個不同角度的搜尋查詢（用於向量資料庫檢索）。
@@ -62,26 +77,95 @@ def expand_query(query: str, model: str) -> list[str]:
         # 原始查詢永遠包含在內，去重
         all_queries = [query] + [q for q in expanded if q != query]
         return all_queries[:4]  # 最多 4 個（原始 + 3 個擴展）
-    except Exception:
+    except Exception as exc:
+        if strict:
+            raise
+        print(
+            f"[rag_query] 警告：查詢擴展失敗（{type(exc).__name__}），改用原始查詢。",
+            file=sys.stderr,
+        )
         return [query]  # 失敗時退回原始查詢
+
+
+def reciprocal_rank_fusion(
+    ranked_lists: Sequence[Sequence[str]],
+    k: int = RRF_K,
+    weights: Sequence[float] | None = None,
+) -> list[tuple[str, float]]:
+    """標準 Reciprocal Rank Fusion（Cormack, Clarke & Buettcher, SIGIR 2009）。
+
+    score(d) = Σ_i w_i / (k + rank_i(d))，rank 從 1 起算；某個 list 沒有 d 時該項為 0。
+    同一 list 內重複的 id 只算第一次出現（rank 以去重後的位置計）。
+    weights 預設皆為 1.0，長度必須等於 ranked_lists。
+
+    排序：分數高者優先；同分時依序比較「各 list 中最好的名次」、「第一個收錄該 id 的 list
+    索引」（較早的 list 優先，例如 dense 在前）、最後是 id 字典序，確保結果可重現。
+    回傳新的 [(id, score), ...]，不修改輸入。
+    """
+    if k < 0:
+        raise ValueError(f"k 必須 >= 0，收到 {k}")
+    if weights is None:
+        weights = [1.0] * len(ranked_lists)
+    elif len(weights) != len(ranked_lists):
+        raise ValueError(f"weights 長度 {len(weights)} 與 ranked_lists 數量 {len(ranked_lists)} 不符")
+
+    scores: dict[str, float] = {}
+    best_rank: dict[str, int] = {}
+    first_list: dict[str, int] = {}
+    for list_idx, (ranked, weight) in enumerate(zip(ranked_lists, weights)):
+        for rank, cid in enumerate(dict.fromkeys(ranked), start=1):
+            scores[cid] = scores.get(cid, 0.0) + weight / (k + rank)
+            best_rank[cid] = min(best_rank.get(cid, rank), rank)
+            first_list.setdefault(cid, list_idx)
+
+    order = sorted(scores, key=lambda cid: (-scores[cid], best_rank[cid], first_list[cid], cid))
+    return [(cid, scores[cid]) for cid in order]
+
+
+def _chunk_id(source_file: str, chunk_index: object) -> str:
+    return f"{source_file}::{chunk_index}"
+
+
+def _cite_row(doc: str, meta: dict, distance: float, retrieved_by: str) -> dict:
+    src = meta.get("source_file", "unknown")
+    idx = meta.get("chunk_index", 0)
+    return {
+        "chunk_id": _chunk_id(src, idx),
+        "source_file": src,
+        "chunk_index": idx,
+        "distance": float(distance),
+        "section_title": meta.get("section_title", ""),
+        "text": doc,
+        "retrieved_by": retrieved_by,
+    }
 
 
 def retrieve_context(
     query: str,
     top_k: int,
     max_distance: float | None = None,
-    rerank: bool = False,
+    truncate_to: int | None = None,
     collection_name: str | None = None,
     extra_queries: list[str] | None = None,
 ) -> tuple[str, list[dict]]:
-    """向量搜尋 + 距離過濾。
+    """向量搜尋 + cosine 距離過濾。
 
-    max_distance: None 時使用模組層 MAX_DISTANCE（來自 .env）。
-    rerank: True 時將候選按距離升序排列後取前 5（retrieve-then-rerank 模擬）。
+    max_distance: None 時使用模組層 MAX_DISTANCE（來自 .env）；距離大於此值的 chunk 直接捨棄。
+    truncate_to: 設定時保留距離排序後的前 truncate_to 個（Combo D：先取 top-10 再截斷為 5，
+        結果等同 top-5，並非 reranker）；None 時保留前 top_k 個。
     collection_name: None 時使用預設 collection。
-    extra_queries: Query Expansion 的額外查詢列表。多個查詢的結果會去重合併，
-        取整體最近的 top_k 個 chunks（Reciprocal Rank Fusion 簡化版）。
+    extra_queries: Query Expansion 的額外子查詢。每個查詢各取 top_k 個候選後去重合併：
+        同一 chunk 被多個查詢找到時保留「最小」距離，再依距離升序排序。
+        這只是去重 + 取最小距離，不是 Reciprocal Rank Fusion；
+        且每個 chunk 的距離是相對於「找到它的那個子查詢」，不一定是原始問題。
+
+    回傳 (context 字串, cite_rows)；cite_row 含 chunk_id、source_file、chunk_index、distance、
+    section_title、text 與 retrieved_by="dense"。
     """
+    if top_k < 1:
+        raise ValueError(f"top_k 必須 >= 1，收到 {top_k}")
+    if truncate_to is not None and truncate_to < 1:
+        raise ValueError(f"truncate_to 必須 >= 1，收到 {truncate_to}")
     effective_distance = max_distance if max_distance is not None else MAX_DISTANCE
     coll = get_chroma_collection(collection_name)
 
@@ -90,9 +174,8 @@ def retrieve_context(
     if extra_queries:
         all_queries += [q for q in extra_queries if q != query]
 
-    seen_ids: set[str] = set()
-    candidates: list[tuple[str, dict, float]] = []
-
+    # chunk_id -> (doc, meta, 最小距離)；dict 保留首次出現順序，排序穩定（與第一輪行為一致）
+    best: dict[str, tuple[str, dict, float]] = {}
     for q in all_queries:
         q_emb = embed_texts([q])[0]
         res = coll.query(
@@ -105,34 +188,80 @@ def retrieve_context(
         dists = (res.get("distances") or [[]])[0]
 
         for i, doc in enumerate(docs):
-            meta = metas[i] if i < len(metas) else {}
-            dist = dists[i] if i < len(dists) else 1.0
+            meta = (metas[i] if i < len(metas) else None) or {}
+            dist = float(dists[i]) if i < len(dists) else 1.0
             if dist > effective_distance:
                 continue
-            chunk_id = f"{meta.get('source_file','')}::{meta.get('chunk_index', i)}"
-            if chunk_id not in seen_ids:
-                seen_ids.add(chunk_id)
-                candidates.append((doc, meta, dist))
+            chunk_id = _chunk_id(meta.get("source_file", ""), meta.get("chunk_index", i))
+            if chunk_id not in best or dist < best[chunk_id][2]:
+                best[chunk_id] = (doc, meta, dist)
 
-    # 按距離排序，取最相關的 top_k 個
-    candidates.sort(key=lambda x: x[2])
-    if rerank:
-        candidates = candidates[:5]
-    else:
-        candidates = candidates[:top_k]
+    # 按距離排序（穩定排序），取最相關的候選
+    candidates = sorted(best.values(), key=lambda x: x[2])
+    limit = truncate_to if truncate_to is not None else top_k
+    cite_rows = [_cite_row(doc, meta, dist, "dense") for doc, meta, dist in candidates[:limit]]
+    return _format_context(cite_rows)
 
-    blocks: list[str] = []
-    cite_rows: list[dict] = []
-    for doc, meta, dist in candidates:
-        src = meta.get("source_file", "unknown")
-        idx = meta.get("chunk_index", 0)
-        section = meta.get("section_title", "")
-        section_label = f" | 章節: {section}" if section else ""
-        blocks.append(f"[來源 {len(blocks)+1}] 檔案: {src} | chunk: {idx}{section_label}\n{doc}")
-        cite_rows.append(
-            {"source_file": src, "chunk_index": idx, "distance": dist, "section_title": section, "text": doc}
-        )
-    return "\n\n".join(blocks), cite_rows
+
+def cosine_distances_to_query(
+    query: str,
+    chunk_ids: Sequence[str],
+    collection_name: str | None = None,
+) -> dict[str, float]:
+    """計算 query 與指定 chunks 的 cosine distance（1 - cosine similarity）。
+
+    query 只 embed 一次；chunk 向量取自 Chroma 已存的 embeddings。
+    不在 collection 中的 id 不會出現在回傳 dict 中。零向量視為距離 1.0。
+    """
+    wanted = list(dict.fromkeys(chunk_ids))
+    if not wanted:
+        return {}
+    q = np.asarray(embed_texts([query])[0], dtype=np.float64)
+    q_norm = float(np.linalg.norm(q))
+    got = get_chroma_collection(collection_name).get(ids=wanted, include=["embeddings"])
+    got_ids = got.get("ids")
+    embeddings = got.get("embeddings")
+    if got_ids is None or embeddings is None:  # chroma 可能回傳 numpy array，不可用真值判斷
+        return {}
+
+    distances: dict[str, float] = {}
+    for cid, emb in zip(list(got_ids), embeddings):
+        v = np.asarray(emb, dtype=np.float64)
+        denom = q_norm * float(np.linalg.norm(v))
+        distances[cid] = 1.0 if denom == 0.0 else float(1.0 - float(np.dot(q, v)) / denom)
+    return distances
+
+
+def _lexical_ranking(bm25, bm25_ids: list[str], query: str, limit: int) -> list[str]:
+    """BM25 排名：只保留分數 > 0 的 chunk，依 (分數降冪, id) 排序後取前 limit 個。"""
+    scores = bm25.get_scores(tokenize_for_bm25(query))
+    hits = [i for i in range(len(bm25_ids)) if float(scores[i]) > 0.0]
+    hits.sort(key=lambda i: (-float(scores[i]), bm25_ids[i]))
+    return [bm25_ids[i] for i in hits[:limit]]
+
+
+def _fetch_lexical_only(
+    query: str, chunk_ids: list[str], collection_name: str | None
+) -> dict[str, dict]:
+    """從 Chroma 取回只被 BM25 找到的 chunks，並計算它們與 query 的真實 cosine distance。"""
+    if not chunk_ids:
+        return {}
+    got = get_chroma_collection(collection_name).get(
+        ids=chunk_ids, include=["documents", "metadatas"]
+    )
+    got_ids = list(got.get("ids") or [])
+    docs = got.get("documents")
+    metas = got.get("metadatas")
+    docs = list(docs) if docs is not None else [""] * len(got_ids)
+    metas = list(metas) if metas is not None else [{}] * len(got_ids)
+    distances = cosine_distances_to_query(query, got_ids, collection_name)
+
+    rows: dict[str, dict] = {}
+    for cid, doc, meta in zip(got_ids, docs, metas):
+        if cid not in distances:
+            continue
+        rows[cid] = {**_cite_row(doc or "", meta or {}, distances[cid], "bm25"), "chunk_id": cid}
+    return rows
 
 
 def hybrid_retrieve(
@@ -141,84 +270,70 @@ def hybrid_retrieve(
     max_distance: float | None = None,
     collection_name: str | None = None,
     extra_queries: list[str] | None = None,
-    bm25_weight: float = 0.3,
+    rrf_k: int = RRF_K,
+    *,
+    strict: bool = False,
 ) -> tuple[str, list[dict]]:
-    """BM25 + 向量混合搜尋（Hybrid Search）。
+    """BM25 + 向量混合搜尋（Hybrid Search），以標準 RRF 融合兩個排名。
 
     策略：對於專有名詞（人名、組織名：如 "Boogaloo Sam"、"Electric Boogaloos"），
     純向量搜尋可能因語義相似度計算而錯失精確匹配，BM25 的詞頻統計能彌補此缺陷。
-    使用 Reciprocal Rank Fusion（RRF）合併兩個排序結果。
 
-    bm25_weight: BM25 得分在 RRF 中的加權比例（0=純向量，1=純BM25）
+    流程：
+    1. dense：retrieve_context 取 top_k*3 個候選（套用 max_distance 與 extra_queries）。
+    2. lexical：該 collection 的 BM25 索引對「原始 query」評分，取分數 > 0 的前 top_k*3 個。
+    3. reciprocal_rank_fusion([dense, lexical], k=rrf_k)，依融合名次取前 top_k 個；
+       BM25 索引中已不在 Chroma 的 id（索引過期）會在 stderr 警告後略過，由下一名遞補。
+    cosine 距離門檻（max_distance）只作用在 dense 通道；只被 BM25 找到的 chunk
+    即使距離超過門檻也可能入選，其 distance 為與原始 query 的真實 cosine distance。
+    retrieved_by 標示來源："dense"、"bm25" 或兩者皆有的 "both"。
+    找不到可用的 BM25 索引時：strict=False（CLI 預設）在 stderr 警告並退回純向量結果；
+    strict=True（實驗用）拋 RuntimeError，避免把純向量結果記成 Hybrid Search。
     """
-    import re
+    bm25, bm25_ids, _ = load_bm25_index(collection_name)
+    if bm25 is None:
+        name = resolve_collection_name(collection_name)
+        if strict:
+            raise RuntimeError(
+                f"collection {name!r} 沒有可用的 BM25 索引（不存在、損毀或未安裝 rank_bm25）；"
+                "strict 模式不退回純向量檢索。"
+            )
+        print(
+            f"[rag_query] 警告：collection {name!r} 沒有可用的 BM25 索引（{REBUILD_HINT}）；"
+            "本次僅使用向量檢索。",
+            file=sys.stderr,
+        )
 
-    def _tokenize(text: str) -> list[str]:
-        text = text.lower()
-        return re.findall(r"[a-z0-9']+|[\u4e00-\u9fff]", text) or [""]
-
-    bm25, bm25_ids, bm25_docs = load_bm25_index()
-
-    # 取向量搜尋結果（加倍 top_k 以便融合後仍有足夠候選）
-    vector_context, vector_cites = retrieve_context(
-        query, top_k * 3, max_distance=max_distance,
+    _, dense = retrieve_context(
+        query, top_k * 3, max_distance,
         collection_name=collection_name, extra_queries=extra_queries,
     )
+    if bm25 is None:
+        return _format_context(dense[:top_k])
 
-    if bm25 is None or not bm25_ids:
-        # 無 BM25 索引，退回純向量搜尋
-        _, cites = retrieve_context(query, top_k, max_distance=max_distance,
-                                    collection_name=collection_name, extra_queries=extra_queries)
-        return _format_context(cites[:top_k])
+    lexical_ids = _lexical_ranking(bm25, bm25_ids, query, top_k * 3)
+    dense_by_id = {c["chunk_id"]: c for c in dense}
+    fused = reciprocal_rank_fusion([list(dense_by_id), lexical_ids], k=rrf_k)
 
-    # BM25 搜尋
-    query_tokens = _tokenize(query)
-    bm25_scores = bm25.get_scores(query_tokens)
-    bm25_ranked = sorted(enumerate(bm25_scores), key=lambda x: x[1], reverse=True)[:top_k * 3]
-
-    # RRF 合併
-    # vector 得分：基於 cite 在 vector_cites 中的排名
-    vector_rank: dict[str, int] = {}
-    for rank, cite in enumerate(vector_cites):
-        chunk_id = f"{cite['source_file']}::{cite['chunk_index']}"
-        vector_rank[chunk_id] = rank + 1
-
-    bm25_rank: dict[str, int] = {}
-    for rank, (idx, _) in enumerate(bm25_ranked):
-        bm25_rank[bm25_ids[idx]] = rank + 1
-
-    k_rrf = 60  # RRF 常數
-    all_ids_set = set(vector_rank.keys()) | set(bm25_rank.keys())
-    rrf_scores: dict[str, float] = {}
-    for cid in all_ids_set:
-        v_score = (1.0 - bm25_weight) / (k_rrf + vector_rank.get(cid, 1000))
-        b_score = bm25_weight / (k_rrf + bm25_rank.get(cid, 1000))
-        rrf_scores[cid] = v_score + b_score
-
-    top_ids = sorted(rrf_scores.keys(), key=lambda x: rrf_scores[x], reverse=True)[:top_k]
-
-    # 從 vector_cites 中取出對應的 cite_row（已含距離資訊）
-    cite_map = {f"{c['source_file']}::{c['chunk_index']}": c for c in vector_cites}
-    final_cites: list[dict] = []
-    for cid in top_ids:
-        if cid in cite_map:
-            final_cites.append(cite_map[cid])
+    lexical_set = set(lexical_ids)
+    lexical_only = _fetch_lexical_only(
+        query, [cid for cid, _ in fused if cid not in dense_by_id], collection_name
+    )
+    final: list[dict] = []
+    for cid, _score in fused:
+        if len(final) == top_k:
+            break
+        if cid in dense_by_id:
+            source = "both" if cid in lexical_set else "dense"
+            final.append({**dense_by_id[cid], "retrieved_by": source})
+        elif cid in lexical_only:
+            final.append(lexical_only[cid])
         else:
-            # 在 BM25 中找到但 vector_cites 中沒有（距離超閾值），加入 BM25 文字
-            try:
-                raw_idx = bm25_ids.index(cid)
-                src_parts = cid.split("::", 1)
-                final_cites.append({
-                    "source_file": src_parts[0] if len(src_parts) > 0 else cid,
-                    "chunk_index": src_parts[1] if len(src_parts) > 1 else "0",
-                    "distance": 0.9,
-                    "section_title": "",
-                    "text": bm25_docs[raw_idx],
-                })
-            except (ValueError, IndexError):
-                pass
-
-    return _format_context(final_cites[:top_k])
+            print(
+                f"[rag_query] 警告：BM25 索引中的 {cid} 不在向量庫中（索引可能過期），已略過。",
+                file=sys.stderr,
+            )
+    return _format_context(final)
 
 
 def _format_context(cites: list[dict]) -> tuple[str, list[dict]]:
@@ -290,6 +405,16 @@ def build_messages(
     return msgs
 
 
+def _print_cites(cites: list[dict]) -> None:
+    """列印引用清單；Hybrid Search 時附上檢索來源（dense / bm25 / both）。"""
+    for i, c in enumerate(cites, 1):
+        section_label = f" [{c['section_title']}]" if c.get("section_title") else ""
+        dist = c.get("distance", 0)
+        source = c.get("retrieved_by", "dense")
+        source_label = f", {source}" if source != "dense" else ""
+        print(f"[{i}] {c['source_file']} chunk {c['chunk_index']}{section_label} (距離: {dist:.3f}{source_label})")
+
+
 def run_once(
     query: str, top_k: int, model: str,
     prompt_style: str = DEFAULT_PROMPT_STYLE,
@@ -310,17 +435,14 @@ def run_once(
         context, cites = retrieve_context(query, top_k, extra_queries=extra)
 
     if not context.strip():
-        print("知識庫中未找到與此問題相關的資料（或向量庫尚未建立，請先執行: python data_update.py --rebuild）")
+        print(f"知識庫中未找到與此問題相關的資料（或向量庫尚未建立：{REBUILD_HINT}）")
         return 1
     messages = build_messages(query, context, [], prompt_style=prompt_style)
     resp = litellm_chat_completion(model=model, messages=messages, temperature=0.2)
     text = resp.choices[0].message.content or ""
     print(text)
     print("\n--- 引用 ---")
-    for i, c in enumerate(cites, 1):
-        section_label = f" [{c['section_title']}]" if c.get("section_title") else ""
-        dist = c.get("distance", 0)
-        print(f"[{i}] {c['source_file']} chunk {c['chunk_index']}{section_label} (距離: {dist:.3f})")
+    _print_cites(cites)
     return 0
 
 
@@ -360,10 +482,7 @@ def interactive_loop(
         ans = resp.choices[0].message.content or ""
         print(f"\n助理:\n{ans}\n")
         print("--- 引用 ---")
-        for i, c in enumerate(cites, 1):
-            section_label = f" [{c['section_title']}]" if c.get("section_title") else ""
-            dist = c.get("distance", 0)
-            print(f"[{i}] {c['source_file']} chunk {c['chunk_index']}{section_label} (距離: {dist:.3f})")
+        _print_cites(cites)
         history.append({"role": "user", "content": q})
         history.append({"role": "assistant", "content": ans})
     return 0
@@ -392,7 +511,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "--hybrid",
         action="store_true",
         default=False,
-        help="啟用 Hybrid Search（BM25 + Vector + RRF）：對專有名詞（人名、組織名）精確匹配更佳",
+        help="啟用 Hybrid Search（向量 + BM25，以標準 RRF 融合）：對專有名詞（人名、組織名）精確匹配更佳",
     )
     return p.parse_args(argv)
 
@@ -404,7 +523,7 @@ def main(argv: list[str] | None = None) -> int:
             return run_once(args.query, args.top_k, args.model, args.prompt_style, args.expand_query, args.hybrid)
         return interactive_loop(args.top_k, args.model, args.prompt_style, args.expand_query, args.hybrid)
     except Exception as e:
-        print(f"[rag_query] 執行失敗，請確認環境設定與向量庫狀態。", file=sys.stderr)
+        print(f"[rag_query] 執行失敗（{type(e).__name__}），請確認環境設定與向量庫狀態。", file=sys.stderr)
         return 1
 
 

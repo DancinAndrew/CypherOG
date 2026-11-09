@@ -6,3 +6,8 @@ sentence-transformers>=2.7.0
 pypdf>=5.0.0
 torch>=2.1.0
 rank-bm25>=0.2.2
+# rag_query 直接使用（cosine 距離計算）；chromadb / sentence-transformers 也會安裝
+numpy>=1.24
+
+# 測試
+pytest>=8.0
