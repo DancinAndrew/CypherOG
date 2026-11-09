@@ -1,0 +1,28 @@
+{
+  "_note": "Pre-registered before the round-2 runs (Nov 2026); do not edit after results exist. Consumed by rag_eval.py.",
+  "q2_members": {
+    "question_number": 2,
+    "members": {
+      "Boogaloo Sam": ["Boogaloo Sam"],
+      "Popin' Pete": ["Popin' Pete", "Popin Pete", "Pop'in Pete", "Poppin Pete", "Poppin' Pete", "Pete"],
+      "Skeeter Rabbit": ["Skeeter Rabbit"],
+      "Suga Pop": ["Suga Pop", "Sugar Pop"],
+      "Mr. Wiggles": ["Mr. Wiggles", "Mr Wiggles"],
+      "Jazzy J": ["Jazzy J"],
+      "Creepin Cid": ["Creepin Cid", "Creepin' Cid", "Creep'n Cid", "Creep'n Sid", "Creepin Sid", "Creeping Sidney"],
+      "Puppet Boozer": ["Puppet Boozer"],
+      "Robot Dane": ["Robot Dane"]
+    }
+  },
+  "q4_juste_debout": {
+    "question_number": 4,
+    "entity": ["Juste Debout"],
+    "fact_groups": {
+      "format": ["2v2", "2 v 2", "2vs2", "2 vs 2", "two-person", "duo", "duos", "雙人", "兩人"],
+      "city": ["Paris", "巴黎"],
+      "year": ["2002", "1998"],
+      "venue": ["Accor Arena", "Bercy", "Stade Pierre de Coubertin"],
+      "organizer": ["Bruce Ykanji"]
+    }
+  }
+}
