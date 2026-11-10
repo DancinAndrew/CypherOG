@@ -1,0 +1,346 @@
+{
+  "combo": {
+    "id": "g",
+    "name": "Combo G — CoT + Query Expansion（多角度子查詢）",
+    "chunk_desc": "recursive / size=600 / overlap=100",
+    "top_k": 5,
+    "max_distance": 0.65,
+    "truncate_to": null,
+    "prompt_style": "cot",
+    "use_hybrid": false,
+    "use_expand": true,
+    "collection": "cypher_og_current_combo_g"
+  },
+  "model": "gpt-4.1-mini-2025-04-14",
+  "retrieval_only": false,
+  "environment": {
+    "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c",
+    "git_dirty": false,
+    "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "text_source": "data/processed",
+    "corpus": "current",
+    "document_count": 42,
+    "documents_digest": "fac881780df23f03e75aa65ff7c5f4f381809b23a7ea0a61938a394cb603d601",
+    "corpus_sha256": "c8e76a3ac522d12b0b5d82acc13670999706b4aa157a3bbc5cc068f8a4a0d0e5",
+    "chunk_count": 1279,
+    "index_rebuilt": true
+  },
+  "generated_at": "2026-11-10T01:17:04+00:00",
+  "questions": [
+    {
+      "index": 1,
+      "question": "What is Popping and who created it?",
+      "expanded_queries": [
+        "Popping 舞蹈的起源與創始人是誰？",
+        "History and origin of Popping dance style",
+        "Who invented Popping and what defines this dance technique?"
+      ],
+      "cites": [
+        {
+          "chunk_id": "What Is Popping (Popping Dance)  STEEZY Blog.txt::0",
+          "source_file": "What Is Popping (Popping Dance)  STEEZY Blog.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.1581507921218872,
+          "distance_to_question": 0.398495923062131,
+          "retrieved_by": "dense",
+          "text": "Popping [dance](https://www.steezy.co/) is a style of dance that started in the late 1960’s and 70’s.\n\nThis dance style is characterized by sudden tensing and releasing of the muscles (\"hitting\") to the rhythm of beats in music.\n\n**_Learn how to create the hit:_** [**_How to Learn Popping_**](https://www.steezy.co/posts/how-to-learn-popping)\n\n## History of Popping Dance\n\nOrigins of dance styles can get tricky, because OG’s have different accounts and interpretations of that story according to their regions and circles of influence."
+        },
+        {
+          "chunk_id": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt::1",
+          "source_file": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt",
+          "chunk_index": 1,
+          "section_title": "**Exploring Different Popping Styles: Boogaloo, Waving, and More**",
+          "distance": 0.1794067621231079,
+          "distance_to_question": 0.48947989476832143,
+          "retrieved_by": "dense",
+          "text": "d styles like Boogaloo, Waving, and more.\n\n \n\n___\n\n#### **1\\. Introduction to Popping Dance Styles**\nPopping is more than just dance; it's an expression that resonates through movement. This energetic and rhythmic style of dance originated in the 1970s, primarily in California. It involves contracting and relaxing muscles rhythmically to the beat of music, creating a distinct \"pop\" or \"hit\" effect.\n\n \n\n___\n\n#### **2\\. Origins of Popping**"
+        },
+        {
+          "chunk_id": "What Is Popping (Popping Dance)  STEEZY Blog.txt::2",
+          "source_file": "What Is Popping (Popping Dance)  STEEZY Blog.txt",
+          "chunk_index": 2,
+          "section_title": "History of Popping Dance",
+          "distance": 0.1804620623588562,
+          "distance_to_question": 0.4155905711586596,
+          "retrieved_by": "dense",
+          "text": "les.\n\nIn addition to being a hobby, Popping dance gave dancers an escape, an identity, and a family.\nOver time, the word “Popping” (which is also often referred to as “hitting,”) started being used to describe the collection of moves and techniques invented by the OG Poppers.\n\n## Key moves in Popping Dance\n\n#### Animation\n\nAnimation was inspired by the _Dynamation_ films by Ray Harryhausen. It is meant to simulate an animated character moving frame-by-frame.\n\nThe technique involves abrupt tensing of the muscles to create a stop-motion illusion.\n\n#### The Boogaloo\n\nThe Boogaloo, invented by Boogaloo Sam, is a loose, fluid motion that gives the impression of the body having no bones."
+        },
+        {
+          "chunk_id": "What Is Popping (Popping Dance)  STEEZY Blog.txt::1",
+          "source_file": "What Is Popping (Popping Dance)  STEEZY Blog.txt",
+          "chunk_index": 1,
+          "section_title": "History of Popping Dance",
+          "distance": 0.2081822156906128,
+          "distance_to_question": 0.462619034561215,
+          "retrieved_by": "dense",
+          "text": "rent accounts and interpretations of that story according to their regions and circles of influence.\nWhile there are several moving parts of Popping's history that sometimes conflict or overlap, one clear part of the dance style's origin is that it started among groups of teenage friends in deindustrializing parts of the city.\n\nThe dancers would come up with moves, practice them, then show them off at clubs or in dance battles.\n\nIn addition to being a hobby, Popping dance gave dancers an escape, an identity, and a family."
+        },
+        {
+          "chunk_id": "What Is Popping (Popping Dance)  STEEZY Blog.txt::20",
+          "source_file": "What Is Popping (Popping Dance)  STEEZY Blog.txt",
+          "chunk_index": 20,
+          "section_title": "Popping dance in the present",
+          "distance": 0.2086678147315979,
+          "distance_to_question": 0.5654556405568067,
+          "retrieved_by": "dense",
+          "text": "her street/funk dance styles (such as Waacking and Locking), but is its own distinct style of dance.\nIt is often performed in battles and cyphers, or incorporated into choreography.\n\nThese Popping OGs' foundations have been viewed, learned, and modified by generations of dancers all over the world.\n\nPoppers aim to maintain the authenticity of the techniques and traditions of the dance style.\n\nWith a better understanding of these origin stories, all dancers can learn to innovate their own Popping style while staying true to the integrity of the culture.\n\n## Helpful Popping dance videos:\n\n \n\n_Interview with Pop’in Pete & Suga Pop_"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Popping is a style of dance that started in the late 1960’s and 70’s [來源 1]。\n2. Popping is characterized by sudden tensing and releasing of the muscles (\"hitting\") to the rhythm of beats in music [來源 1]。\n3. Popping originated primarily in California in the 1970s [來源 2]。\n4. The dance style started among groups of teenage friends in deindustrializing parts of the city, who created moves, practiced them, and showed them off at clubs or dance battles [來源 4]。\n5. The term “Popping” (also called “hitting”) describes the collection of moves and techniques invented by the OG Poppers [來源 3]。\n6. Boogaloo Sam invented the Boogaloo style, a key move in Popping [來源 3]。\n\nStep 2 — 綜合回答：\nPopping is a dance style that began in the late 1960s and 1970s, primarily in California. It is characterized by the sudden tensing and releasing of muscles, known as \"hitting,\" synchronized to the rhythm of music beats. The dance originated among groups of teenage friends in deindustrializing urban areas, who developed and practiced moves before showcasing them in clubs and dance battles. The term \"Popping\" refers to the collection of moves and techniques created by the original pioneers, known as OG Poppers. Among these pioneers, Boogaloo Sam is credited with inventing the Boogaloo style, a fluid and loose movement within Popping [來源 1][來源 2][來源 3][來源 4]。\n\nStep 3 — 缺口說明：\n資料未涵蓋具體個人或團體整體創造 Popping 的完整創始者名單。",
+      "error": null
+    },
+    {
+      "index": 2,
+      "question": "Electric Boogaloos 的成員有哪些？他們各自的貢獻是什麼？",
+      "expanded_queries": [
+        "Electric Boogaloos 成員名單及其舞蹈風格貢獻",
+        "Who are the members of the Electric Boogaloos and what are their individual contributions to popping?",
+        "List of Electric Boogaloos dancers and their roles in developing Boogaloo and Fresno styles"
+      ],
+      "cites": [
+        {
+          "chunk_id": "Boogaloo (funk dance) - Wikipedia.txt::1",
+          "source_file": "Boogaloo (funk dance) - Wikipedia.txt",
+          "chunk_index": 1,
+          "section_title": "",
+          "distance": 0.11835318803787231,
+          "distance_to_question": 0.4665221932847421,
+          "retrieved_by": "dense",
+          "text": "boogaloo](https://en.wikipedia.org/wiki/Electric_boogaloo_(dance) \"Electric boogaloo (dance)\") dance\n[ 1 ]"
+        },
+        {
+          "chunk_id": "Electric boogaloo (dance) - Wikipedia.txt::3",
+          "source_file": "Electric boogaloo (dance) - Wikipedia.txt",
+          "chunk_index": 3,
+          "section_title": "",
+          "distance": 0.1454542875289917,
+          "distance_to_question": 0.35953988877917364,
+          "retrieved_by": "dense",
+          "text": "came the signature style of the mid-1970s dance group, the [Electric Boogaloos](https://en.wikipedia\norg/wiki/Electric_Boogaloos \"Electric Boogaloos\") and also performed by the bush. Along with electric boogaloo, they also popularized popping and many of its related styles."
+        },
+        {
+          "chunk_id": "Electric boogaloo (dance) - Wikipedia.txt::2",
+          "source_file": "Electric boogaloo (dance) - Wikipedia.txt",
+          "chunk_index": 2,
+          "section_title": "",
+          "distance": 0.22891467809677124,
+          "distance_to_question": 0.5415914657621343,
+          "retrieved_by": "dense",
+          "text": "---------------------------------------------------------------------------------------------------|\n**Electric boogaloo** (sometimes referred to as **electric boogie** on the East Coast) is a dance style closely related to the earlier [Boogaloo](https://en.wikipedia.org/wiki/Boogaloo_(freestyle_dance) \"Boogaloo (freestyle dance)\") street dance performed in Oakland and [popping](https://en.wikipedia.org/wiki/Popping \"Popping\"); it combines modern popping techniques and earlier [boogaloo](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance) \"Boogaloo (funk dance)\") forms. [ 1 ] [ 2 ] It became the signature style of the mid-1970s dance group, the [Electric Boogaloos](https://en.wikipedia"
+        },
+        {
+          "chunk_id": "Popin' Pete - Wikipedia.txt::6",
+          "source_file": "Popin' Pete - Wikipedia.txt",
+          "chunk_index": 6,
+          "section_title": "The Electric Boogaloos",
+          "distance": 0.23615610599517822,
+          "distance_to_question": 0.34707363098338273,
+          "retrieved_by": "dense",
+          "text": "Boogaloo Sam [ 4 ] as a creator of the group taught basics to the members of The Electric Boogaloos\nAs all the members were very experienced and passionate dancers, the group soon became successful. During that time, Pete and the other members of The Electric Boogaloos appeared on many popular shows including: [_The Midnight Special_](https://en.wikipedia.org/wiki/The_Midnight_Special_(TV_series) \"The Midnight Special (TV series)\"), _Kicks_ and _[Soul Train](https://en.wikipedia.org/wiki/Soul_Train \"Soul Train\")_ in the United States. (firstly in 1980 [ 5 ] )."
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::5",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 5,
+          "section_title": "7. Liquid / Liquid Popping",
+          "distance": 0.25724363327026367,
+          "distance_to_question": 0.4590162868302593,
+          "retrieved_by": "dense",
+          "text": "性控制和爆點技術\n\n### 8. Strutting\n- **技術特�征**：\n - 強調步伐的節奏感和風格化\n - 以走路動作為基礎，融入 Funk 音樂節奏\n - 在 1970s 加州社群中很普遍\n### 9. Electric Boogaloo（風格名）\n- **注意**：Electric Boogaloo 既是一個**舞團名稱**（Electric Boogaloos），也是一個**風格名稱**\n- **作為風格**：結合 Boogaloo 的流動性和 Popping 的爆點，是整個 Popping 文化的代名詞\n- **作為團體**：Electric Boogaloos = 1977 年由 Boogaloo Sam 在 Fresno 成立的舞團\n\n---\n\n## Locking（兄弟流派）\n\n### 核心技術\n- **Lock**：突然靜止在一個誇張姿勢，然後快速釋放繼續律動\n- **特徵動作**：Wrist Roll（腕部旋轉）、Points（指向動作）、Scooby Doo（轉身）、Leo Walk（特色步伐）\n- **音樂關係**：比 Popping 更緊密依附 Funk 音樂的 downbeat\n- **與 Popping 的差異**：Locking 節奏感更強、動作更外向（outgoing），Popping 則更注重技術控制\n\n---\n\n## 評分標準詳解（Battle 裁判視角）\n\n根據 HHI 官方規則和 Juste Debout 評分標準，Popping Battle 的評判維度："
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Electric Boogaloos 是一個成立於 1977 年，由 Boogaloo Sam 在 Fresno 創立的舞團 [來源 5]。\n2. Boogaloo Sam 是該舞團的創始人，並教授舞團成員基本舞步 [來源 4]。\n3. Electric Boogaloos 的成員都是非常有經驗且熱情的舞者，舞團很快取得成功 [來源 4]。\n4. 舞團成員包括 Popin' Pete，他們曾在多個美國知名節目中表演，如 The Midnight Special、Kicks 和 Soul Train（首次出現於 1980 年）[來源 4]。\n\nStep 2 — 綜合回答：\nElectric Boogaloos 是由 Boogaloo Sam 於 1977 年在 Fresno 成立的舞團。Boogaloo Sam 作為創始人，負責教授舞團成員基本舞步，對舞團的技術基礎有重要貢獻。舞團成員均為經驗豐富且充滿熱情的舞者，這使得舞團迅速獲得成功。成員之一 Popin' Pete 與其他成員曾多次在美國著名節目如 The Midnight Special、Kicks 和 Soul Train 中表演，推廣了他們的舞蹈風格 [來源 4][來源 5]。\n\nStep 3 — 缺口說明：\n資料中未具體列出 Electric Boogaloos 的所有成員名單及其各自詳細貢獻。",
+      "error": null
+    },
+    {
+      "index": 3,
+      "question": "Popping 和 Boogaloo 有什麼差別？",
+      "expanded_queries": [
+        "Popping 與 Boogaloo 之間的區別是什麼？",
+        "Differences between Popping and Boogaloo dance styles",
+        "Comparison of dance techniques in Popping versus Boogaloo"
+      ],
+      "cites": [
+        {
+          "chunk_id": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt::0",
+          "source_file": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.1546863317489624,
+          "distance_to_question": 0.3641310246060412,
+          "retrieved_by": "dense",
+          "text": "### **Exploring Different Popping Styles: Boogaloo, Waving, and More**\n\nPopping dance styles are a captivating art form within the realm of street dance. They possess an extraordinary ability to blend athleticism, creativity, and musicality. In this post, we'll embark on a journey through the diverse and electrifying world of popping, exploring renowned styles like Boogaloo, Waving, and more.\n\n \n\n___\n\n#### **1\\. Introduction to Popping Dance Styles**"
+        },
+        {
+          "chunk_id": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt::1",
+          "source_file": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt",
+          "chunk_index": 1,
+          "section_title": "**Exploring Different Popping Styles: Boogaloo, Waving, and More**",
+          "distance": 0.18738722801208496,
+          "distance_to_question": 0.4100057923779008,
+          "retrieved_by": "dense",
+          "text": "d styles like Boogaloo, Waving, and more.\n\n \n\n___\n\n#### **1\\. Introduction to Popping Dance Styles**\nPopping is more than just dance; it's an expression that resonates through movement. This energetic and rhythmic style of dance originated in the 1970s, primarily in California. It involves contracting and relaxing muscles rhythmically to the beat of music, creating a distinct \"pop\" or \"hit\" effect.\n\n \n\n___\n\n#### **2\\. Origins of Popping**"
+        },
+        {
+          "chunk_id": "POPPING  societydance.txt::3",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 3,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.21733611822128296,
+          "distance_to_question": 0.3966652780880817,
+          "retrieved_by": "dense",
+          "text": "f the leading funk-based group to promote this street dance style and later be adopted into Hip Hop.\nBoogaloo is characterized by fluidity use of every part of the body, rolling the hips, knees and head. The style is a combination of “The Robot” and the smooth isolations of mime.\n\nThe dancers would come up with moves, practice them, then show them off at clubs or in dance battles. In addition to being a hobby, Popping dance gave dancers an escape, an identity, and a family.\n\nOver time, the word “Popping” (which is also often referred to as “hitting,”) started being used to describe the collection of moves and techniques invented by the OG Poppers.\n\nWhat is Popping ?"
+        },
+        {
+          "chunk_id": "Boogaloo (funk dance) - Wikipedia.txt::0",
+          "source_file": "Boogaloo (funk dance) - Wikipedia.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.22511327266693115,
+          "distance_to_question": 0.45023315218143256,
+          "retrieved_by": "dense",
+          "text": "**Boogaloo** is a [freestyle](https://en.wikipedia.org/wiki/Freestyle_dance \"Freestyle dance\"), improvisational [street dance](https://en.wikipedia.org/wiki/Street_dance \"Street dance\"), closely related to [popping](https://en.wikipedia.org/wiki/Popping \"Popping\") dance and [turfing](https://en.wikipedia.org/wiki/Turfing \"Turfing\"). It is best known for the dance move known as [the Robot](https://en.wikipedia.org/wiki/Robot_(dance) \"Robot (dance)\"); it is also related to the later [electric boogaloo](https://en.wikipedia.org/wiki/Electric_boogaloo_(dance) \"Electric boogaloo (dance)\") dance"
+        },
+        {
+          "chunk_id": "Boogaloo (funk dance) - Wikipedia.txt::24",
+          "source_file": "Boogaloo (funk dance) - Wikipedia.txt",
+          "chunk_index": 24,
+          "section_title": "Cartoon Influence and Posing",
+          "distance": 0.22955721616744995,
+          "distance_to_question": 0.45216764741809357,
+          "retrieved_by": "dense",
+          "text": "ant Boogaloo in the term of our dance style, but it was not the James Brown Boogaloo anymore\". [ 4 ]\nIn the early 1970s, dancers from the Black Messengers group innovated a new Boogaloo technique called \"Posing Hard\". They would end their Boogaloo poses and dime-stops with a hard \"hit\" - freezing in place until their muscles vibrated. This technique would influence the modern day \"popping\" technique within the [Popping](https://en.wikipedia.org/wiki/Popping \"Popping\") dance form. [ 20 ] [ 13 ]"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Popping 是一種起源於1970年代加州的街舞風格，透過肌肉的收縮與放鬆，配合音樂節奏，產生明顯的「pop」或「hit」效果。[來源 2]\n2. Boogaloo 是一種即興的街舞，與 popping 舞蹈密切相關，並以機器人舞（the Robot）聞名，也與後來的 electric boogaloo 舞蹈有關。[來源 4]\n3. Boogaloo 特徵是身體各部位的流暢運用，包括臀部、膝蓋和頭部的滾動，結合了「機器人舞」和模仿動作的平滑隔離動作。[來源 3]\n4. 1970年代早期，Black Messengers 團體創新了一種稱為「Posing Hard」的 Boogaloo 技巧，舞者會在動作結束時用力「hit」並凍結姿勢，這影響了現代 popping 舞蹈中的「popping」技巧。[來源 5]\n\nStep 2 — 綜合回答：\nPopping 是一種起源於1970年代加州的街舞風格，透過肌肉的節奏性收縮與放鬆，創造出明顯的「pop」或「hit」效果，強調節奏感和肌肉控制。[來源 2] Boogaloo 則是一種即興的街舞，與 popping 密切相關，著重於身體各部位的流暢動作，如臀部、膝蓋和頭部的滾動，並融合了機器人舞和平滑的隔離動作。[來源 3][來源 4] Boogaloo 在1970年代早期發展出「Posing Hard」技巧，舞者會在動作結束時凍結姿勢並用力「hit」，這種技巧對後來 popping 舞蹈中的「popping」技巧有重要影響。[來源 5] 簡言之，Boogaloo 是一種包含流暢動作和凍結姿勢的街舞風格，而 popping 則更強調肌肉的節奏性收縮與放鬆，兩者風格相關但重點不同。\n\nStep 3 — 缺口說明：\n資料未涵蓋更詳細的技術差異或歷史演變細節。",
+      "error": null
+    },
+    {
+      "index": 4,
+      "question": "Juste Debout 比賽的規則和歷史？",
+      "expanded_queries": [
+        "Juste Debout competition rules and history",
+        "Juste Debout 比賽的起源與規則介紹",
+        "What are the origins and judging criteria of Juste Debout dance battles?"
+      ],
+      "cites": [
+        {
+          "chunk_id": "Guarato.Dance.Articulated.txt::29",
+          "source_file": "Guarato.Dance.Articulated.txt",
+          "chunk_index": 29,
+          "section_title": "",
+          "distance": 0.3563566207885742,
+          "distance_to_question": 0.7108645635432407,
+          "retrieved_by": "dense",
+          "text": "nd oppressed, mainly \nin reports of leadership characters, because through such dance one could pass\ntime or get away from drugs and life in crime.\n3. Dance as a device to avoid material problems, by feeling far from them, as a form of \noutburst, evading or escaping dilemmas and struggles of everyday life. \n4. As a concentration of the previous three points, competitions in local dance clubs \nworked as a legitimizing element of success, respect, and authority among street \ndance peers in the city. \nThe combination of these four factors composed what Raymond Williams (1979) \ncharacterized as structure of feeling, where street dance can act as a space that mediates"
+        },
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::6",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 6,
+          "section_title": "History of dance battles",
+          "distance": 0.36219698190689087,
+          "distance_to_question": 0.5819775698078542,
+          "retrieved_by": "dense",
+          "text": "centers, parks and sometimes in nightclubs. At such battles, you could register and simply compete.\nThis phenomenon was soon picked up by the rest of the world. One important moment was the legendary battle of Rock Steady Crew vs. New York City Breakers shown in the 1984 movie **Beat Street**. Battles were actually not only a part of breakdance culture, but of all urban dance styles.\n\nIn the 1990s and 2000s, dance battles became bigger and bigger. Battles like The Notorious IBE and Red Bull BC One managed to attract a lot of dancers and huge crowds. This growing popularity shows in breakdance being included as an official sport at the 2024 Olympic Games in Paris."
+        },
+        {
+          "chunk_id": "Guarato.Dance.Articulated.txt::64",
+          "source_file": "Guarato.Dance.Articulated.txt",
+          "chunk_index": 64,
+          "section_title": "",
+          "distance": 0.371906578540802,
+          "distance_to_question": 0.5950472463129235,
+          "retrieved_by": "dense",
+          "text": "ispute \nbusiness, each one wanted to be more. So, there was always no.1, no. 2, and who was the last\none. (Carlim Grafiti, 2006, personal communication) \nLike street dancing, breaking dancers were motivated by the existence of dance clubs, \nwith Flash Danceteria standing out during the 1980s and 1990s. In such places there \nwere weekly meetings between dancers from different neighbourhoods of the city \nand the various rachas (a term also used to refer to battles) were held. Such events gave \ndancers motivation to improve their performance during the week to surprise the wheel \nwhen the next weekend would arrive with difficult movements. The result was the"
+        },
+        {
+          "chunk_id": "Popping Dance Battles Near You — EVERYDAY POPPING - Online Popping Dance Tutorials.txt::1",
+          "source_file": "Popping Dance Battles Near You — EVERYDAY POPPING - Online Popping Dance Tutorials.txt",
+          "chunk_index": 1,
+          "section_title": "",
+          "distance": 0.37863826751708984,
+          "distance_to_question": 0.5959355493060081,
+          "retrieved_by": "dense",
+          "text": "Lee at Summer Dance Forever 2016_\n\n### **2\\.** **Juste Debout**** \nFrance**\n\n2 on 2 Popping Category\nJuste Debout is one of the largest street dance competitions in the world, held in Paris, France. It includes a popping category where dancers compete in pairs (2 on 2 format). Juste Debout emphasizes creativity and originality, with dancers showcasing their skills in an electrifying atmosphere.\n\n**Link:** [Juste](https://www.juste-debout.com/) [Debout](https://www.juste-debout.com/)\n\n### **3\\.** **Step Ya Game Up**** \nNew York, USA**\n\nPopping Category"
+        },
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::1",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 1,
+          "section_title": "",
+          "distance": 0.3808176517486572,
+          "distance_to_question": 0.7051016333669515,
+          "retrieved_by": "dense",
+          "text": "0973/settings_images/50b8e1-d083-bfa0-acdd-bb664b5eec_Dance_battles.jpg)\n\n## What is a dance battle?\n![What is a dance battle?](https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/themes/2152870973/settings_images/bf442a-65cb-deb2-5c5-40a3614e0e_What_is_a_dance_battle.jpg)\n\n## What is a dance battle?\n\n**During a dance battle, dancers face each other and take turns on the dance floor to show they have the best dance skills**. Battles are sometimes done 1 versus 1, but you also have 2 vs 2, 3 vs 3, 4 vs 4 or crew battles. A **crew battle** usually involves dancing in a formation of 5 to 10 dancers, and sometimes even more."
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Juste Debout 是世界上最大的街舞比賽之一，在法國巴黎舉行，包含 popping 類別，舞者以兩人一組（2 on 2）形式競賽，強調創意和原創性，舞者在充滿活力的氛圍中展示技巧。[來源 4]\n\nStep 2 — 綜合回答：\nJuste Debout 是一個在法國巴黎舉行的全球大型街舞比賽，設有 popping 類別，舞者以兩人一組（2 on 2）的形式進行比賽。該比賽強調舞者的創意和原創性，參賽者在充滿活力的氛圍中展示他們的舞蹈技巧。[來源 4]\n\nStep 3 — 缺口說明：\n資料未涵蓋 Juste Debout 比賽的詳細規則和歷史背景。",
+      "error": null
+    },
+    {
+      "index": 5,
+      "question": "如何判斷一場 Popping battle 的勝負？",
+      "expanded_queries": [
+        "Popping battle 判定勝負的標準與技巧",
+        "Criteria for winning a Popping dance battle",
+        "How to judge the winner in a Popping dance competition"
+      ],
+      "cites": [
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::9",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 9,
+          "section_title": "How does a dance battle work?",
+          "distance": 0.2698403596878052,
+          "distance_to_question": 0.4394661657132659,
+          "retrieved_by": "dense",
+          "text": "in. Sometimes there are so many participants that they even choose a **top 32** from the qualifiers.\nOften, they put the 4 best rated qualification rounds in the corners of the battle bracket. This is how the best rated dancers will have the best chances to meet in the semifinal. This makes it fair, but also exciting for the audience. \n\nA dance battle itself usually lasts **between 1 and 5 rounds**. This means that in one round one dancer goes, and then the opponent responds to that.\n\nWe recommend to watch this crazy popping battle below.\n\n \n\n## Dance battles at the Olympic Games"
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::3",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 3,
+          "section_title": "**1vs1 Popping Battles**",
+          "distance": 0.2718820571899414,
+          "distance_to_question": 0.27990177406979944,
+          "retrieved_by": "dense",
+          "text": "two poppers who will battle one another facing each other in one (1) minute rounds for each popper.\n- There will be no point system for the battles. (Focus should be on the music not your competition)\n- The judges will judge on each criteria separately.\n- The judges are looking for the person that encompasses all the above criteria and therefore looking for the COMPLETE POPPER.\n- Competition is a learning tool. The results reflect hitting the judges’ criteria."
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::6",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 6,
+          "section_title": "核心技術",
+          "distance": 0.2801324725151062,
+          "distance_to_question": 0.37627631058682487,
+          "retrieved_by": "dense",
+          "text": "，Popping 則更注重技術控制\n\n---\n\n## 評分標準詳解（Battle 裁判視角）\n\n根據 HHI 官方規則和 Juste Debout 評分標準，Popping Battle 的評判維度：\n| 評分維度 | 說明 | 重要性 |\n|---|---|---|\n| **Musicality（樂感）** | 動作與音樂的節奏、旋律、歌詞的對應程度 | ★★★★★ 最重要 |\n| **Foundation（基礎）** | Popping 基本動作的扎實程度（Pop 的清晰度、Isolation 的精準度） | ★★★★★ |\n| **Originality（原創性）** | 動作語彙是否有個人特色，而非複製他人 | ★★★★ |\n| **Execution（執行）** | 動作的完成度，技術是否乾淨清晰 | ★★★★ |\n| **Technique（技術）** | 特定技術動作（如 Waving、Tutting）的掌握程度 | ★★★★ |\n| **Creativity（創造力）** | 動作組合和即興創作的多樣性 | ★★★ |\n| **Floor Work（地板動作）** | 是否有效運用地板，但在 Popping 中比 Breaking 少見 | ★★ |\n| **Showmanship（表演力）** | 與觀眾的互動、眼神、舞台魅力 | ★★★ |\n| **Costume（服裝）** | 服裝是否與風格相符（在部分賽事中計入） | ★ |\n\n---\n\n## 常見混淆澄清"
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::0",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.3171355724334717,
+          "distance_to_question": 0.3214039273902456,
+          "retrieved_by": "dense",
+          "text": "## **1vs1 Popping Battles**\n\n# **1vs1 Popping Battles**"
+        },
+        {
+          "chunk_id": "popping-culture-notes.txt::0",
+          "source_file": "popping-culture-notes.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.32033175230026245,
+          "distance_to_question": 0.3927296546556468,
+          "retrieved_by": "dense",
+          "text": "# Popping 賽事文化（筆記占位）\n\n- Battle 與 cypher 為常見賽制；評判常關注音樂性、獨創性與完整度。\n- 本檔為佔位筆記，可替換為你整理之正式語料。"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Popping battle 通常是 1 對 1 的對決，每位舞者有 1 分鐘的表演時間，沒有使用積分系統，重點在於音樂感而非競爭分數 [來源 2]。\n2. 裁判會根據多個評分維度分別評判，尋找符合所有評判標準的「完整舞者」 [來源 2][來源 3]。\n3. 評分維度包括：樂感（Musicality）、基礎（Foundation）、原創性（Originality）、執行（Execution）、技術（Technique）、創造力（Creativity）、地板動作（Floor Work）、表演力（Showmanship）、服裝（Costume）等，其中樂感和基礎最為重要 [來源 3]。\n4. Battle 的結果反映舞者是否達到裁判的評判標準，競賽本身是一種學習工具 [來源 2]。\n\nStep 2 — 綜合回答：\n判斷一場 Popping battle 的勝負主要依靠裁判根據多項評分標準來決定。每位舞者在 1 分鐘的表演中展現自己的技巧，裁判會分別評估樂感、基礎動作的扎實度、原創性、執行力、技術掌握、創造力、地板動作運用、表演力以及服裝等方面。特別重視樂感和基礎動作的清晰度。雖然沒有使用積分系統，但裁判會綜合這些標準選出最符合「完整舞者」條件的勝者。整個過程強調對音樂的感受和舞者的全面表現，競賽同時也是學習和成長的機會 [來源 2][來源 3]。\n\nStep 3 — 缺口說明：\n資料未涵蓋具體裁判如何宣布勝負的程序或細節。",
+      "error": null
+    }
+  ]
+}

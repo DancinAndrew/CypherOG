@@ -1,0 +1,326 @@
+{
+  "combo": {
+    "id": "f",
+    "name": "Combo F — CoT + Hybrid Search（BM25+Vector+RRF）",
+    "chunk_desc": "recursive / size=600 / overlap=100",
+    "top_k": 5,
+    "max_distance": 0.65,
+    "truncate_to": null,
+    "prompt_style": "cot",
+    "use_hybrid": true,
+    "use_expand": false,
+    "collection": "cypher_og_current_combo_f"
+  },
+  "model": "gpt-4.1-mini-2025-04-14",
+  "retrieval_only": false,
+  "environment": {
+    "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c",
+    "git_dirty": false,
+    "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "text_source": "data/processed",
+    "corpus": "current",
+    "document_count": 42,
+    "documents_digest": "fac881780df23f03e75aa65ff7c5f4f381809b23a7ea0a61938a394cb603d601",
+    "corpus_sha256": "c8e76a3ac522d12b0b5d82acc13670999706b4aa157a3bbc5cc068f8a4a0d0e5",
+    "chunk_count": 1279,
+    "index_rebuilt": true
+  },
+  "generated_at": "2026-11-10T01:18:12+00:00",
+  "questions": [
+    {
+      "index": 1,
+      "question": "What is Popping and who created it?",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "POPPING  societydance.txt::6",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 6,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.3559148907661438,
+          "distance_to_question": 0.355914990309085,
+          "retrieved_by": "both",
+          "text": "ing)) and [locking](https://en.wikipedia.org/wiki/Locking_(dance)), with which it is often confused.\nPopping was created by dancers wanting to look tough like gangsters in Los Angeles and Oakland when they danced. Popping is characterized by jerky movements resulting from flexing the muscles at parts of the body. When dancers Popped they would mutter “Pop, Pop” every time they flexed so it became known as Popping. Hitting is a term used when flexing the muscles harder and sudden as if trying to scare somebody. At the same time dancers watching the waves down at the beach and imitating them with there body movements were creating a dance called Waving"
+        },
+        {
+          "chunk_id": "POPPING  societydance.txt::4",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 4,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.3248583674430847,
+          "distance_to_question": 0.3248582346289307,
+          "retrieved_by": "dense",
+          "text": "ed to describe the collection of moves and techniques invented by the OG Poppers.\n\nWhat is Popping ?\nPopping is a [street dance](https://en.wikipedia.org/wiki/Street_dance) and one of the original [funk](https://en.wikipedia.org/wiki/Funk) styles that came from [Fresno](https://en.wikipedia.org/wiki/Fresno,_California), [California](https://en.wikipedia.org/wiki/California) during the late 1960s–1970s. The dance is based on the technique of quickly contracting and relaxing muscles to cause a jerk in the dancer's body, referred to as a pop or a hit. This is done continuously to the rhythm of a song in combination with various movements and poses."
+        },
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::22",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 22,
+          "section_title": "How do judges choose a winner?",
+          "distance": 0.8751124896558371,
+          "distance_to_question": 0.8751124896558371,
+          "retrieved_by": "bm25",
+          "text": ", called the **tiebreak round**. After the tiebreak round, the judges vote again to decide who wins.\nSo normally the judges and the audience watch the whole battle and after the battle, the judges decide who won. The problem with that is that judges often forget what exactly happened in the first round, and thus judge on what they saw in the last round. This is why another judging system was created called the **Kozen judging system**. In this system, judges choose a winner after every round. A live scoreboard displays the score after each round."
+        },
+        {
+          "chunk_id": "History initiative to document the origins of ‘popping’ - Fresno State News.txt::0",
+          "source_file": "History initiative to document the origins of ‘popping’ - Fresno State News.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.3368624448776245,
+          "distance_to_question": 0.33686250563576836,
+          "retrieved_by": "dense",
+          "text": "## History initiative to document the origins of ‘popping’"
+        },
+        {
+          "chunk_id": "Street dance.txt::5",
+          "source_file": "Street dance.txt",
+          "chunk_index": 5,
+          "section_title": "",
+          "distance": 0.7683228277093748,
+          "distance_to_question": 0.7683228277093748,
+          "retrieved_by": "bm25",
+          "text": "Americans who created the style were generally not accepted into dance studios because of their race\nA significant feature of street dance is that it was historically a dance of young people offering a sense of freedom and giving a 'voice' to unrepresented communities. [ 3 ]"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Popping 是一種街舞，起源於1960年代末至1970年代的加州弗雷斯諾（Fresno, California）[來源 2]。\n2. Popping 的舞蹈技巧基於快速收縮和放鬆肌肉，造成身體的抽動，稱為 pop 或 hit，並持續配合音樂節奏與各種動作和姿勢[來源 2]。\n3. Popping 是由想要像洛杉磯和奧克蘭的幫派成員一樣看起來強悍的舞者創造的[來源 1]。\n4. 舞者在做出肌肉收縮動作時會發出“Pop, Pop”的聲音，因此這種舞蹈被稱為 Popping[來源 1]。\n\nStep 2 — 綜合回答：\nPopping 是一種起源於1960年代末至1970年代加州弗雷斯諾的街舞風格，屬於原始的放克（funk）舞蹈之一。這種舞蹈的核心技巧是快速收縮和放鬆肌肉，造成身體的抽動，稱為 pop 或 hit，並且持續配合音樂節奏進行多樣的動作和姿勢。Popping 是由想要模仿洛杉磯和奧克蘭幫派成員強悍形象的舞者所創造，舞者在做出肌肉收縮時會發出“Pop, Pop”的聲音，這也成為該舞蹈名稱的由來[來源 1][來源 2]。\n\nStep 3 — 缺口說明：\n資料未涵蓋具體創造 Popping 的個人或團體名稱。",
+      "error": null
+    },
+    {
+      "index": 2,
+      "question": "Electric Boogaloos 的成員有哪些？他們各自的貢獻是什麼？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "popping_style_taxonomy.txt::5",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 5,
+          "section_title": "7. Liquid / Liquid Popping",
+          "distance": 0.4590166211128235,
+          "distance_to_question": 0.4590162868302593,
+          "retrieved_by": "both",
+          "text": "性控制和爆點技術\n\n### 8. Strutting\n- **技術特�征**：\n - 強調步伐的節奏感和風格化\n - 以走路動作為基礎，融入 Funk 音樂節奏\n - 在 1970s 加州社群中很普遍\n### 9. Electric Boogaloo（風格名）\n- **注意**：Electric Boogaloo 既是一個**舞團名稱**（Electric Boogaloos），也是一個**風格名稱**\n- **作為風格**：結合 Boogaloo 的流動性和 Popping 的爆點，是整個 Popping 文化的代名詞\n- **作為團體**：Electric Boogaloos = 1977 年由 Boogaloo Sam 在 Fresno 成立的舞團\n\n---\n\n## Locking（兄弟流派）\n\n### 核心技術\n- **Lock**：突然靜止在一個誇張姿勢，然後快速釋放繼續律動\n- **特徵動作**：Wrist Roll（腕部旋轉）、Points（指向動作）、Scooby Doo（轉身）、Leo Walk（特色步伐）\n- **音樂關係**：比 Popping 更緊密依附 Funk 音樂的 downbeat\n- **與 Popping 的差異**：Locking 節奏感更強、動作更外向（outgoing），Popping 則更注重技術控制\n\n---\n\n## 評分標準詳解（Battle 裁判視角）\n\n根據 HHI 官方規則和 Juste Debout 評分標準，Popping Battle 的評判維度："
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::2",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 2,
+          "section_title": "1. Boogaloo",
+          "distance": 0.4671283960342407,
+          "distance_to_question": 0.4671282158789649,
+          "retrieved_by": "both",
+          "text": "ael Wayne Davis）\n- **容易混淆**：Boogaloo 是 Popping 的子流派，不是 Popping 的同義詞；Boogaloo 更強調流動性，Popping 更強調爆點清晰度\n### 2. Waving（波浪）\n- **起源**：Electric Boogaloos 早期技術，後被全球 Popper 廣泛採用\n- **技術特徵**：\n - 動作像波浪或電流從身體一端傳到另一端\n - Arm Wave（手臂波）：從指尖開始，波浪經過手腕、肘、肩傳遍全身\n - Body Wave（身體波）：全身垂直或水平方向的波動\n - 需要精確的 Isolation 控制\n- **代表人物**：Salah（以 Waving 著稱，特別是全身波和手指波）\n- **難度等級**：中高，全身 Waving 需要大量練習\n\n### 3. Tutting（圖坦卡門）\n- **起源**：靈感來自古埃及 Tutankhamun 法老壁畫中的側面姿勢，美國街舞文化中發展\n- **技術特徵**：\n - 手臂和手指形成直角（90°）或方形幾何圖案\n - 動作以直線和方形為美學基礎，與 Waving 的曲線形成對比\n - 細分：Finger Tutting（手指）、Arm Tutting（手臂）、Body Tutting（全身）\n - 每個動作轉換都需要精確定格（Hit）\n- **代表人物**：Nonstop（Marquese Scott）擅長結合 Tutting 和 Animation"
+        },
+        {
+          "chunk_id": "Popin' Pete - Wikipedia.txt::3",
+          "source_file": "Popin' Pete - Wikipedia.txt",
+          "chunk_index": 3,
+          "section_title": "",
+          "distance": 0.3139601945877075,
+          "distance_to_question": 0.3139598848315912,
+          "retrieved_by": "dense",
+          "text": "[ 3 ] He compiled a set of basic movements and founded [The Electric Boogaloos](https://en.wikipedia\norg/wiki/The_Electric_Boogaloos \"The Electric Boogaloos\")."
+        },
+        {
+          "chunk_id": "popping_glossary.txt::10",
+          "source_file": "popping_glossary.txt",
+          "chunk_index": 10,
+          "section_title": "地名與歷史術語",
+          "distance": 0.6180968521170569,
+          "distance_to_question": 0.6180968521170569,
+          "retrieved_by": "bm25",
+          "text": "n、Parliament-Funkadelic、Sly & The Family Stone。Funk 音樂是 Popping 和 Locking 的靈魂來源。 |\n\n---\n\n## 重要人物快速參照\n| 人物 | 別名 | 主要貢獻 |\n|---|---|---|\n| Sam Solomon | Boogaloo Sam | 創立 Electric Boogaloos 團體，發展 Boogaloo 和 Popping 技術，1970s Fresno。 |\n| Timothy Solomon | Popin' Pete | Boogaloo Sam 的弟弟，Electric Boogaloos 創始成員，以細膩的 Popping 著稱。 |\n| Michael Wayne Davis | Skeeter Rabbit | Electric Boogaloos 創始成員，以 Boogaloo 和 Worm 動作知名。 |\n| Larry Vazquez | Sugar Pop / Suga Pop | Electric Boogaloos 成員，以流暢的 Liquid 和 Animation 風格著稱。 |\n| Darryl James | Dane 1 | Electric Boogaloos 成員。 |\n| Nate Johnson | Nate \"Robot\" Johnson | Electric Boogaloos 成員，Robot 風格代表人物。 |"
+        },
+        {
+          "chunk_id": "Popin' Pete - Wikipedia.txt::6",
+          "source_file": "Popin' Pete - Wikipedia.txt",
+          "chunk_index": 6,
+          "section_title": "The Electric Boogaloos",
+          "distance": 0.34707391262054443,
+          "distance_to_question": 0.34707363098338273,
+          "retrieved_by": "dense",
+          "text": "Boogaloo Sam [ 4 ] as a creator of the group taught basics to the members of The Electric Boogaloos\nAs all the members were very experienced and passionate dancers, the group soon became successful. During that time, Pete and the other members of The Electric Boogaloos appeared on many popular shows including: [_The Midnight Special_](https://en.wikipedia.org/wiki/The_Midnight_Special_(TV_series) \"The Midnight Special (TV series)\"), _Kicks_ and _[Soul Train](https://en.wikipedia.org/wiki/Soul_Train \"Soul Train\")_ in the United States. (firstly in 1980 [ 5 ] )."
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Electric Boogaloos 是 1977 年由 Boogaloo Sam 在 Fresno 成立的舞團 [來源 1]。\n2. Electric Boogaloos 的成員包括：Boogaloo Sam（Sam Solomon）、Popin' Pete（Timothy Solomon）、Skeeter Rabbit（Michael Wayne Davis）、Sugar Pop / Suga Pop（Larry Vazquez）、Dane 1（Darryl James）、Nate \"Robot\" Johnson（Nate Johnson）[來源 4]。\n3. Boogaloo Sam 創立 Electric Boogaloos 團體，發展 Boogaloo 和 Popping 技術，1970s Fresno [來源 4]。\n4. Popin' Pete 是 Boogaloo Sam 的弟弟，Electric Boogaloos 創始成員，以細膩的 Popping 著稱 [來源 4]。\n5. Skeeter Rabbit 是 Electric Boogaloos 創始成員，以 Boogaloo 和 Worm 動作知名 [來源 4]。\n6. Sugar Pop / Suga Pop 是 Electric Boogaloos 成員，以流暢的 Liquid 和 Animation 風格著稱 [來源 4]。\n7. Dane 1 是 Electric Boogaloos 成員 [來源 4]。\n8. Nate \"Robot\" Johnson 是 Electric Boogaloos 成員，Robot 風格代表人物 [來源 4]。\n\nStep 2 — 綜合回答：\nElectric Boogaloos 的成員包括 Boogaloo Sam（Sam Solomon）、Popin' Pete（Timothy Solomon）、Skeeter Rabbit（Michael Wayne Davis）、Sugar Pop / Suga Pop（Larry Vazquez）、Dane 1（Darryl James）和 Nate \"Robot\" Johnson（Nate Johnson）[來源 4]。其中，Boogaloo Sam 創立了 Electric Boogaloos 團體並發展了 Boogaloo 和 Popping 技術[來源 4]；Popin' Pete 是 Boogaloo Sam 的弟弟，為創始成員，以細膩的 Popping 技術著稱[來源 4]；Skeeter Rabbit 也是創始成員，以 Boogaloo 和 Worm 動作聞名[來源 4]；Sugar Pop 以流暢的 Liquid 和 Animation 風格著稱[來源 4]；Dane 1 是團體成員之一[來源 4]；Nate \"Robot\" Johnson 則是 Robot 風格的代表人物[來源 4]。\n\nStep 3 — 缺口說明：\n資料未涵蓋其他成員的具體貢獻細節。",
+      "error": null
+    },
+    {
+      "index": 3,
+      "question": "Popping 和 Boogaloo 有什麼差別？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "popping_style_taxonomy.txt::5",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 5,
+          "section_title": "7. Liquid / Liquid Popping",
+          "distance": 0.3806236982345581,
+          "distance_to_question": 0.38062399120779633,
+          "retrieved_by": "both",
+          "text": "性控制和爆點技術\n\n### 8. Strutting\n- **技術特�征**：\n - 強調步伐的節奏感和風格化\n - 以走路動作為基礎，融入 Funk 音樂節奏\n - 在 1970s 加州社群中很普遍\n### 9. Electric Boogaloo（風格名）\n- **注意**：Electric Boogaloo 既是一個**舞團名稱**（Electric Boogaloos），也是一個**風格名稱**\n- **作為風格**：結合 Boogaloo 的流動性和 Popping 的爆點，是整個 Popping 文化的代名詞\n- **作為團體**：Electric Boogaloos = 1977 年由 Boogaloo Sam 在 Fresno 成立的舞團\n\n---\n\n## Locking（兄弟流派）\n\n### 核心技術\n- **Lock**：突然靜止在一個誇張姿勢，然後快速釋放繼續律動\n- **特徵動作**：Wrist Roll（腕部旋轉）、Points（指向動作）、Scooby Doo（轉身）、Leo Walk（特色步伐）\n- **音樂關係**：比 Popping 更緊密依附 Funk 音樂的 downbeat\n- **與 Popping 的差異**：Locking 節奏感更強、動作更外向（outgoing），Popping 則更注重技術控制\n\n---\n\n## 評分標準詳解（Battle 裁判視角）\n\n根據 HHI 官方規則和 Juste Debout 評分標準，Popping Battle 的評判維度："
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::2",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 2,
+          "section_title": "1. Boogaloo",
+          "distance": 0.338192880153656,
+          "distance_to_question": 0.33819298223620486,
+          "retrieved_by": "both",
+          "text": "ael Wayne Davis）\n- **容易混淆**：Boogaloo 是 Popping 的子流派，不是 Popping 的同義詞；Boogaloo 更強調流動性，Popping 更強調爆點清晰度\n### 2. Waving（波浪）\n- **起源**：Electric Boogaloos 早期技術，後被全球 Popper 廣泛採用\n- **技術特徵**：\n - 動作像波浪或電流從身體一端傳到另一端\n - Arm Wave（手臂波）：從指尖開始，波浪經過手腕、肘、肩傳遍全身\n - Body Wave（身體波）：全身垂直或水平方向的波動\n - 需要精確的 Isolation 控制\n- **代表人物**：Salah（以 Waving 著稱，特別是全身波和手指波）\n- **難度等級**：中高，全身 Waving 需要大量練習\n\n### 3. Tutting（圖坦卡門）\n- **起源**：靈感來自古埃及 Tutankhamun 法老壁畫中的側面姿勢，美國街舞文化中發展\n- **技術特徵**：\n - 手臂和手指形成直角（90°）或方形幾何圖案\n - 動作以直線和方形為美學基礎，與 Waving 的曲線形成對比\n - 細分：Finger Tutting（手指）、Arm Tutting（手臂）、Body Tutting（全身）\n - 每個動作轉換都需要精確定格（Hit）\n- **代表人物**：Nonstop（Marquese Scott）擅長結合 Tutting 和 Animation"
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::1",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 1,
+          "section_title": "頂層分類",
+          "distance": 0.3848951458930969,
+          "distance_to_question": 0.3848952773848108,
+          "retrieved_by": "both",
+          "text": "）\n└── Locking（鎖舞） ← 兄弟流派，不在本知識庫主要範疇\n ├── Campbellock\n └── Funky Chicken\n```\n\n---\n\n## Popping — 主流派詳解\n### 1. Boogaloo\n- **起源**：1970s 加州 Richmond / Fresno，Sam Solomon（Boogaloo Sam）創立\n- **技術特徵**：\n - 全身性律動，以臀部和膝蓋為中心的圓形搖擺\n - 動作流暢（fluid）而非爆裂，比其他 Popping 子流派更「液態」\n - 身體的每個關節都參與律動，製造蠕動感（rolling movement）\n - 腿部常見 dip（身體下沉）和 roll（旋轉）\n- **文化地位**：Popping 的源頭技術，所有 Popper 必學\n- **代表人物**：Boogaloo Sam、Skeeter Rabbit（Michael Wayne Davis）\n- **容易混淆**：Boogaloo 是 Popping 的子流派，不是 Popping 的同義詞；Boogaloo 更強調流動性，Popping 更強調爆點清晰度"
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::7",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 7,
+          "section_title": "評分標準詳解（Battle 裁判視角）",
+          "distance": 0.4168001413345337,
+          "distance_to_question": 0.41680022080248513,
+          "retrieved_by": "both",
+          "text": "anship（表演力）** | 與觀眾的互動、眼神、舞台魅力 | ★★★ |\n| **Costume（服裝）** | 服裝是否與風格相符（在部分賽事中計入） | ★ |\n\n---\n\n## 常見混淆澄清\n| 問題 | 答案 |\n|------|------|\n| Popping 和 Boogaloo 是同一種舞嗎？ | 不完全是。Boogaloo 是 Popping 的子流派，更強調流動性；Popping 是包含 Boogaloo 在內的更大類別。 |\n| Popping 和 Locking 是同一種舞嗎？ | 不是，但兩者常被合稱為 Funk Styles。Locking 由 Don Campbell 在 LA 獨立創立，Popping 由 Boogaloo Sam 在 Fresno 創立。 |\n| Breaking（霹靂舞）是 Popping 嗎？ | 不是。Breaking 是 Hip-Hop 四大元素之一（DJ、MC、Graffiti、Breaking），與 Popping/Locking 是完全不同的流派，雖然常在同一文化圈共存。 |\n| 「Electric Boogaloo」是風格還是團體？ | 兩者都是。Electric Boogaloos 是 1977 年成立的舞團；Electric Boogaloo 也指他們發展的舞蹈風格。 |\n| Tutting 和 Popping 有什麼關係？ | Tutting 是 Popping 的子流派，通常與 Popping 技術結合使用（帶有爆點的幾何動作）。 |"
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::0",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.4294015169143677,
+          "distance_to_question": 0.4294014097851584,
+          "retrieved_by": "both",
+          "text": "# Popping & Funk Styles 風格分類體系\n\n> 個人整理，系統性描述 Popping 文化中的所有主要流派、其技術特徵、歷史淵源和代表人物。\n\n---\n\n## 頂層分類\n\n```\nFunk Styles（放克舞蹈）\n├── Popping（震感舞） ← 本知識庫主題\n│ ├── Boogaloo\n│ ├── Waving\n│ ├── Tutting\n│ ├── Animation\n│ ├── Turfing\n│ ├── Robot\n│ ├── Liquid / Liquid Popping\n│ ├── Snaking\n│ ├── Scarecrow\n│ ├── Strutting\n│ └── Electric Boogaloo（風格名，非團體名）\n└── Locking（鎖舞） ← 兄弟流派，不在本知識庫主要範疇\n ├── Campbellock\n └── Funky Chicken\n```\n\n---\n\n## Popping — 主流派詳解"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Boogaloo 是 Popping 的子流派，更強調流動性，Popping 更強調爆點清晰度 [來源 2]。\n2. Boogaloo 起源於1970s加州 Richmond / Fresno，由 Sam Solomon（Boogaloo Sam）創立 [來源 3]。\n3. Boogaloo 技術特徵包括全身性律動，以臀部和膝蓋為中心的圓形搖擺，動作流暢而非爆裂，身體每個關節參與律動，製造蠕動感 [來源 3]。\n4. Popping 是包含 Boogaloo 在內的更大類別 [來源 5]。\n5. Popping 更注重技術控制和爆點技術 [來源 1]。\n\nStep 2 — 綜合回答：\nPopping 是一種包含多個子流派的放克舞蹈大類，其中 Boogaloo 是其子流派之一。Boogaloo 起源於1970年代的加州，由 Boogaloo Sam 創立，技術特徵是全身性流暢律動，特別強調臀部和膝蓋的圓形搖擺，動作較為流暢且帶有蠕動感。相比之下，Popping 更注重爆點的清晰度和技術控制，強調身體的突然收縮和釋放動作。簡言之，Boogaloo 強調流動性和連續性，而 Popping 強調爆點和節奏感 [來源 2][來源 3][來源 5][來源 1]。\n\nStep 3 — 缺口說明：\n資料未涵蓋其他可能的文化或歷史差異。",
+      "error": null
+    },
+    {
+      "index": 4,
+      "question": "Juste Debout 比賽的規則和歷史？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "popping_history_timeline.txt::7",
+          "source_file": "popping_history_timeline.txt",
+          "chunk_index": 7,
+          "section_title": "1990s — 地下社群深化，歐洲崛起",
+          "distance": 0.4599553346633911,
+          "distance_to_question": 0.45995509613332053,
+          "retrieved_by": "both",
+          "text": "uste Debout 前身活動**在巴黎舉辦（由 Bams 和 Anne Nguyen 組織），早期聚焦 Popping 和 Locking。 |\n\n---\n\n## 2000s — 全球賽事體系建立\n| 年份 | 事件 |\n|------|------|\n| 2002 | **Juste Debout 正式成為年度賽事**（巴黎），成為全球最重要的 Popping/Locking/House 2v2 比賽，吸引來自 60+ 個國家的舞者。 |\n| 2003 | **Hip Hop International（HHI）** 正式成立，總部設於美國，舉辦年度世界錦標賽（World Hip Hop Dance Championship）。 |\n| ~2003 | **Turfing** 在加州奧克蘭地下社群興起，結合 Popping、Gliding 和地方文化認同。 |\n| 2005 | 電視節目 **\"America's Best Dance Crew（ABDC）\"** 開播（後於 2008 正式播出），帶動 Street Dance 在美國年輕世代的普及。 |\n| 2008 | **STEEZY Studio** 的前身概念開始發展（正式成立約 2015 年），線上舞蹈教學平台崛起。 |\n| ~2009 | **Marquese Scott（NONSTOP）** 開始在 YouTube 發布 Animation 和 Slow Motion 影片，在全球網路上引發廣泛迴響，單支影片觀看次數逾千萬。 |\n\n---\n\n## 2010s — 數位化與全球化"
+        },
+        {
+          "chunk_id": "Salah (dancer) - Wikipedia.txt::66",
+          "source_file": "Salah (dancer) - Wikipedia.txt",
+          "chunk_index": 66,
+          "section_title": "Career",
+          "distance": 0.42247438430786133,
+          "distance_to_question": 0.42247432131051266,
+          "retrieved_by": "dense",
+          "text": "g/the-judges-the-judges-the-judges) from the original on April 16, 2010. Retrieved October 22, 2009.\n33. **[^](https://en.wikipedia.org/wiki/Salah_(dancer)#cite_ref-35 \"Jump up\")** [\"Judges\"](https://web.archive.org/web/20090105181019/http://www.bboychampionships.com/content/view/241/550/). _BBoyChampionships.com_. 2008. Archived from [the original](http://www.bboychampionships.com/content/view/241/550/) on January 5, 2009. Retrieved November 5, 2009."
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::6",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 6,
+          "section_title": "核心技術",
+          "distance": 0.6389123468340565,
+          "distance_to_question": 0.6389123468340565,
+          "retrieved_by": "bm25",
+          "text": "，Popping 則更注重技術控制\n\n---\n\n## 評分標準詳解（Battle 裁判視角）\n\n根據 HHI 官方規則和 Juste Debout 評分標準，Popping Battle 的評判維度：\n| 評分維度 | 說明 | 重要性 |\n|---|---|---|\n| **Musicality（樂感）** | 動作與音樂的節奏、旋律、歌詞的對應程度 | ★★★★★ 最重要 |\n| **Foundation（基礎）** | Popping 基本動作的扎實程度（Pop 的清晰度、Isolation 的精準度） | ★★★★★ |\n| **Originality（原創性）** | 動作語彙是否有個人特色，而非複製他人 | ★★★★ |\n| **Execution（執行）** | 動作的完成度，技術是否乾淨清晰 | ★★★★ |\n| **Technique（技術）** | 特定技術動作（如 Waving、Tutting）的掌握程度 | ★★★★ |\n| **Creativity（創造力）** | 動作組合和即興創作的多樣性 | ★★★ |\n| **Floor Work（地板動作）** | 是否有效運用地板，但在 Popping 中比 Breaking 少見 | ★★ |\n| **Showmanship（表演力）** | 與觀眾的互動、眼神、舞台魅力 | ★★★ |\n| **Costume（服裝）** | 服裝是否與風格相符（在部分賽事中計入） | ★ |\n\n---\n\n## 常見混淆澄清"
+        },
+        {
+          "chunk_id": "popping_style_taxonomy.txt::5",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 5,
+          "section_title": "7. Liquid / Liquid Popping",
+          "distance": 0.7978709231944106,
+          "distance_to_question": 0.7978709231944106,
+          "retrieved_by": "bm25",
+          "text": "性控制和爆點技術\n\n### 8. Strutting\n- **技術特�征**：\n - 強調步伐的節奏感和風格化\n - 以走路動作為基礎，融入 Funk 音樂節奏\n - 在 1970s 加州社群中很普遍\n### 9. Electric Boogaloo（風格名）\n- **注意**：Electric Boogaloo 既是一個**舞團名稱**（Electric Boogaloos），也是一個**風格名稱**\n- **作為風格**：結合 Boogaloo 的流動性和 Popping 的爆點，是整個 Popping 文化的代名詞\n- **作為團體**：Electric Boogaloos = 1977 年由 Boogaloo Sam 在 Fresno 成立的舞團\n\n---\n\n## Locking（兄弟流派）\n\n### 核心技術\n- **Lock**：突然靜止在一個誇張姿勢，然後快速釋放繼續律動\n- **特徵動作**：Wrist Roll（腕部旋轉）、Points（指向動作）、Scooby Doo（轉身）、Leo Walk（特色步伐）\n- **音樂關係**：比 Popping 更緊密依附 Funk 音樂的 downbeat\n- **與 Popping 的差異**：Locking 節奏感更強、動作更外向（outgoing），Popping 則更注重技術控制\n\n---\n\n## 評分標準詳解（Battle 裁判視角）\n\n根據 HHI 官方規則和 Juste Debout 評分標準，Popping Battle 的評判維度："
+        },
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::22",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 22,
+          "section_title": "How do judges choose a winner?",
+          "distance": 0.471821665763855,
+          "distance_to_question": 0.47182154697444834,
+          "retrieved_by": "dense",
+          "text": ", called the **tiebreak round**. After the tiebreak round, the judges vote again to decide who wins.\nSo normally the judges and the audience watch the whole battle and after the battle, the judges decide who won. The problem with that is that judges often forget what exactly happened in the first round, and thus judge on what they saw in the last round. This is why another judging system was created called the **Kozen judging system**. In this system, judges choose a winner after every round. A live scoreboard displays the score after each round."
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Juste Debout 的前身活動在巴黎舉辦，由 Bams 和 Anne Nguyen 組織，早期聚焦 Popping 和 Locking。[來源 1]\n2. 2002 年，Juste Debout 正式成為年度賽事（巴黎），成為全球最重要的 Popping/Locking/House 2v2 比賽，吸引來自 60+ 個國家的舞者。[來源 1]\n3. 根據 HHI 官方規則和 Juste Debout 評分標準，Popping Battle 的評判維度包括 Musicality（樂感）、Foundation（基礎）、Originality（原創性）、Execution（執行）、Technique（技術）、Creativity（創造力）、Floor Work（地板動作）、Showmanship（表演力）、Costume（服裝）。其中 Musicality 和 Foundation 為最重要的評分項目。[來源 3]\n\nStep 2 — 綜合回答：\nJuste Debout 比賽起源於巴黎，最初由 Bams 和 Anne Nguyen 組織的活動，主要聚焦於 Popping 和 Locking 兩種舞蹈風格。2002 年，Juste Debout 正式成為年度賽事，並迅速發展成為全球最重要的 Popping、Locking 和 House 2v2 比賽，吸引超過 60 個國家的舞者參與。[來源 1]  \n在比賽規則方面，Juste Debout 採用與 HHI 官方規則相似的評分標準，Popping Battle 的評判維度包括樂感（Musicality）、基礎動作的扎實程度（Foundation）、原創性（Originality）、動作執行度（Execution）、技術掌握（Technique）、創造力（Creativity）、地板動作運用（Floor Work）、表演力（Showmanship）及服裝（Costume）。其中樂感與基礎動作被視為最重要的評分項目，分別獲得最高星級評價。[來源 3]\n\nStep 3 — 缺口說明：\n資料未涵蓋 Juste Debout 比賽的具體規則細節（如比賽流程、回合數、勝負判定方式等）。",
+      "error": null
+    },
+    {
+      "index": 5,
+      "question": "如何判斷一場 Popping battle 的勝負？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "popping_style_taxonomy.txt::6",
+          "source_file": "popping_style_taxonomy.txt",
+          "chunk_index": 6,
+          "section_title": "核心技術",
+          "distance": 0.37627655267715454,
+          "distance_to_question": 0.37627631058682487,
+          "retrieved_by": "both",
+          "text": "，Popping 則更注重技術控制\n\n---\n\n## 評分標準詳解（Battle 裁判視角）\n\n根據 HHI 官方規則和 Juste Debout 評分標準，Popping Battle 的評判維度：\n| 評分維度 | 說明 | 重要性 |\n|---|---|---|\n| **Musicality（樂感）** | 動作與音樂的節奏、旋律、歌詞的對應程度 | ★★★★★ 最重要 |\n| **Foundation（基礎）** | Popping 基本動作的扎實程度（Pop 的清晰度、Isolation 的精準度） | ★★★★★ |\n| **Originality（原創性）** | 動作語彙是否有個人特色，而非複製他人 | ★★★★ |\n| **Execution（執行）** | 動作的完成度，技術是否乾淨清晰 | ★★★★ |\n| **Technique（技術）** | 特定技術動作（如 Waving、Tutting）的掌握程度 | ★★★★ |\n| **Creativity（創造力）** | 動作組合和即興創作的多樣性 | ★★★ |\n| **Floor Work（地板動作）** | 是否有效運用地板，但在 Popping 中比 Breaking 少見 | ★★ |\n| **Showmanship（表演力）** | 與觀眾的互動、眼神、舞台魅力 | ★★★ |\n| **Costume（服裝）** | 服裝是否與風格相符（在部分賽事中計入） | ★ |\n\n---\n\n## 常見混淆澄清"
+        },
+        {
+          "chunk_id": "popping-culture-notes.txt::0",
+          "source_file": "popping-culture-notes.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.3927295207977295,
+          "distance_to_question": 0.3927296546556468,
+          "retrieved_by": "both",
+          "text": "# Popping 賽事文化（筆記占位）\n\n- Battle 與 cypher 為常見賽制；評判常關注音樂性、獨創性與完整度。\n- 本檔為佔位筆記，可替換為你整理之正式語料。"
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::3",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 3,
+          "section_title": "**1vs1 Popping Battles**",
+          "distance": 0.27990174293518066,
+          "distance_to_question": 0.27990177406979944,
+          "retrieved_by": "dense",
+          "text": "two poppers who will battle one another facing each other in one (1) minute rounds for each popper.\n- There will be no point system for the battles. (Focus should be on the music not your competition)\n- The judges will judge on each criteria separately.\n- The judges are looking for the person that encompasses all the above criteria and therefore looking for the COMPLETE POPPER.\n- Competition is a learning tool. The results reflect hitting the judges’ criteria."
+        },
+        {
+          "chunk_id": "popping_glossary.txt::7",
+          "source_file": "popping_glossary.txt",
+          "chunk_index": 7,
+          "section_title": "",
+          "distance": 0.5283413908538581,
+          "distance_to_question": 0.5283413908538581,
+          "retrieved_by": "bm25",
+          "text": "---\n\n## Battle 與文化術語\n| 術語 | 定義 |\n|---|---|\n| **Cypher（舞圈）** | 圍成圓形的自由即興舞蹈空間。每位舞者輪流進入圓圈展示，觀眾形成外圈。是街舞文化中最基本的社交和練習形式。 |\n| **Battle** | 兩位舞者（或兩隊）的對抗性表演，由評審或觀眾判定勝負。 |\n| **1v1** | 單人對單人的 battle 形式。 |\n| **Crew Battle** | 多人隊伍對抗，通常 3v3 或 5v5。 |\n| **Judge / 裁判** | 評估 battle 勝負的專業舞者，通常來自同一舞蹈社群。 |\n| **Popping 評分標準（HHI/Juste Debout）** | Musicality（樂感）、Originality（原創性）、Foundation（基礎）、Technique（技術）、Execution（執行）、Floor Work（地板動作）、Showmanship（舞台表現力）、Creativity（創造力）、Costume（服裝）。 |\n| **OG（Original Gangster）** | 指某個流派或文化的元老、先驅人物。對 Popping 社群有深遠影響的前輩。 |\n| **Popper** | 跳 Popping 的舞者。 |\n| **Locker** | 跳 Locking 的舞者。 |"
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::0",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.32140374183654785,
+          "distance_to_question": 0.3214039273902456,
+          "retrieved_by": "dense",
+          "text": "## **1vs1 Popping Battles**\n\n# **1vs1 Popping Battles**"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Popping Battle 的評判維度包括 Musicality（樂感）、Foundation（基礎）、Originality（原創性）、Execution（執行）、Technique（技術）、Creativity（創造力）、Floor Work（地板動作）、Showmanship（表演力）、Costume（服裝）[來源 1]。\n2. 評分標準中，Musicality 和 Foundation 是最重要的評分項目，均為五顆星重要性[來源 1]。\n3. 1vs1 Popping Battles 中，沒有使用點數系統，評判重點在音樂與舞者表現，而非直接競爭分數[來源 3]。\n4. 裁判會根據各項評分標準分別評判，尋找符合所有評分標準的「完整舞者（COMPLETE POPPER）」[來源 3]。\n5. Battle 是兩位舞者的對抗性表演，由評審或觀眾判定勝負[來源 4]。\n\nStep 2 — 綜合回答：\n判斷一場 Popping battle 的勝負，裁判會根據多個評分維度進行評判，主要包括樂感（Musicality）、基礎動作（Foundation）、原創性（Originality）、執行力（Execution）、技術（Technique）、創造力（Creativity）、地板動作（Floor Work）、表演力（Showmanship）及服裝（Costume）等。其中，樂感與基礎動作是最重要的評分項目。裁判不使用點數系統，而是分別評估每個標準，尋找能夠在所有評分維度上表現完整的舞者，即「完整舞者（COMPLETE POPPER）」。最終勝負由裁判依據這些標準判定[來源 1][來源 3][來源 4]。\n\nStep 3 — 缺口說明：\n資料未涵蓋具體的勝負判定流程細節，例如如何在評分維度中權衡或決定勝者的具體方法。",
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,1384 @@
+{
+  "generated_at": "2026-11-10 01:19 UTC",
+  "gold": "experiments/gold.json",
+  "gold_sha256": "ea2393a0091761ce03d1125a0d9a81e145f3f2bc6395f870f87c15afc4aacf07",
+  "corpus_pin": {
+    "path": "experiments/corpus_pin.json",
+    "digest": "c8e76a3ac522d12b0b5d82acc13670999706b4aa157a3bbc5cc068f8a4a0d0e5"
+  },
+  "round1_corpus": {
+    "path": "experiments/corpus_round1.json",
+    "document_count": 39,
+    "documents_digest": "ee060c510ca616935954325a9f50f148832f8bff79784ac1b8aec8cdc4f3bc35"
+  },
+  "round2_status": "read from 6 run folder(s) under `experiments/round2`",
+  "round2_runs": [
+    {
+      "folder": "experiments/round2/round1_corpus/run1",
+      "label": "round1 corpus · run 1",
+      "corpus": "round1",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "repeat": "run 1",
+      "combos": [
+        "e",
+        "f",
+        "g"
+      ],
+      "shared": {
+        "model": "gpt-4.1-mini-2025-04-14",
+        "retrieval_only": false,
+        "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+        "corpus": "round1",
+        "document_count": 39,
+        "documents_digest": "ee060c510ca616935954325a9f50f148832f8bff79784ac1b8aec8cdc4f3bc35",
+        "chunk_count": 1248,
+        "text_source": "data/processed",
+        "corpus_sha256": "5da23af5900efa461025f6730827ac46cb0232b4e11434141117fa6a9e735819",
+        "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c"
+      },
+      "pinned_text": true
+    },
+    {
+      "folder": "experiments/round2/round1_corpus/run2",
+      "label": "round1 corpus · run 2",
+      "corpus": "round1",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "repeat": "run 2",
+      "combos": [
+        "e",
+        "f",
+        "g"
+      ],
+      "shared": {
+        "model": "gpt-4.1-mini-2025-04-14",
+        "retrieval_only": false,
+        "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+        "corpus": "round1",
+        "document_count": 39,
+        "documents_digest": "ee060c510ca616935954325a9f50f148832f8bff79784ac1b8aec8cdc4f3bc35",
+        "chunk_count": 1248,
+        "text_source": "data/processed",
+        "corpus_sha256": "5da23af5900efa461025f6730827ac46cb0232b4e11434141117fa6a9e735819",
+        "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c"
+      },
+      "pinned_text": true
+    },
+    {
+      "folder": "experiments/round2/round1_corpus/run3",
+      "label": "round1 corpus · run 3",
+      "corpus": "round1",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "repeat": "run 3",
+      "combos": [
+        "e",
+        "f",
+        "g"
+      ],
+      "shared": {
+        "model": "gpt-4.1-mini-2025-04-14",
+        "retrieval_only": false,
+        "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+        "corpus": "round1",
+        "document_count": 39,
+        "documents_digest": "ee060c510ca616935954325a9f50f148832f8bff79784ac1b8aec8cdc4f3bc35",
+        "chunk_count": 1248,
+        "text_source": "data/processed",
+        "corpus_sha256": "5da23af5900efa461025f6730827ac46cb0232b4e11434141117fa6a9e735819",
+        "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c"
+      },
+      "pinned_text": true
+    },
+    {
+      "folder": "experiments/round2/current_corpus/run1",
+      "label": "current corpus · run 1",
+      "corpus": "current",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "repeat": "run 1",
+      "combos": [
+        "e",
+        "f",
+        "g"
+      ],
+      "shared": {
+        "model": "gpt-4.1-mini-2025-04-14",
+        "retrieval_only": false,
+        "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+        "corpus": "current",
+        "document_count": 42,
+        "documents_digest": "fac881780df23f03e75aa65ff7c5f4f381809b23a7ea0a61938a394cb603d601",
+        "chunk_count": 1279,
+        "text_source": "data/processed",
+        "corpus_sha256": "c8e76a3ac522d12b0b5d82acc13670999706b4aa157a3bbc5cc068f8a4a0d0e5",
+        "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c"
+      },
+      "pinned_text": true
+    },
+    {
+      "folder": "experiments/round2/current_corpus/run2",
+      "label": "current corpus · run 2",
+      "corpus": "current",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "repeat": "run 2",
+      "combos": [
+        "e",
+        "f",
+        "g"
+      ],
+      "shared": {
+        "model": "gpt-4.1-mini-2025-04-14",
+        "retrieval_only": false,
+        "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+        "corpus": "current",
+        "document_count": 42,
+        "documents_digest": "fac881780df23f03e75aa65ff7c5f4f381809b23a7ea0a61938a394cb603d601",
+        "chunk_count": 1279,
+        "text_source": "data/processed",
+        "corpus_sha256": "c8e76a3ac522d12b0b5d82acc13670999706b4aa157a3bbc5cc068f8a4a0d0e5",
+        "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c"
+      },
+      "pinned_text": true
+    },
+    {
+      "folder": "experiments/round2/current_corpus/run3",
+      "label": "current corpus · run 3",
+      "corpus": "current",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "repeat": "run 3",
+      "combos": [
+        "e",
+        "f",
+        "g"
+      ],
+      "shared": {
+        "model": "gpt-4.1-mini-2025-04-14",
+        "retrieval_only": false,
+        "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+        "corpus": "current",
+        "document_count": 42,
+        "documents_digest": "fac881780df23f03e75aa65ff7c5f4f381809b23a7ea0a61938a394cb603d601",
+        "chunk_count": 1279,
+        "text_source": "data/processed",
+        "corpus_sha256": "c8e76a3ac522d12b0b5d82acc13670999706b4aa157a3bbc5cc068f8a4a0d0e5",
+        "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c"
+      },
+      "pinned_text": true
+    }
+  ],
+  "rows": [
+    {
+      "run": "A",
+      "combo_label": "A",
+      "round": 1,
+      "combo_id": "a",
+      "corpus": "round1",
+      "repeat": null,
+      "run_folder": null,
+      "retrieval": "naive / size=500 / overlap=0; dense top-5; max distance 1.0",
+      "prompt_style": "weak",
+      "model": "gemini-2.5-flash (course OpenAI-compatible proxy)",
+      "source": "experiments/combo_a",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.39928,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 0,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 0,
+      "q4_fact_groups_list": [],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": {
+        "cites": 25,
+        "section_label_matches": 25
+      }
+    },
+    {
+      "run": "B",
+      "combo_label": "B",
+      "round": 1,
+      "combo_id": "b",
+      "corpus": "round1",
+      "repeat": null,
+      "run_folder": null,
+      "retrieval": "recursive / size=600 / overlap=100; dense top-5; max distance 0.65",
+      "prompt_style": "weak",
+      "model": "gemini-2.5-flash (course OpenAI-compatible proxy)",
+      "source": "experiments/combo_b",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.38596,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 0,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 0,
+      "q4_fact_groups_list": [],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": {
+        "cites": 25,
+        "section_label_matches": 25
+      }
+    },
+    {
+      "run": "C",
+      "combo_label": "C",
+      "round": 1,
+      "combo_id": "c",
+      "corpus": "round1",
+      "repeat": null,
+      "run_folder": null,
+      "retrieval": "recursive / size=1200 / overlap=200; dense top-3; max distance 0.65",
+      "prompt_style": "strong",
+      "model": "gemini-2.5-flash (course OpenAI-compatible proxy)",
+      "source": "experiments/combo_c",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.3844,
+      "questions_with_cites": 5,
+      "q2_members_named": 3,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 3,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 0,
+      "q4_chunks_retrieved": 3,
+      "q4_fact_groups": 0,
+      "q4_fact_groups_list": [],
+      "cites_over_max_distance": 0,
+      "cites_scored": 15,
+      "failed_questions": [],
+      "reconstruction": {
+        "cites": 15,
+        "section_label_matches": 15
+      }
+    },
+    {
+      "run": "D",
+      "combo_label": "D",
+      "round": 1,
+      "combo_id": "d",
+      "corpus": "round1",
+      "repeat": null,
+      "run_folder": null,
+      "retrieval": "recursive / size=300 / overlap=50; dense top-10 cut to 5; max distance 0.5",
+      "prompt_style": "strong",
+      "model": "gemini-2.5-flash (course OpenAI-compatible proxy)",
+      "source": "experiments/combo_d",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.3588,
+      "questions_with_cites": 5,
+      "q2_members_named": 2,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q2_members_in_context": 2,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 0,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 0,
+      "q4_fact_groups_list": [],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": {
+        "cites": 25,
+        "section_label_matches": 25
+      }
+    },
+    {
+      "run": "E",
+      "combo_label": "E",
+      "round": 1,
+      "combo_id": "e",
+      "corpus": "round1",
+      "repeat": null,
+      "run_folder": null,
+      "retrieval": "recursive / size=600 / overlap=100; dense top-5; max distance 0.65",
+      "prompt_style": "cot",
+      "model": "gemini-2.5-flash (course OpenAI-compatible proxy)",
+      "source": "experiments/combo_e",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.38596,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 0,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 0,
+      "q4_fact_groups_list": [],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": {
+        "cites": 25,
+        "section_label_matches": 25
+      }
+    },
+    {
+      "run": "E′ (control) · round1 corpus · run 1",
+      "combo_label": "E′ (control)",
+      "round": 2,
+      "combo_id": "e",
+      "corpus": "round1",
+      "repeat": "run 1",
+      "run_folder": "experiments/round2/round1_corpus/run1",
+      "retrieval": "recursive / size=600 / overlap=100; dense top-5; max distance 0.65",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run1/combo_e/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.385937,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 0,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 0,
+      "q4_fact_groups_list": [],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "F · round1 corpus · run 1",
+      "combo_label": "F",
+      "round": 2,
+      "combo_id": "f",
+      "corpus": "round1",
+      "repeat": "run 1",
+      "run_folder": "experiments/round2/round1_corpus/run1",
+      "retrieval": "recursive / size=600 / overlap=100; dense + BM25 (RRF) top-5; max distance 0.65 (dense channel only)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run1/combo_f/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.44325,
+      "questions_with_cites": 5,
+      "q2_members_named": 3,
+      "q2_members_named_list": [
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 1,
+      "q2_members_in_context_list": [
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 2,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 3,
+      "q4_fact_groups_list": [
+        "format",
+        "city",
+        "venue"
+      ],
+      "cites_over_max_distance": 2,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "G · round1 corpus · run 1",
+      "combo_label": "G",
+      "round": 2,
+      "combo_id": "g",
+      "corpus": "round1",
+      "repeat": "run 1",
+      "run_folder": "experiments/round2/round1_corpus/run1",
+      "retrieval": "recursive / size=600 / overlap=100; dense + query expansion top-5; max distance 0.65 (per sub-query)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run1/combo_g/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.466304,
+      "questions_with_cites": 5,
+      "q2_members_named": 0,
+      "q2_members_named_list": [],
+      "q2_members_in_context": 0,
+      "q2_members_in_context_list": [],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 2,
+      "q4_fact_groups_list": [
+        "format",
+        "city"
+      ],
+      "cites_over_max_distance": 2,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "E′ (control) · round1 corpus · run 2",
+      "combo_label": "E′ (control)",
+      "round": 2,
+      "combo_id": "e",
+      "corpus": "round1",
+      "repeat": "run 2",
+      "run_folder": "experiments/round2/round1_corpus/run2",
+      "retrieval": "recursive / size=600 / overlap=100; dense top-5; max distance 0.65",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run2/combo_e/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.385937,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 0,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 0,
+      "q4_fact_groups_list": [],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "F · round1 corpus · run 2",
+      "combo_label": "F",
+      "round": 2,
+      "combo_id": "f",
+      "corpus": "round1",
+      "repeat": "run 2",
+      "run_folder": "experiments/round2/round1_corpus/run2",
+      "retrieval": "recursive / size=600 / overlap=100; dense + BM25 (RRF) top-5; max distance 0.65 (dense channel only)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run2/combo_f/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.44325,
+      "questions_with_cites": 5,
+      "q2_members_named": 3,
+      "q2_members_named_list": [
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 1,
+      "q2_members_in_context_list": [
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 2,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 2,
+      "q4_fact_groups_list": [
+        "city",
+        "venue"
+      ],
+      "cites_over_max_distance": 2,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "G · round1 corpus · run 2",
+      "combo_label": "G",
+      "round": 2,
+      "combo_id": "g",
+      "corpus": "round1",
+      "repeat": "run 2",
+      "run_folder": "experiments/round2/round1_corpus/run2",
+      "retrieval": "recursive / size=600 / overlap=100; dense + query expansion top-5; max distance 0.65 (per sub-query)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run2/combo_g/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.473592,
+      "questions_with_cites": 5,
+      "q2_members_named": 2,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q2_members_in_context": 2,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 1,
+      "q4_fact_groups_list": [
+        "city"
+      ],
+      "cites_over_max_distance": 2,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "E′ (control) · round1 corpus · run 3",
+      "combo_label": "E′ (control)",
+      "round": 2,
+      "combo_id": "e",
+      "corpus": "round1",
+      "repeat": "run 3",
+      "run_folder": "experiments/round2/round1_corpus/run3",
+      "retrieval": "recursive / size=600 / overlap=100; dense top-5; max distance 0.65",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run3/combo_e/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.385937,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 0,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 0,
+      "q4_fact_groups_list": [],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "F · round1 corpus · run 3",
+      "combo_label": "F",
+      "round": 2,
+      "combo_id": "f",
+      "corpus": "round1",
+      "repeat": "run 3",
+      "run_folder": "experiments/round2/round1_corpus/run3",
+      "retrieval": "recursive / size=600 / overlap=100; dense + BM25 (RRF) top-5; max distance 0.65 (dense channel only)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run3/combo_f/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.44325,
+      "questions_with_cites": 5,
+      "q2_members_named": 3,
+      "q2_members_named_list": [
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 1,
+      "q2_members_in_context_list": [
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 2,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 2,
+      "q4_fact_groups_list": [
+        "city",
+        "venue"
+      ],
+      "cites_over_max_distance": 2,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "G · round1 corpus · run 3",
+      "combo_label": "G",
+      "round": 2,
+      "combo_id": "g",
+      "corpus": "round1",
+      "repeat": "run 3",
+      "run_folder": "experiments/round2/round1_corpus/run3",
+      "retrieval": "recursive / size=600 / overlap=100; dense + query expansion top-5; max distance 0.65 (per sub-query)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/round1_corpus/run3/combo_g/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.468158,
+      "questions_with_cites": 5,
+      "q2_members_named": 2,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q2_members_in_context": 2,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 1,
+      "q4_fact_groups_list": [
+        "city"
+      ],
+      "cites_over_max_distance": 2,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "E′ (control) · current corpus · run 1",
+      "combo_label": "E′ (control)",
+      "round": 2,
+      "combo_id": "e",
+      "corpus": "current",
+      "repeat": "run 1",
+      "run_folder": "experiments/round2/current_corpus/run1",
+      "retrieval": "recursive / size=600 / overlap=100; dense top-5; max distance 0.65",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run1/combo_e/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.378537,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 3,
+      "q4_fact_groups_list": [
+        "format",
+        "city",
+        "year"
+      ],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "F · current corpus · run 1",
+      "combo_label": "F",
+      "round": 2,
+      "combo_id": "f",
+      "corpus": "current",
+      "repeat": "run 1",
+      "run_folder": "experiments/round2/current_corpus/run1",
+      "retrieval": "recursive / size=600 / overlap=100; dense + BM25 (RRF) top-5; max distance 0.65 (dense channel only)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run1/combo_f/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.460238,
+      "questions_with_cites": 5,
+      "q2_members_named": 4,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 4,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 3,
+      "q4_fact_groups_list": [
+        "format",
+        "city",
+        "year"
+      ],
+      "cites_over_max_distance": 3,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "G · current corpus · run 1",
+      "combo_label": "G",
+      "round": 2,
+      "combo_id": "g",
+      "corpus": "current",
+      "repeat": "run 1",
+      "run_folder": "experiments/round2/current_corpus/run1",
+      "retrieval": "recursive / size=600 / overlap=100; dense + query expansion top-5; max distance 0.65 (per sub-query)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run1/combo_g/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.465874,
+      "questions_with_cites": 5,
+      "q2_members_named": 1,
+      "q2_members_named_list": [
+        "Boogaloo Sam"
+      ],
+      "q2_members_in_context": 2,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 2,
+      "q4_fact_groups_list": [
+        "format",
+        "city"
+      ],
+      "cites_over_max_distance": 2,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "E′ (control) · current corpus · run 2",
+      "combo_label": "E′ (control)",
+      "round": 2,
+      "combo_id": "e",
+      "corpus": "current",
+      "repeat": "run 2",
+      "run_folder": "experiments/round2/current_corpus/run2",
+      "retrieval": "recursive / size=600 / overlap=100; dense top-5; max distance 0.65",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run2/combo_e/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.378537,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 3,
+      "q4_fact_groups_list": [
+        "format",
+        "city",
+        "year"
+      ],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "F · current corpus · run 2",
+      "combo_label": "F",
+      "round": 2,
+      "combo_id": "f",
+      "corpus": "current",
+      "repeat": "run 2",
+      "run_folder": "experiments/round2/current_corpus/run2",
+      "retrieval": "recursive / size=600 / overlap=100; dense + BM25 (RRF) top-5; max distance 0.65 (dense channel only)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run2/combo_f/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.460238,
+      "questions_with_cites": 5,
+      "q2_members_named": 4,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 4,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 3,
+      "q4_fact_groups_list": [
+        "format",
+        "city",
+        "year"
+      ],
+      "cites_over_max_distance": 3,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "G · current corpus · run 2",
+      "combo_label": "G",
+      "round": 2,
+      "combo_id": "g",
+      "corpus": "current",
+      "repeat": "run 2",
+      "run_folder": "experiments/round2/current_corpus/run2",
+      "retrieval": "recursive / size=600 / overlap=100; dense + query expansion top-5; max distance 0.65 (per sub-query)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run2/combo_g/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.463092,
+      "questions_with_cites": 5,
+      "q2_members_named": 2,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q2_members_in_context": 2,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 2,
+      "q4_fact_groups_list": [
+        "format",
+        "city"
+      ],
+      "cites_over_max_distance": 2,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "E′ (control) · current corpus · run 3",
+      "combo_label": "E′ (control)",
+      "round": 2,
+      "combo_id": "e",
+      "corpus": "current",
+      "repeat": "run 3",
+      "run_folder": "experiments/round2/current_corpus/run3",
+      "retrieval": "recursive / size=600 / overlap=100; dense top-5; max distance 0.65",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run3/combo_e/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.378537,
+      "questions_with_cites": 5,
+      "q2_members_named": 9,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 9,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Creepin Cid",
+        "Jazzy J",
+        "Mr. Wiggles",
+        "Popin' Pete",
+        "Puppet Boozer",
+        "Robot Dane",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 3,
+      "q4_fact_groups_list": [
+        "format",
+        "city",
+        "year"
+      ],
+      "cites_over_max_distance": 0,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "F · current corpus · run 3",
+      "combo_label": "F",
+      "round": 2,
+      "combo_id": "f",
+      "corpus": "current",
+      "repeat": "run 3",
+      "run_folder": "experiments/round2/current_corpus/run3",
+      "retrieval": "recursive / size=600 / overlap=100; dense + BM25 (RRF) top-5; max distance 0.65 (dense channel only)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run3/combo_f/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.460238,
+      "questions_with_cites": 5,
+      "q2_members_named": 4,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q2_members_in_context": 4,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete",
+        "Skeeter Rabbit",
+        "Suga Pop"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 3,
+      "q4_fact_groups_list": [
+        "format",
+        "city",
+        "year"
+      ],
+      "cites_over_max_distance": 3,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    },
+    {
+      "run": "G · current corpus · run 3",
+      "combo_label": "G",
+      "round": 2,
+      "combo_id": "g",
+      "corpus": "current",
+      "repeat": "run 3",
+      "run_folder": "experiments/round2/current_corpus/run3",
+      "retrieval": "recursive / size=600 / overlap=100; dense + query expansion top-5; max distance 0.65 (per sub-query)",
+      "prompt_style": "cot",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "source": "experiments/round2/current_corpus/run3/combo_g/results.json",
+      "retrieval_only": false,
+      "mean_distance_to_question": 0.470678,
+      "questions_with_cites": 5,
+      "q2_members_named": 2,
+      "q2_members_named_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q2_members_in_context": 2,
+      "q2_members_in_context_list": [
+        "Boogaloo Sam",
+        "Popin' Pete"
+      ],
+      "q4_gold_chunks": 1,
+      "q4_chunks_retrieved": 5,
+      "q4_fact_groups": 1,
+      "q4_fact_groups_list": [
+        "city"
+      ],
+      "cites_over_max_distance": 3,
+      "cites_scored": 25,
+      "failed_questions": [],
+      "reconstruction": null
+    }
+  ],
+  "stability": [
+    {
+      "corpus": "round1",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "combo_id": "e",
+      "combo_label": "E′ (control)",
+      "runs": 3,
+      "repeats": [
+        "run 1",
+        "run 2",
+        "run 3"
+      ],
+      "metrics": {
+        "mean_distance_to_question": {
+          "min": 0.385937,
+          "max": 0.385937,
+          "n": 3
+        },
+        "q2_members_named": {
+          "min": 9,
+          "max": 9,
+          "n": 3
+        },
+        "q2_members_in_context": {
+          "min": 9,
+          "max": 9,
+          "n": 3
+        },
+        "q4_gold_chunks": {
+          "min": 0,
+          "max": 0,
+          "n": 3
+        },
+        "q4_fact_groups": {
+          "min": 0,
+          "max": 0,
+          "n": 3
+        }
+      }
+    },
+    {
+      "corpus": "round1",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "combo_id": "f",
+      "combo_label": "F",
+      "runs": 3,
+      "repeats": [
+        "run 1",
+        "run 2",
+        "run 3"
+      ],
+      "metrics": {
+        "mean_distance_to_question": {
+          "min": 0.44325,
+          "max": 0.44325,
+          "n": 3
+        },
+        "q2_members_named": {
+          "min": 3,
+          "max": 3,
+          "n": 3
+        },
+        "q2_members_in_context": {
+          "min": 1,
+          "max": 1,
+          "n": 3
+        },
+        "q4_gold_chunks": {
+          "min": 2,
+          "max": 2,
+          "n": 3
+        },
+        "q4_fact_groups": {
+          "min": 2,
+          "max": 3,
+          "n": 3
+        }
+      }
+    },
+    {
+      "corpus": "round1",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "combo_id": "g",
+      "combo_label": "G",
+      "runs": 3,
+      "repeats": [
+        "run 1",
+        "run 2",
+        "run 3"
+      ],
+      "metrics": {
+        "mean_distance_to_question": {
+          "min": 0.466304,
+          "max": 0.473592,
+          "n": 3
+        },
+        "q2_members_named": {
+          "min": 0,
+          "max": 2,
+          "n": 3
+        },
+        "q2_members_in_context": {
+          "min": 0,
+          "max": 2,
+          "n": 3
+        },
+        "q4_gold_chunks": {
+          "min": 1,
+          "max": 1,
+          "n": 3
+        },
+        "q4_fact_groups": {
+          "min": 1,
+          "max": 2,
+          "n": 3
+        }
+      }
+    },
+    {
+      "corpus": "current",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "combo_id": "e",
+      "combo_label": "E′ (control)",
+      "runs": 3,
+      "repeats": [
+        "run 1",
+        "run 2",
+        "run 3"
+      ],
+      "metrics": {
+        "mean_distance_to_question": {
+          "min": 0.378537,
+          "max": 0.378537,
+          "n": 3
+        },
+        "q2_members_named": {
+          "min": 9,
+          "max": 9,
+          "n": 3
+        },
+        "q2_members_in_context": {
+          "min": 9,
+          "max": 9,
+          "n": 3
+        },
+        "q4_gold_chunks": {
+          "min": 1,
+          "max": 1,
+          "n": 3
+        },
+        "q4_fact_groups": {
+          "min": 3,
+          "max": 3,
+          "n": 3
+        }
+      }
+    },
+    {
+      "corpus": "current",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "combo_id": "f",
+      "combo_label": "F",
+      "runs": 3,
+      "repeats": [
+        "run 1",
+        "run 2",
+        "run 3"
+      ],
+      "metrics": {
+        "mean_distance_to_question": {
+          "min": 0.460238,
+          "max": 0.460238,
+          "n": 3
+        },
+        "q2_members_named": {
+          "min": 4,
+          "max": 4,
+          "n": 3
+        },
+        "q2_members_in_context": {
+          "min": 4,
+          "max": 4,
+          "n": 3
+        },
+        "q4_gold_chunks": {
+          "min": 1,
+          "max": 1,
+          "n": 3
+        },
+        "q4_fact_groups": {
+          "min": 3,
+          "max": 3,
+          "n": 3
+        }
+      }
+    },
+    {
+      "corpus": "current",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "combo_id": "g",
+      "combo_label": "G",
+      "runs": 3,
+      "repeats": [
+        "run 1",
+        "run 2",
+        "run 3"
+      ],
+      "metrics": {
+        "mean_distance_to_question": {
+          "min": 0.463092,
+          "max": 0.470678,
+          "n": 3
+        },
+        "q2_members_named": {
+          "min": 1,
+          "max": 2,
+          "n": 3
+        },
+        "q2_members_in_context": {
+          "min": 2,
+          "max": 2,
+          "n": 3
+        },
+        "q4_gold_chunks": {
+          "min": 1,
+          "max": 1,
+          "n": 3
+        },
+        "q4_fact_groups": {
+          "min": 1,
+          "max": 2,
+          "n": 3
+        }
+      }
+    }
+  ]
+}

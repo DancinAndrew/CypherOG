@@ -1,0 +1,326 @@
+{
+  "combo": {
+    "id": "f",
+    "name": "Combo F — CoT + Hybrid Search（BM25+Vector+RRF）",
+    "chunk_desc": "recursive / size=600 / overlap=100",
+    "top_k": 5,
+    "max_distance": 0.65,
+    "truncate_to": null,
+    "prompt_style": "cot",
+    "use_hybrid": true,
+    "use_expand": false,
+    "collection": "cypher_og_round1_combo_f"
+  },
+  "model": "gpt-4.1-mini-2025-04-14",
+  "retrieval_only": false,
+  "environment": {
+    "git_commit": "c728f5afc3a4d62c6f9fe8676a4e7e9f7ec3f52c",
+    "git_dirty": false,
+    "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "text_source": "data/processed",
+    "corpus": "round1",
+    "document_count": 39,
+    "documents_digest": "ee060c510ca616935954325a9f50f148832f8bff79784ac1b8aec8cdc4f3bc35",
+    "corpus_sha256": "5da23af5900efa461025f6730827ac46cb0232b4e11434141117fa6a9e735819",
+    "chunk_count": 1248,
+    "index_rebuilt": true
+  },
+  "generated_at": "2026-11-10T01:10:27+00:00",
+  "questions": [
+    {
+      "index": 1,
+      "question": "What is Popping and who created it?",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "POPPING  societydance.txt::6",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 6,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.3559148907661438,
+          "distance_to_question": 0.355914990309085,
+          "retrieved_by": "both",
+          "text": "ing)) and [locking](https://en.wikipedia.org/wiki/Locking_(dance)), with which it is often confused.\nPopping was created by dancers wanting to look tough like gangsters in Los Angeles and Oakland when they danced. Popping is characterized by jerky movements resulting from flexing the muscles at parts of the body. When dancers Popped they would mutter “Pop, Pop” every time they flexed so it became known as Popping. Hitting is a term used when flexing the muscles harder and sudden as if trying to scare somebody. At the same time dancers watching the waves down at the beach and imitating them with there body movements were creating a dance called Waving"
+        },
+        {
+          "chunk_id": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt::2",
+          "source_file": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt",
+          "chunk_index": 2,
+          "section_title": "**Exploring Different Popping Styles: Boogaloo, Waving, and More**",
+          "distance": 0.4185712933540344,
+          "distance_to_question": 0.4185711970329108,
+          "retrieved_by": "both",
+          "text": "e beat of music, creating a distinct \"pop\" or \"hit\" effect.\n\n \n\n___\n\n#### **2\\. Origins of Popping**\nThe roots of popping can be traced back to the funk music era. Pioneers like Don Campbell, Boogaloo Sam, and Popin' Pete were instrumental in shaping this dance form. Their fusion of funk music with fluid body movements laid the foundation for what we know as popping today.\n\n___\n\n#### **3\\. Understanding Boogaloo**\n\nBoogaloo, one of the foundational styles within popping, is characterized by its fluid and intricate footwork combined with isolations and rolls. It emphasizes the use of angles and smooth transitions, creating an illusionary effect that captivates audiences.\n\n___"
+        },
+        {
+          "chunk_id": "POPPING  societydance.txt::4",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 4,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.3248583674430847,
+          "distance_to_question": 0.3248582346289307,
+          "retrieved_by": "dense",
+          "text": "ed to describe the collection of moves and techniques invented by the OG Poppers.\n\nWhat is Popping ?\nPopping is a [street dance](https://en.wikipedia.org/wiki/Street_dance) and one of the original [funk](https://en.wikipedia.org/wiki/Funk) styles that came from [Fresno](https://en.wikipedia.org/wiki/Fresno,_California), [California](https://en.wikipedia.org/wiki/California) during the late 1960s–1970s. The dance is based on the technique of quickly contracting and relaxing muscles to cause a jerk in the dancer's body, referred to as a pop or a hit. This is done continuously to the rhythm of a song in combination with various movements and poses."
+        },
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::22",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 22,
+          "section_title": "How do judges choose a winner?",
+          "distance": 0.8751124896558371,
+          "distance_to_question": 0.8751124896558371,
+          "retrieved_by": "bm25",
+          "text": ", called the **tiebreak round**. After the tiebreak round, the judges vote again to decide who wins.\nSo normally the judges and the audience watch the whole battle and after the battle, the judges decide who won. The problem with that is that judges often forget what exactly happened in the first round, and thus judge on what they saw in the last round. This is why another judging system was created called the **Kozen judging system**. In this system, judges choose a winner after every round. A live scoreboard displays the score after each round."
+        },
+        {
+          "chunk_id": "History initiative to document the origins of ‘popping’ - Fresno State News.txt::0",
+          "source_file": "History initiative to document the origins of ‘popping’ - Fresno State News.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.3368624448776245,
+          "distance_to_question": 0.33686250563576836,
+          "retrieved_by": "dense",
+          "text": "## History initiative to document the origins of ‘popping’"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Popping 是一種街舞，起源於1960年代末至1970年代的加州弗雷斯諾，屬於原始的放克舞蹈風格之一，舞蹈技巧是快速收縮和放鬆肌肉，造成身體的抽動，稱為 pop 或 hit，並配合音樂節奏和各種動作與姿勢持續進行 [來源 3]。\n2. Popping 是由想要像洛杉磯和奧克蘭的幫派分子一樣看起來強硬的舞者創造的，特點是身體部分肌肉的抽動動作，舞者在抽動時會喃喃自語“Pop, Pop”，因此得名 Popping。Hitting 是指更用力且突然的肌肉抽動，像是在嚇唬別人 [來源 1]。\n3. Popping 的根源可追溯到放克音樂時代，先驅者包括 Don Campbell、Boogaloo Sam 和 Popin' Pete，他們將放克音樂與流暢的身體動作融合，奠定了現代 Popping 的基礎 [來源 2]。\n\nStep 2 — 綜合回答：\nPopping 是一種起源於1960年代末至1970年代加州弗雷斯諾的街舞，屬於原始的放克舞蹈風格。這種舞蹈的特點是透過快速收縮和放鬆肌肉，造成身體的抽動（稱為 pop 或 hit），並配合音樂節奏和各種動作與姿勢持續進行。Popping 是由想要模仿洛杉磯和奧克蘭幫派分子強硬形象的舞者創造的，舞者在抽動肌肉時會喃喃自語“Pop, Pop”，因此得名。這種舞蹈的根源可追溯到放克音樂時代，先驅者包括 Don Campbell、Boogaloo Sam 和 Popin' Pete，他們將放克音樂與流暢的身體動作融合，奠定了現代 Popping 的基礎 [來源 1][來源 2][來源 3]。\n\nStep 3 — 缺口說明：\n資料未涵蓋具體單一創始人或創造者的詳細身份。",
+      "error": null
+    },
+    {
+      "index": 2,
+      "question": "Electric Boogaloos 的成員有哪些？他們各自的貢獻是什麼？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "Popin' Pete - Wikipedia.txt::3",
+          "source_file": "Popin' Pete - Wikipedia.txt",
+          "chunk_index": 3,
+          "section_title": "",
+          "distance": 0.3139601945877075,
+          "distance_to_question": 0.3139598848315912,
+          "retrieved_by": "both",
+          "text": "[ 3 ] He compiled a set of basic movements and founded [The Electric Boogaloos](https://en.wikipedia\norg/wiki/The_Electric_Boogaloos \"The Electric Boogaloos\")."
+        },
+        {
+          "chunk_id": "Popin' Pete - Wikipedia.txt::4",
+          "source_file": "Popin' Pete - Wikipedia.txt",
+          "chunk_index": 4,
+          "section_title": "",
+          "distance": 0.3491016626358032,
+          "distance_to_question": 0.3491017428560508,
+          "retrieved_by": "both",
+          "text": "org/wiki/The_Electric_Boogaloos \"The Electric Boogaloos\").\n### The Electric Boogaloos\n\n\\[[edit](https://en.wikipedia.org/w/index.php?title=Popin%27_Pete&action=edit&section=2 \"Edit section: The Electric Boogaloos\")\\]"
+        },
+        {
+          "chunk_id": "Electric boogaloo (dance) - Wikipedia.txt::3",
+          "source_file": "Electric boogaloo (dance) - Wikipedia.txt",
+          "chunk_index": 3,
+          "section_title": "",
+          "distance": 0.35953980684280396,
+          "distance_to_question": 0.35953988877917364,
+          "retrieved_by": "both",
+          "text": "came the signature style of the mid-1970s dance group, the [Electric Boogaloos](https://en.wikipedia\norg/wiki/Electric_Boogaloos \"Electric Boogaloos\") and also performed by the bush. Along with electric boogaloo, they also popularized popping and many of its related styles."
+        },
+        {
+          "chunk_id": "Mr. Wiggles - Wikipedia.txt::2",
+          "source_file": "Mr. Wiggles - Wikipedia.txt",
+          "chunk_index": 2,
+          "section_title": "",
+          "distance": 0.4494584798812866,
+          "distance_to_question": 0.4494585716814139,
+          "retrieved_by": "both",
+          "text": "kipedia.org/wiki/Rock_Steady_Crew \"Rock Steady Crew\"), [The Electric Boogaloos](https://en.wikipedia\norg/wiki/The_Electric_Boogaloos \"The Electric Boogaloos\"), Tribal Click, [Zulu Nation](https://en.wikipedia.org/wiki/Universal_Zulu_Nation \"Universal Zulu Nation\"), and TC5 (also known as The Cool Five or The Crazy Five)."
+        },
+        {
+          "chunk_id": "Suga Pop - Wikipedia.txt::2",
+          "source_file": "Suga Pop - Wikipedia.txt",
+          "chunk_index": 2,
+          "section_title": "",
+          "distance": 0.4885059595108032,
+          "distance_to_question": 0.48850589190240634,
+          "retrieved_by": "both",
+          "text": "/Funk \"Funk\") styles\". These styles are associated with the U.S. West Coast, particularly California\nHe has been affiliated with the performance groups [Electric Boogaloos](https://en.wikipedia.org/wiki/Electric_Boogaloos \"Electric Boogaloos\") and [Rock Steady Crew](https://en.wikipedia.org/wiki/Rock_Steady_Crew \"Rock Steady Crew\"). [ 2 ]"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Popin' Pete 編輯並創立了 The Electric Boogaloos [來源 1]。\n2. The Electric Boogaloos 是1970年代中期的舞蹈團體，推廣了 electric boogaloo 舞風和 popping 及其相關風格 [來源 3]。\n3. Mr. Wiggles 與 The Electric Boogaloos 有關聯 [來源 4]。\n4. Suga Pop 也與 Electric Boogaloos 有關聯 [來源 5]。\n\nStep 2 — 綜合回答：\nElectric Boogaloos 的成員包括 Popin' Pete，他編輯並創立了該團體，並推廣了 electric boogaloo 舞風及 popping 等相關舞蹈風格 [來源 1][來源 3]。此外，Mr. Wiggles 和 Suga Pop 也與 Electric Boogaloos 有關聯，暗示他們是成員之一或與團體有合作關係，但具體貢獻未詳述 [來源 4][來源 5]。\n\nStep 3 — 缺口說明：\n資料未涵蓋 Electric Boogaloos 其他成員的完整名單及各自具體貢獻。",
+      "error": null
+    },
+    {
+      "index": 3,
+      "question": "Popping 和 Boogaloo 有什麼差別？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt::0",
+          "source_file": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.36413097381591797,
+          "distance_to_question": 0.3641310246060412,
+          "retrieved_by": "both",
+          "text": "### **Exploring Different Popping Styles: Boogaloo, Waving, and More**\n\nPopping dance styles are a captivating art form within the realm of street dance. They possess an extraordinary ability to blend athleticism, creativity, and musicality. In this post, we'll embark on a journey through the diverse and electrifying world of popping, exploring renowned styles like Boogaloo, Waving, and more.\n\n \n\n___\n\n#### **1\\. Introduction to Popping Dance Styles**"
+        },
+        {
+          "chunk_id": "Electric boogaloo (dance) - Wikipedia.txt::2",
+          "source_file": "Electric boogaloo (dance) - Wikipedia.txt",
+          "chunk_index": 2,
+          "section_title": "",
+          "distance": 0.4370596408843994,
+          "distance_to_question": 0.437059751821964,
+          "retrieved_by": "both",
+          "text": "---------------------------------------------------------------------------------------------------|\n**Electric boogaloo** (sometimes referred to as **electric boogie** on the East Coast) is a dance style closely related to the earlier [Boogaloo](https://en.wikipedia.org/wiki/Boogaloo_(freestyle_dance) \"Boogaloo (freestyle dance)\") street dance performed in Oakland and [popping](https://en.wikipedia.org/wiki/Popping \"Popping\"); it combines modern popping techniques and earlier [boogaloo](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance) \"Boogaloo (funk dance)\") forms. [ 1 ] [ 2 ] It became the signature style of the mid-1970s dance group, the [Electric Boogaloos](https://en.wikipedia"
+        },
+        {
+          "chunk_id": "Boogaloo (funk dance) - Wikipedia.txt::24",
+          "source_file": "Boogaloo (funk dance) - Wikipedia.txt",
+          "chunk_index": 24,
+          "section_title": "Cartoon Influence and Posing",
+          "distance": 0.452167809009552,
+          "distance_to_question": 0.45216764741809357,
+          "retrieved_by": "both",
+          "text": "ant Boogaloo in the term of our dance style, but it was not the James Brown Boogaloo anymore\". [ 4 ]\nIn the early 1970s, dancers from the Black Messengers group innovated a new Boogaloo technique called \"Posing Hard\". They would end their Boogaloo poses and dime-stops with a hard \"hit\" - freezing in place until their muscles vibrated. This technique would influence the modern day \"popping\" technique within the [Popping](https://en.wikipedia.org/wiki/Popping \"Popping\") dance form. [ 20 ] [ 13 ]"
+        },
+        {
+          "chunk_id": "A Little Dance History: Popping, Boogaloo, Robot, Strutting, Fillmore, etc.txt::5",
+          "source_file": "A Little Dance History: Popping, Boogaloo, Robot, Strutting, Fillmore, etc.txt",
+          "chunk_index": 5,
+          "section_title": "Dance History",
+          "distance": 0.39785462617874146,
+          "distance_to_question": 0.39785480780151183,
+          "retrieved_by": "both",
+          "text": "and rolling of the hips, legs, etc) and popping, (muscles quickly flexing and relaxing to the beat).\nBoogaloo Sam started a group in the mid 70s called The Electric Boogaloo Lockers, and they are now called the Electric Boogaloos. According to the EB’s, their reference to popping was coined by Boogaloo Sam when he would mouth the word “pop” as he popped.\n\nA few noteable names (among many): Boogaloo Sam, Popin Pete, Skeeter Rabbit, Suga Pop, Mr. Wiggles, Jazzy J, Creepin Cid, Puppet Boozer, Robot Dane.\n\nFor more info on the Electric Boogaloos, visit their website [here](http://www.electricboogaloos.com/)\n\nCheck out this playlist of Boogaloo Sam and other Electric Boogaloo clips"
+        },
+        {
+          "chunk_id": "Boogaloo (funk dance) - Wikipedia.txt::0",
+          "source_file": "Boogaloo (funk dance) - Wikipedia.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.4502333998680115,
+          "distance_to_question": 0.45023315218143256,
+          "retrieved_by": "both",
+          "text": "**Boogaloo** is a [freestyle](https://en.wikipedia.org/wiki/Freestyle_dance \"Freestyle dance\"), improvisational [street dance](https://en.wikipedia.org/wiki/Street_dance \"Street dance\"), closely related to [popping](https://en.wikipedia.org/wiki/Popping \"Popping\") dance and [turfing](https://en.wikipedia.org/wiki/Turfing \"Turfing\"). It is best known for the dance move known as [the Robot](https://en.wikipedia.org/wiki/Robot_(dance) \"Robot (dance)\"); it is also related to the later [electric boogaloo](https://en.wikipedia.org/wiki/Electric_boogaloo_(dance) \"Electric boogaloo (dance)\") dance"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Electric boogaloo 是一種舞蹈風格，與早期在奧克蘭表演的 Boogaloo 街舞和 popping 密切相關，結合了現代 popping 技巧和早期 boogaloo 形式 [來源 2]。\n2. Boogaloo 是一種自由風格的即興街舞，與 popping 舞蹈和 turfing 密切相關，以機器人舞步聞名，也與後來的 electric boogaloo 舞蹈有關 [來源 5]。\n3. 在1970年代初，Black Messengers 團體的舞者創新了一種稱為 \"Posing Hard\" 的 Boogaloo 技巧，這種技巧會在動作結束時硬停並凍結姿勢，這影響了現代 popping 舞蹈中的 popping 技巧 [來源 3]。\n4. popping 舞蹈風格融合了肌肉快速收縮和放鬆以配合節拍的動作，而 Boogaloo 則包含更多的擺動和滾動動作（如臀部和腿部） [來源 4]。\n5. Boogaloo Sam 在70年代中期成立了 Electric Boogaloo Lockers（後改名為 Electric Boogaloos），並且 popping 這個詞是由 Boogaloo Sam 在跳舞時口中發出的“pop”聲而命名的 [來源 4]。\n\nStep 2 — 綜合回答：\nPopping 和 Boogaloo 是兩種密切相關但有不同特點的街舞風格。Boogaloo 是一種自由即興的街舞，著重於身體的擺動和滾動動作，如臀部和腿部的動作，並以機器人舞步聞名。Popping 則強調肌肉的快速收縮和放鬆，配合節拍產生“pop”效果。Boogaloo 舞者在1970年代初期創新了“Posing Hard”技巧，即在動作結束時凍結姿勢，這對後來 popping 的技巧產生了影響。Electric Boogaloo 是結合了現代 popping 技巧和早期 Boogaloo 形式的舞蹈風格，並由 Boogaloo Sam 和 Electric Boogaloos 舞團推廣。popping 這個詞據說是由 Boogaloo Sam 在跳舞時發出的聲音而得名 [來源 2][來源 3][來源 4][來源 5]。\n\nStep 3 — 缺口說明：\n資料未涵蓋更詳細的技術差異或歷史演變細節。",
+      "error": null
+    },
+    {
+      "index": 4,
+      "question": "Juste Debout 比賽的規則和歷史？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "Juste Debout.txt::4",
+          "source_file": "Juste Debout.txt",
+          "chunk_index": 4,
+          "section_title": "From November 30, 2025 to March 6, 2025, participate in the global pre-selections",
+          "distance": 0.5203180313110352,
+          "distance_to_question": 0.5203179077893703,
+          "retrieved_by": "both",
+          "text": "Event Sticker](https://juste-debout.com/wp-content/themes/JusteDeboutEvent/img/jdevent_sticker.svg)\n## March 02, 2025 - Accor Arena - Paris\n\n![Large Discipline Image](https://juste-debout.com/wp-content/uploads/2025/11/1_LITTLESHAO_JUSTE_DEBOUT_250342__NZ90725-scaled-e1762981753919.jpg)\n\n![Small Discipline Image](http://0.0.4.134/)\n\n## FINALE\n\n### Locking, Popping, Hip-Hop Newstyle, House Dance, Experimental, Junior Dance Tour PLUS Afro, Dancehall, Krump and Electro\n\nCome and vibrate to the rhythm of Hip-Hop, Funkstyle and House Music during the live finals. Whether you are a DanceLoverz, passionate or an art and culture lover, join us for an unforgettable experience!\n\n[\n\nBuy tickets"
+        },
+        {
+          "chunk_id": "Salah (dancer) - Wikipedia.txt::66",
+          "source_file": "Salah (dancer) - Wikipedia.txt",
+          "chunk_index": 66,
+          "section_title": "Career",
+          "distance": 0.42247438430786133,
+          "distance_to_question": 0.42247432131051266,
+          "retrieved_by": "dense",
+          "text": "g/the-judges-the-judges-the-judges) from the original on April 16, 2010. Retrieved October 22, 2009.\n33. **[^](https://en.wikipedia.org/wiki/Salah_(dancer)#cite_ref-35 \"Jump up\")** [\"Judges\"](https://web.archive.org/web/20090105181019/http://www.bboychampionships.com/content/view/241/550/). _BBoyChampionships.com_. 2008. Archived from [the original](http://www.bboychampionships.com/content/view/241/550/) on January 5, 2009. Retrieved November 5, 2009."
+        },
+        {
+          "chunk_id": "Juste Debout.txt::0",
+          "source_file": "Juste Debout.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.7981055996350679,
+          "distance_to_question": 0.7981055996350679,
+          "retrieved_by": "bm25",
+          "text": "Juste Debout \n\n[![Logo](https://juste-debout.com/wp-content/themes/JusteDeboutEvent/images/logo_single.svg)](https://juste-debout.com/)\n\n### PURCHASED TICKETS\n\n#### BEST 8 - FINAL\n\n589 / 6000\n\n#### PRELIMS\n\n138 / 800\n\n![Down Arrows Left](https://juste-debout.com/wp-content/themes/JusteDeboutEvent/img/homepage/down_arrows.svg)\n\n## March 02, 2025 - Accor Arena - Paris\n\n![Down Arrows Right](https://juste-debout.com/wp-content/themes/JusteDeboutEvent/img/homepage/down_arrows.svg)\n\n## The biggest international Hip-Hop meeting\n\n### Participate in the #1 street dance event in 2026 – Juste Debout"
+        },
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::22",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 22,
+          "section_title": "How do judges choose a winner?",
+          "distance": 0.471821665763855,
+          "distance_to_question": 0.47182154697444834,
+          "retrieved_by": "dense",
+          "text": ", called the **tiebreak round**. After the tiebreak round, the judges vote again to decide who wins.\nSo normally the judges and the audience watch the whole battle and after the battle, the judges decide who won. The problem with that is that judges often forget what exactly happened in the first round, and thus judge on what they saw in the last round. This is why another judging system was created called the **Kozen judging system**. In this system, judges choose a winner after every round. A live scoreboard displays the score after each round."
+        },
+        {
+          "chunk_id": "Popping Dance Battles Near You — EVERYDAY POPPING - Online Popping Dance Tutorials.txt::1",
+          "source_file": "Popping Dance Battles Near You — EVERYDAY POPPING - Online Popping Dance Tutorials.txt",
+          "chunk_index": 1,
+          "section_title": "",
+          "distance": 0.5959355493060081,
+          "distance_to_question": 0.5959355493060081,
+          "retrieved_by": "bm25",
+          "text": "Lee at Summer Dance Forever 2016_\n\n### **2\\.** **Juste Debout**** \nFrance**\n\n2 on 2 Popping Category\nJuste Debout is one of the largest street dance competitions in the world, held in Paris, France. It includes a popping category where dancers compete in pairs (2 on 2 format). Juste Debout emphasizes creativity and originality, with dancers showcasing their skills in an electrifying atmosphere.\n\n**Link:** [Juste](https://www.juste-debout.com/) [Debout](https://www.juste-debout.com/)\n\n### **3\\.** **Step Ya Game Up**** \nNew York, USA**\n\nPopping Category"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Juste Debout 是世界上最大的街舞比賽之一，於法國巴黎舉辦，包含 popping 項目，舞者以兩人一組（2 on 2）形式競賽，強調創意和原創性，氣氛熱烈 [來源 5]。\n2. Juste Debout 是國際性的 Hip-Hop 舞蹈盛會，2025 年 3 月 2 日在巴黎 Accor Arena 舉行決賽，涵蓋 Locking、Popping、Hip-Hop Newstyle、House Dance、Experimental、Junior Dance Tour PLUS Afro、Dancehall、Krump 和 Electro 等多種舞蹈類別 [來源 1][來源 3]。\n3. 比賽從 2024 年 11 月 30 日到 2025 年 3 月 6 日進行全球預選賽，最後決賽在巴黎 Accor Arena 舉行 [來源 1]。\n4. 評審制度中提到街舞比賽通常由評審在整場比賽後決定勝負，但有時會因記憶偏差而影響判決，因此有 Kozen 評分系統，評審在每回合後即選出勝者，並有即時計分板顯示分數 [來源 4]。\n\nStep 2 — 綜合回答：\nJuste Debout 是一個於法國巴黎舉辦的國際大型街舞比賽，涵蓋多種舞蹈類別，包括 Locking、Popping、Hip-Hop Newstyle、House Dance 等。比賽強調舞者的創意與原創性，特別是在 popping 項目中，舞者以兩人一組的形式競賽。比賽流程包括從 2024 年 11 月 30 日開始的全球預選賽，最終決賽於 2025 年 3 月 2 日在巴黎 Accor Arena 舉行。評審制度可能採用 Kozen 評分系統，即每回合結束後評審即時選出勝者並更新分數，以避免因記憶偏差影響判決，確保比賽公平公正 [來源 1][來源 3][來源 4][來源 5]。\n\nStep 3 — 缺口說明：\n資料中未具體說明 Juste Debout 比賽的詳細規則條文及歷史起源背景。資料未涵蓋。",
+      "error": null
+    },
+    {
+      "index": 5,
+      "question": "如何判斷一場 Popping battle 的勝負？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "popping-culture-notes.txt::0",
+          "source_file": "popping-culture-notes.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.3927295207977295,
+          "distance_to_question": 0.3927296546556468,
+          "retrieved_by": "both",
+          "text": "# Popping 賽事文化（筆記占位）\n\n- Battle 與 cypher 為常見賽制；評判常關注音樂性、獨創性與完整度。\n- 本檔為佔位筆記，可替換為你整理之正式語料。"
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::2",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 2,
+          "section_title": "**1vs1 Popping Battles**",
+          "distance": 0.46576595306396484,
+          "distance_to_question": 0.4657660458289248,
+          "retrieved_by": "both",
+          "text": "ough improvisation and making any mistakes into something, Focus on the music…not moves or worries!)\n7. FLOOR WORK (Within the Popping vocabulary)\n8. STAGE PRESENCE (Entertainment quality/Performance/Audience connection)\n9. CREATIVITY (….Add your flavor, Be Extraordinary)\n10. ATTIRE (Within the Popping Style) \n11. There will be 16 open slots for this battle, a qualifying round will take place to determine the top 16 poppers if needed. \n12. Each battle will consist of two poppers who will battle one another facing each other in one (1) minute rounds for each popper."
+        },
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::9",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 9,
+          "section_title": "How does a dance battle work?",
+          "distance": 0.43946611881256104,
+          "distance_to_question": 0.4394661657132659,
+          "retrieved_by": "both",
+          "text": "in. Sometimes there are so many participants that they even choose a **top 32** from the qualifiers.\nOften, they put the 4 best rated qualification rounds in the corners of the battle bracket. This is how the best rated dancers will have the best chances to meet in the semifinal. This makes it fair, but also exciting for the audience. \n\nA dance battle itself usually lasts **between 1 and 5 rounds**. This means that in one round one dancer goes, and then the opponent responds to that.\n\nWe recommend to watch this crazy popping battle below.\n\n \n\n## Dance battles at the Olympic Games"
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::3",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 3,
+          "section_title": "**1vs1 Popping Battles**",
+          "distance": 0.27990174293518066,
+          "distance_to_question": 0.27990177406979944,
+          "retrieved_by": "dense",
+          "text": "two poppers who will battle one another facing each other in one (1) minute rounds for each popper.\n- There will be no point system for the battles. (Focus should be on the music not your competition)\n- The judges will judge on each criteria separately.\n- The judges are looking for the person that encompasses all the above criteria and therefore looking for the COMPLETE POPPER.\n- Competition is a learning tool. The results reflect hitting the judges’ criteria."
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::0",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.32140374183654785,
+          "distance_to_question": 0.3214039273902456,
+          "retrieved_by": "dense",
+          "text": "## **1vs1 Popping Battles**\n\n# **1vs1 Popping Battles**"
+        }
+      ],
+      "answer": "Step 1 — 列出 Facts：\n1. Popping battle 中，評判常關注音樂性、獨創性與完整度 [來源 1]。\n2. 評判標準包含：FLOOR WORK（地板動作）、STAGE PRESENCE（舞台表現力/娛樂性/與觀眾的連結）、CREATIVITY（創意）、ATTIRE（服裝符合Popping風格）等 [來源 2]。\n3. 每場 battle 由兩位舞者對戰，輪流表演一分鐘的回合 [來源 2][來源 4]。\n4. 不採用點數制，評判會針對每個標準分別評分，尋找符合所有標準的「完整Popper」 [來源 4]。\n5. 評判的結果反映舞者是否符合評判標準，競賽本身是學習工具 [來源 4]。\n\nStep 2 — 綜合回答：\n判斷一場 Popping battle 的勝負，評判會根據多項標準來評估舞者的表現，包括音樂性、獨創性、完整度、地板動作（FLOOR WORK）、舞台表現力（STAGE PRESENCE）、創意（CREATIVITY）以及服裝是否符合Popping風格（ATTIRE）[來源 1][來源 2]。每場 battle 由兩位舞者輪流表演一分鐘的回合[來源 2][來源 4]，評判不使用點數制，而是分別針對各項標準進行評分，尋找最能展現所有評判標準的「完整Popper」[來源 4]。最終勝負由評判根據這些標準綜合判定，並反映舞者是否達到評判的要求[來源 4]。\n\nStep 3 — 缺口說明：\n資料未涵蓋具體勝負判定的細節程序或評判如何決定勝者（例如是否有投票、多數決等）。",
+      "error": null
+    }
+  ]
+}
