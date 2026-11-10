@@ -1,0 +1,326 @@
+{
+  "combo": {
+    "id": "d",
+    "name": "Combo D — 小 chunk + top-10 距離截斷",
+    "chunk_desc": "recursive / size=300 / overlap=50",
+    "top_k": 10,
+    "max_distance": 0.5,
+    "truncate_to": 5,
+    "prompt_style": "strong",
+    "use_hybrid": false,
+    "use_expand": false,
+    "collection": "cypher_og_round1_combo_d"
+  },
+  "model": "gemini-2.5-flash",
+  "retrieval_only": true,
+  "environment": {
+    "git_commit": "82d81ce743f54f962644903e88db48a079f0a28a",
+    "git_dirty": false,
+    "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
+    "text_source": "data/processed",
+    "corpus": "round1",
+    "document_count": 39,
+    "documents_digest": "ee060c510ca616935954325a9f50f148832f8bff79784ac1b8aec8cdc4f3bc35",
+    "corpus_sha256": "5da23af5900efa461025f6730827ac46cb0232b4e11434141117fa6a9e735819",
+    "chunk_count": 2494,
+    "index_rebuilt": true
+  },
+  "generated_at": "2026-11-10T01:08:50+00:00",
+  "questions": [
+    {
+      "index": 1,
+      "question": "What is Popping and who created it?",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "POPPING  societydance.txt::11",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 11,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.2449183464050293,
+          "distance_to_question": 0.24491820675308973,
+          "retrieved_by": "dense",
+          "text": "gave dancers an escape, an identity, and a family.\nOver time, the word “Popping” (which is also often referred to as “hitting,”) started being used to describe the collection of moves and techniques invented by the OG Poppers.\n\nWhat is Popping ?"
+        },
+        {
+          "chunk_id": "POPPING  societydance.txt::12",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 12,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.28051286935806274,
+          "distance_to_question": 0.28051322541194035,
+          "retrieved_by": "dense",
+          "text": "ues invented by the OG Poppers.\n\nWhat is Popping ?\nPopping is a [street dance](https://en.wikipedia.org/wiki/Street_dance) and one of the original [funk](https://en.wikipedia.org/wiki/Funk) styles that came from [Fresno](https://en.wikipedia.org/wiki/Fresno,_California), [California](https://en.wikipedia"
+        },
+        {
+          "chunk_id": "Popping.txt::1",
+          "source_file": "Popping.txt",
+          "chunk_index": 1,
+          "section_title": "![](https://www.thesubath.com/pageassets/burban/educational_pages",
+          "distance": 0.31074148416519165,
+          "distance_to_question": 0.3107415479067098,
+          "retrieved_by": "dense",
+          "text": "/popping/Screenshot-2020-08-26-at-10.38.07-AM.png)\nPopping is a dance style that originated in the U.S. in the 60-70s, and is characterised by the sudden contracting and releasing of a dancer’s muscles to the rhythm of the beat (also called hitting)"
+        },
+        {
+          "chunk_id": "History initiative to document the origins of ‘popping’ - Fresno State News.txt::0",
+          "source_file": "History initiative to document the origins of ‘popping’ - Fresno State News.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.3368624448776245,
+          "distance_to_question": 0.33686250563576836,
+          "retrieved_by": "dense",
+          "text": "## History initiative to document the origins of ‘popping’"
+        },
+        {
+          "chunk_id": "POPPING  societydance.txt::16",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 16,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.36017870903015137,
+          "distance_to_question": 0.3601784567476759,
+          "retrieved_by": "dense",
+          "text": "Locking_(dance)), with which it is often confused.\nPopping was created by dancers wanting to look tough like gangsters in Los Angeles and Oakland when they danced. Popping is characterized by jerky movements resulting from flexing the muscles at parts of the body"
+        }
+      ],
+      "answer": "",
+      "error": null
+    },
+    {
+      "index": 2,
+      "question": "Electric Boogaloos 的成員有哪些？他們各自的貢獻是什麼？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "Popin' Pete - Wikipedia.txt::6",
+          "source_file": "Popin' Pete - Wikipedia.txt",
+          "chunk_index": 6,
+          "section_title": "",
+          "distance": 0.23508727550506592,
+          "distance_to_question": 0.2350873682522423,
+          "retrieved_by": "dense",
+          "text": "nded [The Electric Boogaloos](https://en.wikipedia\norg/wiki/The_Electric_Boogaloos \"The Electric Boogaloos\")."
+        },
+        {
+          "chunk_id": "Popin' Pete - Wikipedia.txt::10",
+          "source_file": "Popin' Pete - Wikipedia.txt",
+          "chunk_index": 10,
+          "section_title": "The Electric Boogaloos",
+          "distance": 0.3261371850967407,
+          "distance_to_question": 0.32613748484851324,
+          "retrieved_by": "dense",
+          "text": "ht basics to the members of The Electric Boogaloos\nAs all the members were very experienced and passionate dancers, the group soon became successful. During that time, Pete and the other members of The Electric Boogaloos appeared on many popular shows including: [_The Midnight Special_](https://en.wikipedia"
+        },
+        {
+          "chunk_id": "A Little Dance History: Popping, Boogaloo, Robot, Strutting, Fillmore, etc.txt::14",
+          "source_file": "A Little Dance History: Popping, Boogaloo, Robot, Strutting, Fillmore, etc.txt",
+          "chunk_index": 14,
+          "section_title": "Dance History",
+          "distance": 0.34498149156570435,
+          "distance_to_question": 0.34498169619461816,
+          "retrieved_by": "dense",
+          "text": "muscles quickly flexing and relaxing to the beat).\nBoogaloo Sam started a group in the mid 70s called The Electric Boogaloo Lockers, and they are now called the Electric Boogaloos. According to the EB’s, their reference to popping was coined by Boogaloo Sam when he would mouth the word “pop” as he popped."
+        },
+        {
+          "chunk_id": "Electric boogaloo (dance) - Wikipedia.txt::6",
+          "source_file": "Electric boogaloo (dance) - Wikipedia.txt",
+          "chunk_index": 6,
+          "section_title": "",
+          "distance": 0.35610365867614746,
+          "distance_to_question": 0.35610382093453163,
+          "retrieved_by": "dense",
+          "text": "s dance group, the [Electric Boogaloos](https://en\nwikipedia.org/wiki/Electric_Boogaloos \"Electric Boogaloos\") and also performed by the bush. Along with electric boogaloo, they also popularized popping and many of its related styles."
+        },
+        {
+          "chunk_id": "Electric boogaloo (dance) - Wikipedia.txt::22",
+          "source_file": "Electric boogaloo (dance) - Wikipedia.txt",
+          "chunk_index": 22,
+          "section_title": "",
+          "distance": 0.36228781938552856,
+          "distance_to_question": 0.36228791705781327,
+          "retrieved_by": "dense",
+          "text": "lectric_Boogaloo \"Breakin' 2: Electric Boogaloo\")_\n- [The Electric Boogaloo Founding Members](http://www.danceconsortium.com/content.aspx?CategoryID=1384)\n\n## Dance steps"
+        }
+      ],
+      "answer": "",
+      "error": null
+    },
+    {
+      "index": 3,
+      "question": "Popping 和 Boogaloo 有什麼差別？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt::7",
+          "source_file": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt",
+          "chunk_index": 7,
+          "section_title": "**Exploring Different Popping Styles: Boogaloo, Waving, and More**",
+          "distance": 0.32232582569122314,
+          "distance_to_question": 0.32232597008920594,
+          "retrieved_by": "dense",
+          "text": "foundation for what we know as popping today.\n\n___\n#### **3\\. Understanding Boogaloo**\n\nBoogaloo, one of the foundational styles within popping, is characterized by its fluid and intricate footwork combined with isolations and rolls. It emphasizes the use of angles and smooth transitions, creating an illusionary effect that captivates audiences."
+        },
+        {
+          "chunk_id": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt::0",
+          "source_file": "Exploring Different Popping Styles Boogaloo, Waving, and More – Panic 39.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.33861827850341797,
+          "distance_to_question": 0.3386180416377468,
+          "retrieved_by": "dense",
+          "text": "### **Exploring Different Popping Styles: Boogaloo, Waving, and More**"
+        },
+        {
+          "chunk_id": "Popin' Pete - Wikipedia.txt::9",
+          "source_file": "Popin' Pete - Wikipedia.txt",
+          "chunk_index": 9,
+          "section_title": "",
+          "distance": 0.36895567178726196,
+          "distance_to_question": 0.36895581474892103,
+          "retrieved_by": "dense",
+          "text": "s://en.wikipedia.org/wiki/Popping \"Popping\") style\nAccording to Pete, he learned to pop first because [Boogaloo](https://en.wikipedia.org/wiki/Boogaloo_(funk_dance) \"Boogaloo (funk dance)\") was too difficult. Boogaloo Sam [ 4 ] as a creator of the group taught basics to the members of The Electric Boogaloos"
+        },
+        {
+          "chunk_id": "Boogaloo (funk dance) - Wikipedia.txt::48",
+          "source_file": "Boogaloo (funk dance) - Wikipedia.txt",
+          "chunk_index": 48,
+          "section_title": "Cartoon Influence and Posing",
+          "distance": 0.369370698928833,
+          "distance_to_question": 0.3693706991321536,
+          "retrieved_by": "dense",
+          "text": "\"popping\" or \"hitting\" techniques of the late 70s.\nRentie referred to their new Boogaloo style as \"Bug'n\". He recalls, \"When we were Bug'n, we meant Boogaloo in the term of our dance style, but it was not the James Brown Boogaloo anymore\". [ 4 ]"
+        },
+        {
+          "chunk_id": "POPPING  societydance.txt::9",
+          "source_file": "POPPING  societydance.txt",
+          "chunk_index": 9,
+          "section_title": "SAM SOLOMON",
+          "distance": 0.374667227268219,
+          "distance_to_question": 0.37466740983222946,
+          "retrieved_by": "dense",
+          "text": "eet dance style and later be adopted into Hip Hop.\nBoogaloo is characterized by fluidity use of every part of the body, rolling the hips, knees and head. The style is a combination of “The Robot” and the smooth isolations of mime."
+        }
+      ],
+      "answer": "",
+      "error": null
+    },
+    {
+      "index": 4,
+      "question": "Juste Debout 比賽的規則和歷史？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "Salah (dancer) - Wikipedia.txt::49",
+          "source_file": "Salah (dancer) - Wikipedia.txt",
+          "chunk_index": 49,
+          "section_title": "",
+          "distance": 0.4024360179901123,
+          "distance_to_question": 0.40243595791332487,
+          "retrieved_by": "dense",
+          "text": "judged the locking and popping competitions only.\n## Career"
+        },
+        {
+          "chunk_id": "Guarato.Dance.Articulated.txt::43",
+          "source_file": "Guarato.Dance.Articulated.txt",
+          "chunk_index": 43,
+          "section_title": "",
+          "distance": 0.4406161308288574,
+          "distance_to_question": 0.4406161754814245,
+          "retrieved_by": "dense",
+          "text": "(Branca de Neve) and Mamede Aref. They were partly\nmotivated by the interest in participating in these contests that were being promoted \nfor more than four years. Inside the contests, an environment was created in which \n“nobody liked to lose” (Pires, 2007, personal communication). People, weekend"
+        },
+        {
+          "chunk_id": "Salah (dancer) - Wikipedia.txt::34",
+          "source_file": "Salah (dancer) - Wikipedia.txt",
+          "chunk_index": 34,
+          "section_title": "",
+          "distance": 0.4642394781112671,
+          "distance_to_question": 0.4642393082592444,
+          "retrieved_by": "dense",
+          "text": ".org/wiki/Battle_of_the_Year \"Battle of the Year\")\n- 2009: [Red Bull BC One](https://en.wikipedia.org/wiki/Red_Bull_BC_One \"Red Bull BC One\") [ 32 ] \n - 2008: UK B-Boy Championships [ 33 ] [ note 3 ] \n - 2008: Warsaw Challenge [ 34 ] \n - 2007: Warsaw Challenge [ 35 ] \n - 2006: Circle Sensation\n- **Film**"
+        },
+        {
+          "chunk_id": "Salah (dancer) - Wikipedia.txt::83",
+          "source_file": "Salah (dancer) - Wikipedia.txt",
+          "chunk_index": 83,
+          "section_title": "Career",
+          "distance": 0.47060686349868774,
+          "distance_to_question": 0.4706067593516068,
+          "retrieved_by": "dense",
+          "text": "Retrieved November 10, 2011.\n15. **[^](https://en.wikipedia.org/wiki/Salah_(dancer)#cite_ref-15 \"Jump up\")** [\"Competition\"](https://web.archive.org/web/20111116084846/http://breathethebeat.com/competition). _BreatheTheBeat.com_. Archived from [the original](http://breathethebeat.com/competition/) on November 16, 2011"
+        },
+        {
+          "chunk_id": "Salah (dancer) - Wikipedia.txt::121",
+          "source_file": "Salah (dancer) - Wikipedia.txt",
+          "chunk_index": 121,
+          "section_title": "Career",
+          "distance": 0.4714564085006714,
+          "distance_to_question": 0.4714563079674926,
+          "retrieved_by": "dense",
+          "text": "nal on April 16, 2010. Retrieved October 22, 2009.\n33. **[^](https://en.wikipedia.org/wiki/Salah_(dancer)#cite_ref-35 \"Jump up\")** [\"Judges\"](https://web.archive.org/web/20090105181019/http://www.bboychampionships.com/content/view/241/550/). _BBoyChampionships.com_. 2008. Archived from [the original](http://www.bboychampionships"
+        }
+      ],
+      "answer": "",
+      "error": null
+    },
+    {
+      "index": 5,
+      "question": "如何判斷一場 Popping battle 的勝負？",
+      "expanded_queries": null,
+      "cites": [
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::0",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.32140374183654785,
+          "distance_to_question": 0.3214039273902456,
+          "retrieved_by": "dense",
+          "text": "## **1vs1 Popping Battles**\n\n# **1vs1 Popping Battles**"
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::5",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 5,
+          "section_title": "**1vs1 Popping Battles**",
+          "distance": 0.3271554112434387,
+          "distance_to_question": 0.3271555308971621,
+          "retrieved_by": "dense",
+          "text": "e place to determine the top 16 poppers if needed.\n12. Each battle will consist of two poppers who will battle one another facing each other in one (1) minute rounds for each popper."
+        },
+        {
+          "chunk_id": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt::6",
+          "source_file": "Official Rules & Regulations-Popping  HIP HOP INTERNATIONAL.txt",
+          "chunk_index": 6,
+          "section_title": "**1vs1 Popping Battles**",
+          "distance": 0.34012025594711304,
+          "distance_to_question": 0.34011996458278915,
+          "retrieved_by": "dense",
+          "text": "ch other in one (1) minute rounds for each popper.\n- There will be no point system for the battles. (Focus should be on the music not your competition)\n- The judges will judge on each criteria separately.\n- The judges are looking for the person that encompasses all the above criteria and therefore looking for the COMPLETE POPPER."
+        },
+        {
+          "chunk_id": "popping-culture-notes.txt::0",
+          "source_file": "popping-culture-notes.txt",
+          "chunk_index": 0,
+          "section_title": "",
+          "distance": 0.3927295207977295,
+          "distance_to_question": 0.3927296546556468,
+          "retrieved_by": "dense",
+          "text": "# Popping 賽事文化（筆記占位）\n\n- Battle 與 cypher 為常見賽制；評判常關注音樂性、獨創性與完整度。\n- 本檔為佔位筆記，可替換為你整理之正式語料。"
+        },
+        {
+          "chunk_id": "Dance Battles How Do They Work (Ultimate Guide).txt::31",
+          "source_file": "Dance Battles How Do They Work (Ultimate Guide).txt",
+          "chunk_index": 31,
+          "section_title": "Dance battles at the Olympic Games",
+          "distance": 0.407662570476532,
+          "distance_to_question": 0.4076628652367955,
+          "retrieved_by": "dense",
+          "text": "st from each pool go through to the top 8 battles.\nIn the **top 8 battles** all bboys/bgirls battle **3 rounds in a knockout system**. The winner of these 3 rounds goes on to the top 4. The 2 winners of the top 4 compete for 1st place (gold medal) and 2nd place (silver medal)"
+        }
+      ],
+      "answer": "",
+      "error": null
+    }
+  ]
+}
