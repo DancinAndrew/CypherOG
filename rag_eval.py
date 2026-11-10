@@ -14,16 +14,28 @@
 資料來源：
 - Round 1：experiments/combo_a..e/q1..q5.md 的既有記錄（不重跑）；chunk 原文未儲存，
   以各組 round-1 切法重新切 data/processed/<source_file> 還原。還原前先確認 data/processed
-  與 experiments/corpus_pin.json 完全一致，否則拒絕評估。
-- Round 2：<round2>/combo_{e,f,g}/results.json（由 experiment_runner.py 寫出，契約見 load_round2_run）。
-  各組的模型、檢索模式、embedding、chunk 數、建索引文字的指紋與 git commit 必須一致，否則拒絕評估。
+  與 experiments/corpus_pin.json 完全一致，否則拒絕評估。Round 1 的索引只收錄 39 份文件
+  （experiments/corpus_round1.json）。
+- Round 2：--round2 的每個目錄（預設 experiments/round2）都會遞迴搜尋 run 資料夾，也就是直接含
+  combo_*/results.json 的目錄（例如 experiments/round2/round1_corpus/run1；略過 .previous/ 等隱藏目錄）。
+  results.json 由 experiment_runner.py 寫出，契約見 load_round2_run。同一個 run 資料夾內各組的模型、
+  檢索模式、embedding、語料（名稱、文件數、文件清單指紋）、chunk 數、建索引文字的指紋與 git commit
+  必須一致，否則拒絕評估；不同 run 資料夾依 (語料, 模型) 分組，列標籤如「E′ (control) · round1 corpus · run 2」，
+  並另列各 (語料, 模型, 組別) 跨重複執行的 min–max 穩定度表。
   查詢擴展失敗的題目，檢索與回答指標皆為 n/a；LLM 失敗的題目，回答指標為 n/a。
 
 輸出：<out>/metrics.json 與 <out>/metrics.md。
 
+重現檢查（--check-reproduction <run_dir>）：把 experiment_runner.py --combos a b c d e --retrieval-only
+的結果與 round-1 記錄（experiments/combo_*/q*.md）逐題比對（chunk id 與順序相同、距離差 <= 0.001），
+印出 5×5 表並寫出報告（預設 experiments/round1_reproduction.md，可用 --report-out 改寫到其他位置）；
+有任何不符時結束碼為 1。
+
 Usage:
     python rag_eval.py
     python rag_eval.py --round1 experiments --round2 experiments/round2 --out experiments
+    python rag_eval.py --round2 experiments/round2/round1_corpus experiments/round2/current_corpus
+    python rag_eval.py --check-reproduction experiments/round1_reproduction_run
 """
 
 from __future__ import annotations
@@ -33,6 +45,7 @@ import functools
 import hashlib
 import json
 import math
+import os
 import re
 import sys
 from collections.abc import Callable, Iterable, Mapping, Sequence
@@ -44,13 +57,25 @@ ROOT = Path(__file__).resolve().parent
 EXPERIMENTS_DIR = ROOT / "experiments"
 GOLD_PATH = EXPERIMENTS_DIR / "gold.json"
 CORPUS_PIN_PATH = EXPERIMENTS_DIR / "corpus_pin.json"
+CORPUS_ROUND1_PATH = EXPERIMENTS_DIR / "corpus_round1.json"
 ROUND2_DIR = EXPERIMENTS_DIR / "round2"
 PROCESSED_DIR = ROOT / "data" / "processed"
+REPRODUCTION_REPORT_PATH = EXPERIMENTS_DIR / "round1_reproduction.md"
 
 QUESTION_COUNT = 5
 
 # Round 1 的 q*.md 未記錄模型名稱；當時 LITELLM_MODEL 預設為 gemini-2.5-flash，經課程提供的代理呼叫。
 ROUND1_MODEL = "gemini-2.5-flash (course OpenAI-compatible proxy)"
+
+# 預設 embedding 模型的 max_seq_length：chunk 超過 128 個 token 的部分不進入向量（BM25 則索引全文）
+EMBEDDING_MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
+EMBEDDING_MAX_TOKENS = 128
+
+# 重現檢查的距離容許誤差：round-1 的 q*.md 只記錄到小數點後 3 位
+REPRODUCTION_TOLERANCE = 0.001
+
+# 語料的顯示順序（round1 為主要比較對象）
+CORPUS_ORDER: tuple[str, ...] = ("round1", "current")
 
 # Round-1 各組設定（刻意在此定義，不依賴 experiment_runner.py 的現行設定）。
 # chunker: (種類, size, overlap)；"naive" → naive_chunk_text(t, size)，"recursive" → chunk_text(t, size, overlap)。
@@ -114,9 +139,13 @@ ROUND2_LABELS: dict[str, str] = {"e": "E\u2032 (control)"}
 # 預先登錄的 round-2 組別；<round2> 內其他 combo 的結果不納入比較
 ROUND2_COMBO_IDS: tuple[str, ...] = ("e", "f", "g")
 
-# round-2 各組必須相同的執行條件（results.json 的 model、retrieval_only 與 environment 欄位）
+# 同一個 run 資料夾內各組必須相同的執行條件（results.json 的 model、retrieval_only 與 environment 欄位）；
+# corpus、document_count、documents_digest 是 run 身分的一部分
 ROUND2_ENVIRONMENT_KEYS: tuple[str, ...] = (
     "embedding_model",
+    "corpus",
+    "document_count",
+    "documents_digest",
     "chunk_count",
     "text_source",
     "corpus_sha256",
@@ -416,8 +445,13 @@ def load_round1_run(
         )
     return {
         "run": combo_id.upper(),
+        "combo_label": combo_id.upper(),
         "round": 1,
         "combo_id": combo_id,
+        "corpus": "round1",
+        "repeat": None,
+        "run_folder": None,
+        "order": 0,
         "retrieval": describe_retrieval(spec),
         "max_distance": float(spec["max_distance"]),
         "prompt_style": spec["prompt_style"],
@@ -486,13 +520,14 @@ def _round2_question(raw: Mapping[str, Any], retrieval_only: bool) -> dict[str, 
 
 
 def load_round2_run(results_path: Path) -> dict[str, Any]:
-    """讀取 <round2>/combo_<id>/results.json（experiment_runner.py 寫出）。
+    """讀取 <run 資料夾>/combo_<id>/results.json（experiment_runner.py 寫出）。
 
     契約重點：combo{id, chunk_desc, top_k, max_distance, truncate_to, prompt_style, use_hybrid,
-    use_expand, ...}、model、retrieval_only、environment{embedding_model, chunk_count, text_source,
-    corpus_sha256, git_commit, ...}、questions[{index, question, cites[{text, distance_to_question, ...}],
-    answer, error}]。distance_to_question 為「原始問題」與 chunk 的 cosine distance（G 的 distance
-    可能是對子查詢量的，故不使用）。不符契約時拋 ValueError。
+    use_expand, ...}、model、retrieval_only、environment{embedding_model, corpus, document_count,
+    documents_digest, chunk_count, text_source, corpus_sha256, git_commit, ...}、questions[{index, question,
+    cites[{text, distance_to_question, ...}], answer, error}]。distance_to_question 為「原始問題」與 chunk 的
+    cosine distance（G 的 distance 可能是對子查詢量的，故不使用）。不符契約時拋 ValueError。
+    回傳的 run 標籤只有組別名稱（例如 E′ (control)）；跨 run 資料夾的標籤由 load_round2_folders 加上。
     """
     data = json.loads(results_path.read_text(encoding="utf-8"))
     try:
@@ -510,14 +545,23 @@ def load_round2_run(results_path: Path) -> dict[str, Any]:
             "retrieval_only": retrieval_only,
             **{key: environment[key] for key in ROUND2_ENVIRONMENT_KEYS},
         }
+        corpus = str(environment["corpus"])
     except (KeyError, TypeError, ValueError) as exc:
         raise ValueError(
             f"{_display_path(results_path)} 不符合 results.json 契約（{type(exc).__name__}: {exc}）"
         ) from exc
+    run_dir = results_path.parent.parent
+    label = ROUND2_LABELS.get(combo_id, combo_id.upper())
     return {
-        "run": ROUND2_LABELS.get(combo_id, combo_id.upper()),
+        "run": label,
+        "combo_label": label,
         "round": 2,
         "combo_id": combo_id,
+        "corpus": corpus,
+        "repeat": None,
+        "run_folder": _display_path(run_dir),
+        "run_dir": run_dir.resolve(),
+        "order": 0,
         "retrieval": retrieval,
         "max_distance": max_distance,
         "prompt_style": prompt_style,
@@ -531,14 +575,35 @@ def load_round2_run(results_path: Path) -> dict[str, Any]:
 
 
 def round2_results_paths(round2_dir: Path) -> list[Path]:
-    """列出 round2_dir/combo_*/results.json（目錄不存在時回空 list）。"""
+    """列出單一 run 資料夾的 round2_dir/combo_*/results.json（不遞迴；目錄不存在時回空 list）。"""
     if not round2_dir.is_dir():
         return []
     return sorted(round2_dir.glob("combo_*/results.json"))
 
 
+def find_run_dirs(roots: Sequence[Path]) -> list[Path]:
+    """在每個 root 之下（含 root 本身）遞迴找出 run 資料夾：直接含 combo_*/results.json 的目錄。
+
+    略過隱藏目錄（例如 experiment_runner 把舊結果移入的 .previous/）；不存在的 root 略過。
+    回傳去重、排序後的絕對路徑。
+    """
+    found: set[Path] = set()
+    for root in roots:
+        if not root.is_dir():
+            continue
+        base = root.resolve()
+        for path in base.rglob("results.json"):
+            rel_parts = path.relative_to(base).parts
+            if len(rel_parts) < 2 or not rel_parts[-2].startswith("combo_"):
+                continue
+            if any(part.startswith(".") for part in rel_parts):
+                continue
+            found.add(path.parent.parent)
+    return sorted(found)
+
+
 def load_round2_runs(round2_dir: Path) -> list[dict[str, Any]]:
-    """讀取所有 round-2 results.json；格式錯誤的檔案在 stderr 警告後略過。"""
+    """讀取單一 run 資料夾內所有 round-2 results.json；格式錯誤的檔案在 stderr 警告後略過。"""
     runs: list[dict[str, Any]] = []
     for path in round2_results_paths(round2_dir):
         try:
@@ -597,6 +662,119 @@ def keep_consistent_runs(
     return kept
 
 
+# ─── Round 2：多個 run 資料夾（重複執行）────────────────────────────────────
+
+_RUN_NAME_RE = re.compile(r"run[_-]?(\d+)", re.IGNORECASE)
+
+
+def _corpus_rank(corpus: str) -> tuple[int, str]:
+    """語料的排序鍵：round1、current 在前，其餘依名稱。"""
+    return (CORPUS_ORDER.index(corpus) if corpus in CORPUS_ORDER else len(CORPUS_ORDER), corpus)
+
+
+def _repeat_name(run_dir: Path) -> tuple[str, tuple[int, int, str]]:
+    """run 資料夾 → (顯示名稱, 排序鍵)：run2 → ("run 2", (0, 2, ""))；其他名稱原樣保留、排在編號之後。"""
+    match = _RUN_NAME_RE.fullmatch(run_dir.name)
+    if match:
+        n = int(match.group(1))
+        return f"run {n}", (0, n, "")
+    return run_dir.name, (1, 0, run_dir.name)
+
+
+def pinned_corpus_digests(pin_path: Path = CORPUS_PIN_PATH) -> dict[str, str | None]:
+    """各語料在 corpus_pin.json 下應有的文字指紋：{"round1": …, "current": …}（文件未全被鎖定時為 None）。
+
+    與 results.json 的 corpus_sha256 比較，可確認 round 2 建索引用的就是已鎖定的文字。
+    """
+    from data_update import list_raw_documents  # 延遲匯入：純函數不必載入 data_update
+    from rag_common import load_corpus_definition, load_corpus_pin, pinned_digest_for
+
+    pinned = load_corpus_pin(pin_path)
+    round1 = load_corpus_definition(CORPUS_ROUND1_PATH)["documents"]
+    current = [p.name for p in list_raw_documents()]
+    return {"round1": pinned_digest_for(round1, pinned), "current": pinned_digest_for(current, pinned)}
+
+
+def label_round2_folders(
+    loaded: Sequence[tuple[Path, Sequence[Mapping[str, Any]]]],
+    pinned_digests: Mapping[str, str | None],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """為各 run 資料夾的 run 加上「組別 · 語料 corpus · run N」標籤，並依 (語料, 模型, 重複編號) 排序。
+
+    同一語料有多個模型時，標籤另含模型名稱；(語料, 模型, 名稱) 重複的資料夾依路徑加上 #1、#2。
+    回傳 (新的 run list, 資料夾摘要 list)；不修改輸入。
+    """
+    entries = []
+    for run_dir, runs in loaded:
+        shared = runs[0]["consistency"]
+        repeat, repeat_key = _repeat_name(run_dir)
+        entries.append(
+            {"run_dir": run_dir, "runs": runs, "shared": shared, "corpus": str(shared["corpus"]),
+             "model": str(shared["model"]), "repeat": repeat, "repeat_key": repeat_key}
+        )
+    entries.sort(key=lambda e: (_corpus_rank(e["corpus"]), e["model"], e["repeat_key"], str(e["run_dir"])))
+
+    models: dict[str, set[str]] = {}
+    names: dict[tuple[str, str, str], list[Path]] = {}
+    for e in entries:
+        models.setdefault(e["corpus"], set()).add(e["model"])
+        names.setdefault((e["corpus"], e["model"], e["repeat"]), []).append(e["run_dir"])
+
+    labelled: list[dict[str, Any]] = []
+    folders: list[dict[str, Any]] = []
+    for order, e in enumerate(entries, start=1):
+        same_name = names[(e["corpus"], e["model"], e["repeat"])]
+        repeat = e["repeat"] if len(same_name) == 1 else f"{e['repeat']} #{same_name.index(e['run_dir']) + 1}"
+        model_part = f" · {e['model']}" if len(models[e["corpus"]]) > 1 else ""
+        suffix = f"{e['corpus']} corpus{model_part} · {repeat}"
+        expected = pinned_digests.get(e["corpus"])
+        folders.append(
+            {
+                "folder": _display_path(e["run_dir"]),
+                "label": suffix,
+                "corpus": e["corpus"],
+                "model": e["model"],
+                "repeat": repeat,
+                "combos": sorted(run["combo_id"] for run in e["runs"]),
+                "shared": dict(e["shared"]),
+                "pinned_text": None if expected is None else e["shared"]["corpus_sha256"] == expected,
+            }
+        )
+        labelled += [
+            {**run, "run": f"{run['combo_label']} · {suffix}", "repeat": repeat, "order": order}
+            for run in e["runs"]
+        ]
+    return labelled, folders
+
+
+def load_round2_folders(
+    roots: Sequence[Path],
+    reference: Mapping[int, str],
+    pinned_digests: Mapping[str, str | None] | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """讀取 roots 之下所有 run 資料夾的 E′、F、G，回傳 (加上標籤的 run list, 資料夾摘要 list)。
+
+    每個資料夾只保留預先登錄的組別與題目一致的 run；同一個資料夾內執行條件（含語料）不一致時
+    拋 ValueError（訊息指出資料夾），不同資料夾之間不要求一致，依 (語料, 模型) 分組。
+    pinned_digests 為 None 時以 pinned_corpus_digests() 計算。
+    """
+    loaded: list[tuple[Path, list[Mapping[str, Any]]]] = []
+    for run_dir in find_run_dirs(roots):
+        runs = keep_consistent_runs(keep_preregistered_round2(load_round2_runs(run_dir)), reference)
+        if not runs:
+            _warn(f"{_display_path(run_dir)} 沒有可評估的 round-2 結果，略過")
+            continue
+        conflicts = round2_inconsistencies(runs)
+        if conflicts:
+            detail = "; ".join(f"{key}: {values}" for key, values in conflicts.items())
+            raise ValueError(
+                f"{_display_path(run_dir)} 內各組的執行條件不一致，不可互相比較（{detail}）"
+            )
+        loaded.append((run_dir, runs))
+    digests = pinned_digests if pinned_digests is not None else (pinned_corpus_digests() if loaded else {})
+    return label_round2_folders(loaded, digests)
+
+
 # ─── 計分 ──────────────────────────────────────────────────────────────────
 
 
@@ -616,8 +794,12 @@ def _score_run(run: Mapping[str, Any], gold: Mapping[str, Any]) -> dict[str, Any
 
     return {
         "run": run["run"],
+        "combo_label": run.get("combo_label", run["run"]),
         "round": run["round"],
         "combo_id": run["combo_id"],
+        "corpus": run.get("corpus"),
+        "repeat": run.get("repeat"),
+        "run_folder": run.get("run_folder"),
         "retrieval": run["retrieval"],
         "prompt_style": run["prompt_style"],
         "model": run["model"],
@@ -646,9 +828,49 @@ def _score_run(run: Mapping[str, Any], gold: Mapping[str, Any]) -> dict[str, Any
 
 
 def compute_metrics(runs: Sequence[Mapping[str, Any]], gold: Mapping[str, Any]) -> list[dict[str, Any]]:
-    """所有 run → 指標列，依 (round, combo_id) 排序。"""
-    ordered = sorted(runs, key=lambda r: (r["round"], r["combo_id"]))
+    """所有 run → 指標列，依 (round, run 資料夾順序, combo_id) 排序（round 2 依語料、模型、重複編號分組）。"""
+    ordered = sorted(runs, key=lambda r: (r["round"], r.get("order", 0), r["combo_id"]))
     return [_score_run(run, gold) for run in ordered]
+
+
+# 穩定度表的指標（metrics row 的欄位, 表頭）
+STABILITY_METRICS: tuple[tuple[str, str], ...] = (
+    ("mean_distance_to_question", "Mean cosine distance to question (5 Qs)"),
+    ("q2_members_named", "Q2 members named (/9)"),
+    ("q2_members_in_context", "Q2 members in context (/9)"),
+    ("q4_gold_chunks", "Q4 Juste Debout chunks in top-k"),
+    ("q4_fact_groups", "Q4 fact groups in answer"),
+)
+
+
+def stability_rows(rows: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """round-2 每個 (語料, 模型, 組別) 跨重複執行的穩定度：各指標的 min、max 與有值的 run 數 n。
+
+    runs 為該組的 run 資料夾數；n < runs 代表部分 run 的該指標為 n/a（不納入 min–max）。
+    依 (語料, 模型, combo_id) 排序。純函數。
+    """
+    groups: dict[tuple[str, str, str], list[Mapping[str, Any]]] = {}
+    for row in rows:
+        if row["round"] == 2:
+            groups.setdefault((str(row["corpus"]), str(row["model"]), row["combo_id"]), []).append(row)
+
+    def summary(members: Sequence[Mapping[str, Any]], key: str) -> dict[str, Any]:
+        values = [m[key] for m in members if m[key] is not None]
+        return {"min": min(values) if values else None, "max": max(values) if values else None, "n": len(values)}
+
+    ordered = sorted(groups, key=lambda k: (_corpus_rank(k[0]), k[1], k[2]))
+    return [
+        {
+            "corpus": corpus,
+            "model": model,
+            "combo_id": combo_id,
+            "combo_label": groups[(corpus, model, combo_id)][0]["combo_label"],
+            "runs": len(groups[(corpus, model, combo_id)]),
+            "repeats": [m["repeat"] for m in groups[(corpus, model, combo_id)]],
+            "metrics": {key: summary(groups[(corpus, model, combo_id)], key) for key, _ in STABILITY_METRICS},
+        }
+        for corpus, model, combo_id in ordered
+    ]
 
 
 # ─── 輸出 ──────────────────────────────────────────────────────────────────
@@ -685,35 +907,45 @@ def _format_row(row: Mapping[str, Any]) -> str:
 
 
 def _prompt_legend(rows: Sequence[Mapping[str, Any]]) -> str:
+    """「A, B: weak; …」：每個組別名稱只列一次（round 2 的重複執行不重複列出）。"""
     styles: dict[str, list[str]] = {}
     for row in rows:
-        styles.setdefault(row["prompt_style"], []).append(row["run"])
-    return "; ".join(f"{', '.join(runs)}: {style}" for style, runs in styles.items())
+        labels = styles.setdefault(row["prompt_style"], [])
+        if row["combo_label"] not in labels:
+            labels.append(row["combo_label"])
+    return "; ".join(f"{', '.join(labels)}: {style}" for style, labels in styles.items())
 
 
 def _short(value: Any, width: int = 12) -> str:
     return "unknown" if value is None else f"{str(value)[:width]}"
 
 
-def _round2_check_note(shared: Mapping[str, Any] | None, corpus_pin_digest: str) -> list[str]:
-    """round-2 可比性的說明：通過檢查時列出共同條件；沒有 round-2 結果時說明檢查規則。"""
-    if shared is None:
-        return [
-            "- Compare F and G with E′ from the same round. rag_eval scores round 2 only when every round-2 "
-            "run shares the model, retrieval mode, embedding model, chunk count, indexed-text hash and git "
-            "commit. Round-1 E vs E′ mixes a model change with the re-index.",
-        ]
-    pinned = shared["corpus_sha256"] == corpus_pin_digest
-    return [
-        f"- Compare F and G with E′. rag_eval checked that every round-2 run shares the model "
-        f"({shared['model']}), retrieval mode ({'retrieval only' if shared['retrieval_only'] else 'retrieval + answer'}), "
-        f"embedding model ({shared['embedding_model']}), chunk count ({shared['chunk_count']}), indexed text "
-        f"({shared['text_source']}, sha256 `{_short(shared['corpus_sha256'])}…`) and git commit "
-        f"(`{_short(shared['git_commit'], 7)}`). Round-1 E vs E′ mixes a model change with the re-index.",
-        "- Round-2 indexed text "
-        + ("matches" if pinned else "does **not** match")
-        + " the pinned round-1 corpus.",
-    ]
+def _round2_check_note(folders: Sequence[Mapping[str, Any]]) -> list[str]:
+    """round-2 可比性的說明：檢查規則，以及每個 run 資料夾通過檢查的共同條件。"""
+    rule = (
+        "- Within one run folder, rag_eval scores round 2 only when every combo shares the model, retrieval "
+        "mode, embedding model, corpus (name, document count, document-list digest), chunk count, "
+        "indexed-text hash and git commit; otherwise it refuses to score. Across run folders, rows are grouped "
+        "by (corpus, model) and each label names the corpus and the run folder. Compare F and G with E′ from "
+        "the same run folder. Round-1 E vs E′ mixes a model change with the re-index."
+    )
+    notes = [rule]
+    for folder in folders:
+        shared = folder["shared"]
+        pinned = {
+            True: f"matches the pinned text of its {shared['document_count']} documents",
+            False: f"does **not** match the pinned text of its {shared['document_count']} documents",
+            None: "cannot be checked against `experiments/corpus_pin.json` (not every document is pinned)",
+        }[folder["pinned_text"]]
+        mode = "retrieval only" if shared["retrieval_only"] else "retrieval + answer"
+        notes.append(
+            f"- `{folder['folder']}` ({folder['label']}): model {shared['model']}, {mode}, embedding "
+            f"{shared['embedding_model']}, {shared['corpus']} corpus of {shared['document_count']} documents "
+            f"(list sha256 `{_short(shared['documents_digest'])}…`), {shared['chunk_count']} chunks, indexed text "
+            f"{pinned} ({shared['text_source']}, sha256 `{_short(shared['corpus_sha256'])}…`), git commit "
+            f"`{_short(shared['git_commit'], 7)}`."
+        )
+    return notes
 
 
 def _failed_question_notes(rows: Sequence[Mapping[str, Any]]) -> list[str]:
@@ -730,6 +962,48 @@ def _failed_question_notes(rows: Sequence[Mapping[str, Any]]) -> list[str]:
     return notes
 
 
+def _stability_cell(summary: Mapping[str, Any], runs: int, distance: bool) -> str:
+    """min–max；部分 run 為 n/a 時附「(k of n runs)」，全部 n/a 時為 n/a。"""
+    if summary["n"] == 0:
+        return "n/a"
+    fmt = (lambda v: f"{v:.3f}") if distance else str
+    cell = f"{fmt(summary['min'])}–{fmt(summary['max'])}"
+    return cell if summary["n"] == runs else f"{cell} ({summary['n']} of {runs} runs)"
+
+
+def _stability_section(stability: Sequence[Mapping[str, Any]]) -> list[str]:
+    """metrics.md 的「Stability across repeats」段落。"""
+    lines = [
+        "## Stability across repeats",
+        "",
+        "For each (corpus, model, combo) in round 2: the min–max of each metric across the repeated run folders "
+        "and the number of runs. \"(k of n runs)\" marks a metric that is n/a in some runs; those runs are left "
+        "out of its range. The Q4 column counts hits only.",
+        "",
+    ]
+    if not stability:
+        return [*lines, "No round-2 runs yet.", ""]
+    header = "| Combo | Corpus | Model | Runs | " + " | ".join(title for _, title in STABILITY_METRICS) + " |"
+    rows = [
+        "| "
+        + " | ".join(
+            [
+                _cell(s["combo_label"]),
+                _cell(s["corpus"]),
+                _cell(s["model"]),
+                str(s["runs"]),
+                *[
+                    _stability_cell(s["metrics"][key], s["runs"], key == "mean_distance_to_question")
+                    for key, _ in STABILITY_METRICS
+                ],
+            ]
+        )
+        + " |"
+        for s in stability
+    ]
+    return [*lines, header, "|---|---|---|---|" + "---|" * len(STABILITY_METRICS), *rows, ""]
+
+
 def render_markdown(
     rows: Sequence[Mapping[str, Any]],
     *,
@@ -737,13 +1011,16 @@ def render_markdown(
     gold: Mapping[str, Any],
     round2_status: str,
     corpus_docs: int,
+    round1_docs: int,
     gold_sha256: str,
     corpus_pin_digest: str,
-    round2_shared: Mapping[str, Any] | None = None,
+    round2_folders: Sequence[Mapping[str, Any]] = (),
+    stability: Sequence[Mapping[str, Any]] = (),
 ) -> str:
-    """產生 metrics.md：指標說明、兩輪差異，以及單一比較表。
+    """產生 metrics.md：開頭的判讀注意事項、指標說明、兩輪差異、逐 run 比較表與跨重複執行的穩定度表。
 
-    round2_shared：round-2 各 run 共同的執行條件（已通過 round2_inconsistencies 檢查）；沒有 round-2 時為 None。
+    corpus_docs：data/processed 目前的文件數；round1_docs：round-1 索引收錄的文件數（corpus_round1.json）。
+    round2_folders：load_round2_folders 回傳的資料夾摘要（已通過資料夾內一致性檢查）；stability：stability_rows 的結果。
     """
     members = ", ".join(gold["q2_members"]["members"])
     groups = ", ".join(gold["q4_juste_debout"]["fact_groups"])
@@ -771,6 +1048,19 @@ def render_markdown(
         f"*Generated by `rag_eval.py` at {generated_at}. Metric definitions and aliases live in "
         f"`experiments/gold.json` (sha256 `{gold_sha256}`), registered before any round-2 run.*",
         "",
+        "**Read before comparing rows:**",
+        "",
+        f"- **Embedding window.** The embedding model (`{EMBEDDING_MODEL_NAME}`) reads only the first "
+        f"{EMBEDDING_MAX_TOKENS} tokens of each chunk; the rest of a longer chunk never reaches dense retrieval, "
+        "while BM25 indexes the full chunk text. This is a possible confound when reading F: part of a difference "
+        "between F and E′ may come from BM25 seeing text the embedding never read, not from lexical matching as such.",
+        "- **Loose alias.** The gold alias `Pete` (for Popin' Pete) is loose: any standalone \"Pete\" counts, so "
+        "the Q2 member counts can include a different Pete.",
+        f"- **What each round used.** Round-1 rows come from an index of {round1_docs} documents "
+        f"(`experiments/corpus_round1.json`) and from {ROUND1_MODEL.split(' (')[0]} answers via a course proxy. "
+        "Round-2 rows use the model and corpus recorded in their results.json; each round-2 row label names its "
+        "corpus and run folder.",
+        "",
         "## Metrics",
         "",
         "- **Mean cosine distance to question (5 Qs)**: for each fixed question, the mean cosine distance "
@@ -796,14 +1086,15 @@ def render_markdown(
         "",
         "- **Round 1** (A–E, April 2026): rows reuse the answers and distances recorded in "
         "`experiments/combo_a`–`combo_e`; nothing was re-run. Model: "
-        f"{ROUND1_MODEL}. Chunk texts were not stored, so they are rebuilt by re-chunking "
-        f"`data/processed/<source_file>` ({corpus_docs} documents) with each combo's round-1 chunker, after "
-        f"checking that `data/processed` matches `experiments/corpus_pin.json` (digest `{_short(corpus_pin_digest)}…`, "
-        f"text committed before round 1); {matched}/{checked} rebuilt chunks reproduce the section label "
-        "recorded next to their cite.",
+        f"{ROUND1_MODEL}. The round-1 index held {round1_docs} documents (`experiments/corpus_round1.json`; "
+        f"`data/processed` now holds {corpus_docs}). Chunk texts were not stored, so they are rebuilt by "
+        "re-chunking `data/processed/<source_file>` with each combo's round-1 chunker, after checking that "
+        f"`data/processed` matches `experiments/corpus_pin.json` (digest `{_short(corpus_pin_digest)}…`, text "
+        f"committed before round 1); {matched}/{checked} rebuilt chunks reproduce the section label recorded "
+        "next to their cite.",
         f"- **Round 2** (E′ control, F hybrid, G query expansion): {round2_status}. Model: {model_note}. "
         "Round-2 chunk texts and distances come from `results.json`, i.e. from the index built at run time.",
-        *_round2_check_note(round2_shared, corpus_pin_digest),
+        *_round2_check_note(round2_folders),
         *cutoff_note,
         "- Round-1 D was logged as \"top-10 + rerank\", but no reranker existed: the distance-sorted "
         "top-10 was cut to 5, i.e. plain dense top-5.",
@@ -816,6 +1107,7 @@ def render_markdown(
         "|---|---|---|---|---|---|---|---|",
         *[_format_row(r) for r in rows],
         "",
+        *_stability_section(stability),
     ]
     return "\n".join(lines)
 
@@ -830,45 +1122,410 @@ def write_outputs(out_dir: Path, payload: Mapping[str, Any], markdown: str) -> t
     return json_path, md_path
 
 
+# ─── Round-1 重現檢查（--check-reproduction）──────────────────────────────
+
+# 影響檢索結果的 round-1 設定（prompt_style 只影響回答，不檢查）
+_RETRIEVAL_SETTING_KEYS: tuple[str, ...] = (
+    "chunk_desc",
+    "top_k",
+    "max_distance",
+    "truncate_to",
+    "use_hybrid",
+    "use_expand",
+)
+# --report-out 不可覆寫的 experiments/ 檔案（第一輪彙整與評估輸出）
+_PROTECTED_EXPERIMENT_FILES = frozenset({"summary.md", "metrics.md"})
+
+Cite = tuple[str, int, float]
+
+
+def _chunk_ids(cites: Sequence[Cite]) -> list[str]:
+    return [f"{src}::{idx}" for src, idx, _ in cites]
+
+
+def compare_reproduction(
+    recorded: Sequence[Cite],
+    reproduced: Sequence[Cite] | None,
+    tolerance: float = REPRODUCTION_TOLERANCE,
+) -> dict[str, Any]:
+    """單題比對：chunk id（檔名 + chunk 編號）與順序完全相同，且每個 |記錄距離 − 重現距離| <= tolerance。
+
+    reproduced 為 None 代表沒有重現結果。回傳 {match, same_chunks, reason, added, removed,
+    max_abs_distance_diff}；added / removed 為重現多出 / 缺少的 chunk id。純函數。
+    """
+    if reproduced is None:
+        return {"match": False, "same_chunks": False, "reason": "missing", "added": [], "removed": [],
+                "max_abs_distance_diff": None}
+    recorded_ids, reproduced_ids = _chunk_ids(recorded), _chunk_ids(reproduced)
+    if recorded_ids != reproduced_ids:
+        added = [cid for cid in reproduced_ids if cid not in recorded_ids]
+        removed = [cid for cid in recorded_ids if cid not in reproduced_ids]
+        reason = "order differs" if not added and not removed else f"chunks differ (+{len(added)} / -{len(removed)})"
+        return {"match": False, "same_chunks": False, "reason": reason, "added": added, "removed": removed,
+                "max_abs_distance_diff": None}
+    max_diff = max((abs(a[2] - b[2]) for a, b in zip(recorded, reproduced)), default=0.0)
+    match = max_diff <= tolerance
+    return {
+        "match": match,
+        "same_chunks": True,
+        "reason": None if match else f"distance off by {max_diff:.4f}",
+        "added": [],
+        "removed": [],
+        "max_abs_distance_diff": max_diff,
+    }
+
+
+def _load_reproduced_combo(results_path: Path, combo_id: str) -> tuple[dict[int, dict[str, Any]], str | None, dict[str, Any]]:
+    """讀取重現 run 的 combo_<id>/results.json → ({題號: {question, cites}}, 問題說明或 None, 環境摘要)。
+
+    檔案缺漏、無法解析、不符契約，或檢索設定與 round 1 不同時，問題說明不為 None（該組 5 題皆記為不符）。
+    """
+    if not results_path.is_file():
+        return {}, "missing (no results.json)", {}
+    try:
+        data = json.loads(results_path.read_text(encoding="utf-8"))
+        combo = data["combo"]
+        environment = data.get("environment") or {}
+        info = {
+            "collection": combo.get("collection"),
+            "chunk_count": environment.get("chunk_count"),
+            "corpus": environment.get("corpus"),
+            "document_count": environment.get("document_count"),
+            "corpus_sha256": environment.get("corpus_sha256"),
+            "retrieval_only": data.get("retrieval_only"),
+        }
+        if str(combo["id"]).lower() != combo_id:
+            return {}, f"results.json is for combo {combo['id']!r}", info
+        differs = [k for k in _RETRIEVAL_SETTING_KEYS if combo.get(k) != ROUND1_COMBOS[combo_id][k]]
+        if differs:
+            return {}, f"retrieval settings differ from round 1 ({', '.join(differs)})", info
+        questions = {
+            int(q["index"]): {
+                "question": str(q["question"]),
+                "cites": [(str(c["source_file"]), int(c["chunk_index"]), float(c["distance"])) for c in q["cites"]],
+            }
+            for q in data["questions"]
+        }
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        return {}, f"unreadable results.json ({type(exc).__name__})", {}
+    return questions, None, info
+
+
+def _read_run_json(run_dir: Path) -> dict[str, Any] | None:
+    """讀取 run.json（不存在或無法解析時在 stderr 警告並回傳 None）。"""
+    path = run_dir / "run.json"
+    if not path.is_file():
+        _warn(f"{_display_path(path)} 不存在；報告不含執行環境")
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError("run.json 不是 JSON 物件")
+        return data
+    except (OSError, ValueError) as exc:
+        _warn(f"{_display_path(path)} 無法讀取（{type(exc).__name__}）；報告不含執行環境")
+        return None
+
+
+def check_reproduction(run_dir: Path, round1_dir: Path = EXPERIMENTS_DIR) -> dict[str, Any]:
+    """比對 run_dir/combo_a..e/results.json 與 round1_dir/combo_a..e/q1..q5.md，回傳 25 格的結果。
+
+    round-1 記錄無法解析時拋 OSError / ValueError（記錄本身有問題時不產生報告）。
+    """
+    combos: list[dict[str, Any]] = []
+    for combo_id in ROUND1_COMBOS:
+        reproduced, problem, info = _load_reproduced_combo(run_dir / f"combo_{combo_id}" / "results.json", combo_id)
+        cells: list[dict[str, Any]] = []
+        for n in range(1, QUESTION_COUNT + 1):
+            recorded = parse_round1_question(round1_dir / f"combo_{combo_id}" / f"q{n}.md")
+            question = reproduced.get(n)
+            if problem is not None:
+                cell = {**compare_reproduction(recorded["cites"], None), "reason": problem}
+            elif question is None:
+                cell = {**compare_reproduction(recorded["cites"], None), "reason": "question missing"}
+            elif normalize(question["question"]) != normalize(recorded["question"]):
+                cell = {**compare_reproduction(recorded["cites"], None), "reason": "question text differs"}
+            else:
+                cell = compare_reproduction(recorded["cites"], question["cites"])
+            cells.append(
+                {
+                    "question": n,
+                    **cell,
+                    "recorded": [list(c) for c in recorded["cites"]],
+                    "reproduced": [list(c) for c in question["cites"]] if question and problem is None else None,
+                }
+            )
+        combos.append({"combo_id": combo_id, "info": info, "cells": cells})
+    matched = sum(cell["match"] for combo in combos for cell in combo["cells"])
+    return {
+        "run_dir": _display_path(run_dir),
+        "round1_dir": _display_path(round1_dir),
+        "run": _read_run_json(run_dir),
+        "combos": combos,
+        "matched": matched,
+        "total": len(combos) * QUESTION_COUNT,
+    }
+
+
+def _reproduction_cell(cell: Mapping[str, Any]) -> str:
+    if cell["match"]:
+        return f"ok (max Δ {cell['max_abs_distance_diff']:.4f})"
+    return f"MISMATCH: {cell['reason']}"
+
+
+def reproduction_table(result: Mapping[str, Any]) -> list[str]:
+    """5×5 結果表（每列一個 combo、每欄一題）與總計列。"""
+    lines = [
+        "| Combo | " + " | ".join(f"Q{n}" for n in range(1, QUESTION_COUNT + 1)) + " | Matched |",
+        "|---|" + "---|" * QUESTION_COUNT + "---|",
+    ]
+    for combo in result["combos"]:
+        ok = sum(cell["match"] for cell in combo["cells"])
+        cells = " | ".join(_reproduction_cell(cell) for cell in combo["cells"])
+        lines.append(f"| {combo['combo_id'].upper()} | {cells} | {ok}/{len(combo['cells'])} |")
+    return lines
+
+
+def _format_cites(cites: Sequence[Sequence[Any]] | None) -> str:
+    if cites is None:
+        return "(none)"
+    return ", ".join(f"`{src}::{idx}` ({float(d):.4f})" for src, idx, d in cites) or "(no cites)"
+
+
+def _corpus_lines(run: Mapping[str, Any] | None, round1_definition: Mapping[str, Any]) -> list[str]:
+    """報告的「Corpus」段落：run.json 記錄的語料，與 experiments/corpus_round1.json 比對。"""
+    from rag_common import document_list_digest  # 延遲匯入：純函數不必載入 rag_common
+
+    corpus = (run or {}).get("corpus")
+    if not isinstance(corpus, dict):
+        return ["- run.json has no corpus record."]
+    round1_digest = document_list_digest(round1_definition["documents"])
+    excluded = ", ".join(f"`{name}`" for name in round1_definition["excluded"])
+    same_list = corpus.get("documents_digest") == round1_digest
+    lines = [
+        f"- Corpus: **{corpus.get('name', 'unknown')}** ({corpus.get('definition', 'definition not recorded')}), "
+        f"{corpus.get('document_count')} documents, document-list sha256 `{_short(corpus.get('documents_digest'), 16)}…`.",
+        "- Document list "
+        + ("matches" if same_list else "does **not** match")
+        + f" `experiments/corpus_round1.json` ({len(round1_definition['documents'])} documents; it excludes "
+        f"{excluded}).",
+        f"- Indexed text: `data/processed` digest `{_short(corpus.get('processed_digest'), 16)}…`; matches "
+        f"`experiments/corpus_pin.json`: {corpus.get('matches_pin')}.",
+    ]
+    return lines
+
+
+def _environment_lines(result: Mapping[str, Any]) -> list[str]:
+    """報告的「Environment」段落（取自 run.json 與各 combo 的 results.json）。"""
+    run = result["run"] or {}
+    git = run.get("git") or {}
+    embedding = run.get("embedding") or {}
+    lines = [
+        f"- Run folder: `{result['run_dir']}`; run.json generated at {run.get('generated_at', 'unknown')}.",
+        f"- Git commit `{_short(git.get('commit'), 7)}` (uncommitted tracked changes: {git.get('dirty')}).",
+        f"- Embedding: {embedding.get('model', 'unknown')}, max_seq_length {embedding.get('max_seq_length')}.",
+        f"- Retrieval only: {run.get('retrieval_only')} (no LLM call for combos A–E); text source: "
+        + ("committed `data/processed`" if run.get("reuse_processed") else "re-extracted from `data/raw`")
+        + ".",
+        "",
+        "| Combo | Collection | Chunks | Corpus | Status |",
+        "|---|---|---|---|---|",
+    ]
+    statuses = run.get("combos") or {}
+    for combo in result["combos"]:
+        info = combo["info"]
+        status = (statuses.get(combo["combo_id"]) or {}).get("status", "not in run.json")
+        lines.append(
+            f"| {combo['combo_id'].upper()} | `{info.get('collection')}` | {info.get('chunk_count')} | "
+            f"{info.get('corpus')} | {status} |"
+        )
+    return lines
+
+
+def render_reproduction_report(
+    result: Mapping[str, Any], *, generated_at: str, round1_definition: Mapping[str, Any]
+) -> str:
+    """round1_reproduction.md：方法、執行環境、語料與 25 格結果（含不符的明細）。"""
+    total, matched = result["total"], result["matched"]
+    verdict = (
+        f"**Result: {matched}/{total} cells reproduce the recorded round-1 retrieval.**"
+        if matched == total
+        else f"**Result: {matched}/{total} cells reproduce the recorded round-1 retrieval; "
+        f"{total - matched} MISMATCH.**"
+    )
+    corpus_record = (result["run"] or {}).get("corpus")
+    corpus_flag = f" --corpus {corpus_record['name']}" if isinstance(corpus_record, dict) and corpus_record.get("name") else ""
+    details: list[str] = []
+    for combo in result["combos"]:
+        for cell in combo["cells"]:
+            if cell["match"]:
+                continue
+            details += [
+                f"### Combo {combo['combo_id'].upper()} · Q{cell['question']}",
+                "",
+                f"- Reason: {cell['reason']}",
+                f"- Recorded: {_format_cites(cell['recorded'])}",
+                f"- Reproduced: {_format_cites(cell['reproduced'])}",
+            ]
+            if cell["added"] or cell["removed"]:
+                details.append(
+                    "- Added: " + (", ".join(f"+{cid}" for cid in cell["added"]) or "none")
+                    + "; removed: " + (", ".join(f"-{cid}" for cid in cell["removed"]) or "none")
+                )
+            details.append("")
+    lines = [
+        "# Round-1 retrieval reproduction check",
+        "",
+        f"*Generated by `rag_eval.py --check-reproduction` at {generated_at}.*",
+        "",
+        verdict,
+        "",
+        "## Method",
+        "",
+        f"- Recorded: `{result['round1_dir']}/combo_a`–`combo_e`, `q1.md`–`q5.md` (round 1, April 2026; "
+        "distances printed with 3 decimals).",
+        f"- Reproduced: `{result['run_dir']}/combo_a`–`combo_e/results.json`, written by "
+        f"`experiment_runner.py --combos a b c d e{corpus_flag} --retrieval-only`: each combo rebuilds its own Chroma "
+        "collection with its round-1 chunker and retrieves with its round-1 settings; no LLM call.",
+        f"- A cell (combo × question) matches when the reproduced cites have the same chunk ids (source file + "
+        f"chunk index) in the same order as the recorded cites, and every |recorded distance − reproduced "
+        f"distance| ≤ {REPRODUCTION_TOLERANCE}. Retrieval settings in each results.json (chunking, top-k, max "
+        "distance, truncation, hybrid, expansion) must equal the round-1 settings, otherwise all five cells "
+        "of that combo count as mismatches.",
+        "",
+        "## Corpus",
+        "",
+        *_corpus_lines(result["run"], round1_definition),
+        "",
+        "## Environment",
+        "",
+        *_environment_lines(result),
+        "",
+        "## Result",
+        "",
+        *reproduction_table(result),
+        "",
+        f"Total: {matched}/{total} cells match.",
+        "",
+        *(["## Mismatches", "", *details] if details else []),
+    ]
+    return "\n".join(lines)
+
+
+def _inside(path: Path, parent: Path) -> bool:
+    """path 是否為 parent 或其下（不分大小寫：macOS APFS 預設不分大小寫）。"""
+    child, base = str(path).casefold(), str(parent).casefold()
+    return child == base or child.startswith(base.rstrip(os.sep) + os.sep)
+
+
+def resolve_report_path(raw: Path) -> Path:
+    """解析 --report-out；不符合規則時拋 ValueError。
+
+    必須是 .md；repo 內只允許 experiments/ 之下，且不可在第一輪的 experiments/combo_* 之內，
+    也不可是 experiments/summary.md、metrics.md。repo 外（例如暫存目錄）允許。
+    """
+    path = raw.expanduser().resolve()
+    if path.suffix.lower() != ".md":
+        raise ValueError(f"--report-out 必須是 .md 檔（收到 {path.name}）")
+    root, experiments = ROOT.resolve(), EXPERIMENTS_DIR.resolve()
+    if not _inside(path, root):
+        return path
+    if not _inside(path, experiments):
+        raise ValueError("--report-out 在 repo 內時必須位於 experiments/ 之下")
+    # 比較一律不分大小寫：resolve() 保留使用者輸入的大小寫，「Experiments/Summary.md」在 APFS 上是同一個檔案
+    first = path.parts[len(experiments.parts)]
+    if first.casefold().startswith("combo_"):
+        raise ValueError(f"--report-out 不可位於第一輪結果目錄 experiments/{first} 之內")
+    if _inside(path.parent, experiments) and _inside(experiments, path.parent):
+        if path.name.casefold() in _PROTECTED_EXPERIMENT_FILES:
+            raise ValueError(f"--report-out 不可覆寫 experiments/{path.name}")
+    return path
+
+
+def run_reproduction_check(run_dir: Path, round1_dir: Path, report_out: Path | None) -> int:
+    """--check-reproduction 的流程：比對、印出 5×5 表、寫報告；全部相符回 0，有不符或錯誤回 1，報告路徑不合法回 2。"""
+    try:
+        report_path = resolve_report_path(report_out if report_out is not None else REPRODUCTION_REPORT_PATH)
+    except ValueError as exc:
+        print(f"[rag_eval] 錯誤（{_describe_exc(exc)}）", file=sys.stderr)
+        return 2
+    try:
+        if not run_dir.is_dir():
+            raise ValueError(f"找不到重現 run 目錄 {_display_path(run_dir)}")
+        from rag_common import load_corpus_definition  # 延遲匯入：純函數不必載入 rag_common
+
+        result = check_reproduction(run_dir, round1_dir)
+        generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+        report = render_reproduction_report(
+            result, generated_at=generated_at, round1_definition=load_corpus_definition(CORPUS_ROUND1_PATH)
+        )
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(report, encoding="utf-8")
+    except Exception as exc:  # CLI 邊界：回報型別與（去除本機路徑的）訊息後以非 0 結束
+        print(f"[rag_eval] 錯誤（{_describe_exc(exc)}）", file=sys.stderr)
+        return 1
+    print("\n".join(reproduction_table(result)))
+    print(f"\n[rag_eval] round-1 reproduction: {result['matched']}/{result['total']} cells match")
+    print(f"[rag_eval] 已寫入 {_display_path(report_path)}")
+    return 0 if result["matched"] == result["total"] else 1
+
+
 # ─── CLI ───────────────────────────────────────────────────────────────────
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="預先登錄的 RAG 評估：round 1（A–E）vs round 2（E′、F、G）")
     p.add_argument("--round1", type=Path, default=EXPERIMENTS_DIR, help="含 combo_a..e/q*.md 的目錄")
-    p.add_argument("--round2", type=Path, default=ROUND2_DIR, help="含 combo_*/results.json 的目錄")
+    p.add_argument(
+        "--round2",
+        type=Path,
+        nargs="+",
+        default=[ROUND2_DIR],
+        help="一或多個目錄，各自遞迴搜尋 run 資料夾（直接含 combo_*/results.json 的目錄）；預設 experiments/round2",
+    )
     p.add_argument("--out", type=Path, default=EXPERIMENTS_DIR, help="metrics.json / metrics.md 輸出目錄")
+    p.add_argument(
+        "--check-reproduction",
+        type=Path,
+        default=None,
+        metavar="RUN_DIR",
+        help="改為重現檢查：比對 RUN_DIR/combo_a..e/results.json（--retrieval-only）與 round-1 的 q*.md",
+    )
+    p.add_argument(
+        "--report-out",
+        type=Path,
+        default=None,
+        help="重現檢查報告的輸出路徑（預設 experiments/round1_reproduction.md）",
+    )
     return p.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    if args.check_reproduction is not None:
+        return run_reproduction_check(args.check_reproduction, args.round1, args.report_out)
     try:
+        from rag_common import document_list_digest, load_corpus_definition  # 延遲匯入
+
         gold = load_gold(GOLD_PATH)
         gold_sha256 = hashlib.sha256(GOLD_PATH.read_bytes()).hexdigest()
         corpus_pin_digest = check_round1_corpus(PROCESSED_DIR, CORPUS_PIN_PATH)
+        round1_documents = load_corpus_definition(CORPUS_ROUND1_PATH)["documents"]
         runs = load_round1_runs(args.round1, PROCESSED_DIR)
         reference = {q["index"]: q["question"] for q in runs[0]["questions"]} if runs else {}
-        round2_shown = f"{_display_path(args.round2)}/combo_*/results.json"
-        round2_shared: Mapping[str, Any] | None = None
-        if round2_results_paths(args.round2):
-            round2 = keep_consistent_runs(
-                keep_preregistered_round2(load_round2_runs(args.round2)), reference
-            )
-            conflicts = round2_inconsistencies(round2)
-            if conflicts:
-                detail = "; ".join(f"{key}: {values}" for key, values in conflicts.items())
-                raise ValueError(f"round-2 各組的執行條件不一致，不可互相比較（{detail}）")
-            round2_shared = round2[0]["consistency"] if round2 else None
+        round2_shown = ", ".join(f"`{_display_path(d)}`" for d in args.round2)
+        round2, round2_folders = load_round2_folders(args.round2, reference)
+        if round2_folders:
             runs = runs + round2
-            round2_status = f"read from `{round2_shown}`"
+            round2_status = f"read from {len(round2_folders)} run folder(s) under {round2_shown}"
         else:
-            print(f"[rag_eval] round 2: no results.json under {_display_path(args.round2)} yet; skipped.")
-            round2_status = f"no results yet (`{round2_shown}` not found)"
+            print(f"[rag_eval] round 2: no run folder (combo_*/results.json) under {round2_shown} yet; skipped.")
+            round2_status = f"no results yet (no `combo_*/results.json` under {round2_shown})"
         if not runs:
             raise ValueError("沒有任何可評估的 run")
 
         rows = compute_metrics(runs, gold)
+        stability = stability_rows(rows)
         generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
         corpus_docs = len(list(PROCESSED_DIR.glob("*.txt")))
         markdown = render_markdown(
@@ -877,18 +1534,26 @@ def main(argv: list[str] | None = None) -> int:
             gold=gold,
             round2_status=round2_status,
             corpus_docs=corpus_docs,
+            round1_docs=len(round1_documents),
             gold_sha256=gold_sha256,
             corpus_pin_digest=corpus_pin_digest,
-            round2_shared=round2_shared,
+            round2_folders=round2_folders,
+            stability=stability,
         )
         payload = {
             "generated_at": generated_at,
             "gold": _display_path(GOLD_PATH),
             "gold_sha256": gold_sha256,
             "corpus_pin": {"path": _display_path(CORPUS_PIN_PATH), "digest": corpus_pin_digest},
+            "round1_corpus": {
+                "path": _display_path(CORPUS_ROUND1_PATH),
+                "document_count": len(round1_documents),
+                "documents_digest": document_list_digest(round1_documents),
+            },
             "round2_status": round2_status,
-            "round2_shared": round2_shared,
+            "round2_runs": round2_folders,
             "rows": rows,
+            "stability": stability,
         }
         json_path, md_path = write_outputs(args.out, payload, markdown)
     except Exception as exc:  # CLI 邊界：回報型別與（去除本機路徑的）訊息後以非 0 結束

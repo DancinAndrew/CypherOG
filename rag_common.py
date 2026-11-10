@@ -7,7 +7,7 @@ import json
 import os
 import re
 import sys
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +23,8 @@ DATA_PROCESSED = ROOT / "data" / "processed"
 MANIFEST_PATH = ROOT / "data" / ".ingest_manifest.json"
 # data/processed 的鎖定指紋：round-1 還原與 round-2 實驗都必須使用這份已提交的文字
 CORPUS_PIN_PATH = ROOT / "experiments" / "corpus_pin.json"
+# round-1 索引實際收錄的 39 份 data/raw 文件（experiment_runner --corpus round1 使用）
+CORPUS_ROUND1_PATH = ROOT / "experiments" / "corpus_round1.json"
 
 # 找不到或無法使用索引時的建議指令（不建議會改寫已提交 data/processed 的指令）
 REBUILD_HINT = (
@@ -134,6 +136,66 @@ def load_corpus_pin(path: Path | None = None) -> dict[str, str]:
 def corpus_mismatches(actual: Mapping[str, str], pinned: Mapping[str, str]) -> list[str]:
     """回傳缺少、多出或內容不同的檔名（排序後）；空 list 代表與鎖定版本完全一致。"""
     return sorted(name for name in set(actual) | set(pinned) if actual.get(name) != pinned.get(name))
+
+
+# ---------------------------------------------------------------------------
+# 語料選擇：以 data/raw 檔名列出要建索引的文件（例如 experiments/corpus_round1.json）
+# ---------------------------------------------------------------------------
+
+_CORPUS_NAME_RE = re.compile(r"[a-z0-9]+(?:_[a-z0-9]+)*")
+
+
+def processed_name_for(raw_name: str) -> str:
+    """data/raw 檔名 → data/processed 檔名（<stem>.txt，與 data_update 的規則相同）。"""
+    return f"{Path(raw_name).stem}.txt"
+
+
+def document_list_digest(names: Iterable[str]) -> str:
+    """文件清單的指紋：sha256 of 依名稱排序的「名稱\\n」（只看檔名，不看內容；重複名稱只算一次）。"""
+    lines = "".join(f"{name}\n" for name in sorted(set(names)))
+    return hashlib.sha256(lines.encode("utf-8")).hexdigest()
+
+
+def _file_name_list(value: Any, field: str) -> list[str]:
+    """驗證「不重複的單層檔名 list」，回傳排序後的新 list；不符時拋 ValueError。"""
+    if not isinstance(value, list) or not all(isinstance(v, str) and v for v in value):
+        raise ValueError(f"{field} 必須是非空字串的 list")
+    if len(set(value)) != len(value):
+        raise ValueError(f"{field} 有重複的檔名")
+    if any("/" in v or "\\" in v or v in {".", ".."} for v in value):
+        raise ValueError(f"{field} 只能列 data/raw 內的檔名，不可含路徑")
+    return sorted(value)
+
+
+def load_corpus_definition(path: Path | None = None) -> dict[str, Any]:
+    """讀取語料定義檔（預設 experiments/corpus_round1.json），回傳 {name, documents, excluded}（皆為新物件）。
+
+    documents：要建索引的 data/raw 檔名（排序、不可為空）；excluded：刻意排除的 data/raw 檔名。
+    name 會成為 Chroma collection 名稱的一部分，只允許小寫英數與底線。結構不符時拋 ValueError。
+    """
+    data = json.loads((path if path is not None else CORPUS_ROUND1_PATH).read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError("語料定義檔不是 JSON 物件")
+    name = data.get("name")
+    if not isinstance(name, str) or not _CORPUS_NAME_RE.fullmatch(name):
+        raise ValueError(f"語料名稱不合法: {name!r}")
+    documents = _file_name_list(data.get("documents"), "documents")
+    if not documents:
+        raise ValueError("documents 不可為空")
+    excluded = _file_name_list(data.get("excluded", []), "excluded")
+    overlap = sorted(set(documents) & set(excluded))
+    if overlap:
+        raise ValueError(f"documents 與 excluded 重疊: {overlap[:3]}")
+    return {"name": name, "documents": documents, "excluded": excluded}
+
+
+def pinned_digest_for(documents: Iterable[str], pinned: Mapping[str, str]) -> str | None:
+    """所選 data/raw 文件在 corpus_pin.json 中的文字指紋（與 rebuild 回傳值的 corpus_digest 可比）；
+    任一文件未被鎖定時回傳 None。"""
+    names = {processed_name_for(d) for d in documents}
+    if not names or not names <= set(pinned):
+        return None
+    return corpus_digest({n: pinned[n] for n in names})
 
 
 def resolve_collection_name(collection_name: str | None = None) -> str:

@@ -14,7 +14,7 @@ import json
 import re
 import shutil
 import sys
-from collections.abc import Callable
+from collections.abc import Callable, Collection
 from pathlib import Path
 
 from rag_common import (
@@ -173,6 +173,27 @@ def list_raw_documents() -> list[Path]:
     )
 
 
+def select_raw_documents(include: Collection[str] | None = None) -> list[Path]:
+    """list_raw_documents() 中檔名在 include 內的文件（保持排序）；include 為 None 時回傳全部。
+
+    include 是單一字串時拋 TypeError（避免被當成字元集合）；為空、或含 data/raw 中不存在
+    （或副檔名不支援）的檔名時拋 ValueError，不會默默略過。
+    """
+    documents = list_raw_documents()
+    if include is None:
+        return documents
+    if isinstance(include, str):
+        raise TypeError("include 必須是 data/raw 檔名的集合，不可是單一字串")
+    wanted = set(include)
+    if not wanted:
+        raise ValueError("include 不可為空（None 代表全部文件）")
+    missing = sorted(wanted - {p.name for p in documents})
+    if missing:
+        shown = "、".join(missing[:3]) + ("…" if len(missing) > 3 else "")
+        raise ValueError(f"include 有 {len(missing)} 個檔名不在 data/raw 的支援文件中（{shown}）")
+    return [p for p in documents if p.name in wanted]
+
+
 def _load_document_text(raw: Path, reuse_processed: bool) -> str:
     """取得文件清理後的文字：reuse_processed 時優先讀 data/processed/<stem>.txt（不寫入任何檔案）。"""
     if reuse_processed:
@@ -200,6 +221,7 @@ def rebuild_processed_and_index(
     collection_name: str | None = None,
     reuse_processed: bool = False,
     write_processed: bool = True,
+    include: Collection[str] | None = None,
 ) -> dict[str, str]:
     """全量重建：清空 Chroma collection、重新 chunk + embed + 寫入，並重建該 collection 的 BM25 索引。
 
@@ -210,10 +232,19 @@ def rebuild_processed_and_index(
     write_processed: 只在 reuse_processed=False 時有作用。True（預設，CLI --rebuild）時清空 data/processed
         與 ingest manifest 並寫回新抽取的文字；False 時新抽取的文字只存於記憶體，不動 data/ 下任何檔案
         （experiment_runner 的 --re-extract 如此使用）。
-    清空 collection 失敗時拋 RuntimeError，且在此之前不會動到 data/processed。
-    回傳 {processed 檔名: 本次建索引所用文字的 sha256}，供實驗記錄語料指紋。
+    include: 只為這些 data/raw 檔名建索引（例如 experiments/corpus_round1.json 的 39 份）；None 為全部文件。
+        會寫回 data/processed 的模式（write_processed=True 且 reuse_processed=False）不接受 include，
+        否則 data/processed 只會剩下部分文件。
+    include 不合法時拋 TypeError / ValueError，清空 collection 失敗時拋 RuntimeError；兩者都發生在
+    動到 collection 或 data/processed 之前。
+    回傳 {processed 檔名: 本次建索引所用文字的 sha256}（只含所選文件），供實驗記錄語料指紋。
     """
     persist = write_processed and not reuse_processed
+    if include is not None and persist:
+        raise ValueError(
+            "include 不能搭配會寫回 data/processed 的重建（請用 reuse_processed=True 或 write_processed=False）"
+        )
+    raw_documents = select_raw_documents(include)
     coll = get_chroma_collection(collection_name)
     _clear_collection(coll, collection_name)
 
@@ -232,7 +263,7 @@ def rebuild_processed_and_index(
     all_docs: list[str] = []
     all_metas: list[dict] = []
 
-    for raw in list_raw_documents():
+    for raw in raw_documents:
         rel = raw.relative_to(DATA_RAW)
         text = _load_document_text(raw, reuse_processed)
         out = _processed_path_for(raw)

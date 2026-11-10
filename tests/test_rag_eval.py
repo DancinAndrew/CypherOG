@@ -19,6 +19,13 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 import rag_eval  # noqa: E402
+from data_update import list_raw_documents  # noqa: E402
+from rag_common import (  # noqa: E402
+    document_list_digest,
+    load_corpus_definition,
+    load_corpus_pin,
+    pinned_digest_for,
+)
 
 EXPERIMENTS = ROOT / "experiments"
 ROUND1_IDS = ("a", "b", "c", "d", "e")
@@ -350,6 +357,9 @@ def _cite(text: str, dist_q: float, idx: int = 0) -> dict:
 
 
 PINNED_DIGEST = json.loads((EXPERIMENTS / "corpus_pin.json").read_text(encoding="utf-8"))["digest"]
+ROUND1_DOCS = load_corpus_definition(EXPERIMENTS / "corpus_round1.json")["documents"]
+# round1 語料（39 份）在 corpus_pin.json 下的文字指紋
+ROUND1_PINNED_DIGEST = pinned_digest_for(ROUND1_DOCS, load_corpus_pin(EXPERIMENTS / "corpus_pin.json"))
 
 
 def _environment(**overrides) -> dict:
@@ -358,11 +368,26 @@ def _environment(**overrides) -> dict:
         "git_dirty": False,
         "embedding_model": "paraphrase-multilingual-MiniLM-L12-v2",
         "text_source": "data/processed",
-        "corpus_sha256": PINNED_DIGEST,
-        "chunk_count": 1234,
+        "corpus": "round1",
+        "document_count": 39,
+        "documents_digest": document_list_digest(ROUND1_DOCS),
+        "corpus_sha256": ROUND1_PINNED_DIGEST,
+        "chunk_count": 1248,
         "index_rebuilt": True,
         **overrides,
     }
+
+
+def _current_environment(**overrides) -> dict:
+    current = [p.name for p in list_raw_documents()]
+    return _environment(
+        corpus="current",
+        document_count=len(current),
+        documents_digest=document_list_digest(current),
+        corpus_sha256=PINNED_DIGEST,
+        chunk_count=1279,
+        **overrides,
+    )
 
 
 def _write_results(
@@ -560,6 +585,9 @@ def test_round2_requires_the_environment_record(tmp_path: Path) -> None:
         ("git_commit", {"environment": _environment(git_commit="fffffff")}),
         ("embedding_model", {"environment": _environment(embedding_model="other-model")}),
         ("text_source", {"environment": _environment(text_source="data/raw (re-extracted in memory)")}),
+        ("corpus", {"environment": _environment(corpus="current")}),
+        ("document_count", {"environment": _environment(document_count=42)}),
+        ("documents_digest", {"environment": _environment(documents_digest="0" * 64)}),
     ],
 )
 def test_round2_runs_must_share_their_run_conditions(
@@ -575,7 +603,9 @@ def test_round2_runs_must_share_their_run_conditions(
     out = tmp_path / "out"
     assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(round2), "--out", str(out)]) == 1
     assert not (out / "metrics.md").exists()
-    assert field in capsys.readouterr().err
+    err = capsys.readouterr().err
+    assert field in err
+    assert "round2" in err  # 指出是哪個 run 資料夾
 
 
 def test_combos_outside_the_preregistered_round2_set_are_dropped(
@@ -587,8 +617,8 @@ def test_combos_outside_the_preregistered_round2_set_are_dropped(
     out = tmp_path / "out"
     assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(round2), "--out", str(out)]) == 0
     rows = json.loads((out / "metrics.json").read_text(encoding="utf-8"))["rows"]
-    assert [(r["run"], r["round"]) for r in rows][-1] == ("E\u2032 (control)", 2)
-    assert [r["run"] for r in rows if r["round"] == 2] == ["E\u2032 (control)"]
+    assert [(r["run"], r["round"]) for r in rows][-1] == ("E\u2032 (control) · round1 corpus · round2", 2)
+    assert [r["combo_label"] for r in rows if r["round"] == 2] == ["E\u2032 (control)"]
     assert "combo_a" in capsys.readouterr().err
 
 
@@ -612,7 +642,7 @@ def test_cli_drops_round2_run_with_other_questions(
     out = tmp_path / "out"
     assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(round2), "--out", str(out)]) == 0
     rows = json.loads((out / "metrics.json").read_text(encoding="utf-8"))["rows"]
-    assert [r["run"] for r in rows] == ["A", "B", "C", "D", "E", "F"]
+    assert [r["run"] for r in rows] == ["A", "B", "C", "D", "E", "F · round1 corpus · round2"]
     assert "combo_g" in capsys.readouterr().err
 
 
@@ -655,13 +685,19 @@ def test_cli_includes_round2_rows(tmp_path: Path) -> None:
     out = tmp_path / "out"
     assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(round2), "--out", str(out)]) == 0
     metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
-    assert [r["run"] for r in metrics["rows"]] == ["A", "B", "C", "D", "E", "E\u2032 (control)", "F"]
-    assert metrics["round2_shared"]["model"] == "gpt-test"
+    assert [r["run"] for r in metrics["rows"]] == [
+        "A", "B", "C", "D", "E", "E\u2032 (control) · round1 corpus · round2", "F · round1 corpus · round2",
+    ]
+    assert [r["corpus"] for r in metrics["rows"]] == ["round1"] * 7
+    (folder,) = metrics["round2_runs"]
+    assert folder["shared"]["model"] == "gpt-test"
+    assert folder["shared"]["corpus"] == "round1"
+    assert folder["pinned_text"] is True
     md = (out / "metrics.md").read_text(encoding="utf-8")
     assert "gpt-test" in md
-    assert "checked that every round-2 run shares the model (gpt-test)" in md
-    assert "Round-2 indexed text matches the pinned round-1 corpus." in md
-    assert "- F Q4: `llm_error: RuntimeError`; answer metrics are n/a." in md
+    assert "(round1 corpus · round2): model gpt-test" in md
+    assert "indexed text matches the pinned text of its 39 documents" in md
+    assert "- F · round1 corpus · round2 Q4: `llm_error: RuntimeError`; answer metrics are n/a." in md
     assert "max distance 0.65 (dense channel only)" in md
     assert str(tmp_path) not in md  # 不洩漏本機絕對路徑
 
@@ -673,8 +709,428 @@ def test_cli_records_the_gold_and_corpus_fingerprints(tmp_path: Path) -> None:
     gold_sha = hashlib.sha256((EXPERIMENTS / "gold.json").read_bytes()).hexdigest()
     assert metrics["gold_sha256"] == gold_sha
     assert metrics["corpus_pin"] == {"path": "experiments/corpus_pin.json", "digest": PINNED_DIGEST}
-    assert metrics["round2_shared"] is None
+    assert metrics["round2_runs"] == []
+    assert metrics["stability"] == []
+    assert metrics["round1_corpus"]["document_count"] == 39
     md = (out / "metrics.md").read_text(encoding="utf-8")
     assert gold_sha in md
-    assert "scores round 2 only when every round-2 run shares the model" in md
+    assert "Within one run folder, rag_eval scores round 2 only when every combo shares the model" in md
+    assert "No round-2 runs yet." in md
     assert "same model" not in md
+
+
+# ─── round 2：多個 run 資料夾（重複執行）────────────────────────────────────
+
+
+def _reference() -> dict[int, str]:
+    return dict(enumerate(_round1_questions(), start=1))
+
+
+def _write_run(run_dir: Path, *, environment: dict | None = None, model: str = "gpt-test") -> Path:
+    """在 run_dir 寫入同一次執行的 E′、F、G 三組。"""
+    _write_results(run_dir, "e", model=model, environment=environment)
+    _write_results(run_dir, "f", use_hybrid=True, model=model, environment=environment)
+    _write_results(run_dir, "g", use_expand=True, model=model, environment=environment)
+    return run_dir
+
+
+def _edit_results(path: Path, edit) -> None:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    edit(data)
+    path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+
+
+def test_run_folders_are_found_recursively_and_retired_copies_are_skipped(tmp_path: Path) -> None:
+    root = tmp_path / "round2"
+    _write_run(root / "round1_corpus" / "run1")
+    _write_run(root / "round1_corpus" / "run2")
+    _write_results(root / "current_corpus" / "run1", "e", environment=_current_environment())
+    retired = root / "round1_corpus" / "run1" / ".previous" / "combo_f-20261109T000000Z"
+    retired.mkdir(parents=True)
+    (retired / "results.json").write_text("{}", encoding="utf-8")
+    (root / "notes").mkdir()
+
+    found = rag_eval.find_run_dirs([root])
+
+    base = root.resolve()
+    assert [p.relative_to(base).as_posix() for p in found] == [
+        "current_corpus/run1",
+        "round1_corpus/run1",
+        "round1_corpus/run2",
+    ]
+    # 多個目錄（可重疊、可不存在）：去重後合併；目錄本身也可以是 run 資料夾
+    assert rag_eval.find_run_dirs(
+        [root / "round1_corpus", root / "round1_corpus" / "run2", tmp_path / "missing"]
+    ) == found[1:]
+    assert rag_eval.find_run_dirs([root / "round1_corpus" / "run2"]) == [found[2]]
+
+
+def test_repeats_are_labelled_by_corpus_and_run_and_grouped_by_corpus(tmp_path: Path, gold: dict) -> None:
+    root = tmp_path / "round2"
+    for n in (2, 10, 1):
+        _write_run(root / "round1_corpus" / f"run{n}")
+    _write_run(root / "current_corpus" / "run1", environment=_current_environment())
+
+    runs, folders = rag_eval.load_round2_folders([root], _reference())
+    labels = [r["run"] for r in rag_eval.compute_metrics(runs, gold)]
+
+    assert labels == [
+        f"{combo} · {corpus} corpus · run {n}"
+        for corpus, repeats in (("round1", (1, 2, 10)), ("current", (1,)))
+        for n in repeats
+        for combo in ("E′ (control)", "F", "G")
+    ]
+    assert [(f["corpus"], f["repeat"]) for f in folders] == [
+        ("round1", "run 1"),
+        ("round1", "run 2"),
+        ("round1", "run 10"),
+        ("current", "run 1"),
+    ]
+    assert folders[-1]["pinned_text"] is True  # current 語料的指紋對應 42 份鎖定文字
+
+
+def test_round2_cli_accepts_several_directories(tmp_path: Path) -> None:
+    _write_run(tmp_path / "a" / "round1_corpus" / "run1")
+    _write_run(tmp_path / "b" / "current_corpus" / "run1", environment=_current_environment())
+    out = tmp_path / "out"
+    code = rag_eval.main(
+        ["--round1", str(EXPERIMENTS), "--round2", str(tmp_path / "a"), str(tmp_path / "b"), "--out", str(out)]
+    )
+    assert code == 0
+    metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
+    assert [f["corpus"] for f in metrics["round2_runs"]] == ["round1", "current"]
+    assert len([r for r in metrics["rows"] if r["round"] == 2]) == 6
+
+
+def test_labels_name_the_model_when_a_corpus_has_several(tmp_path: Path, gold: dict) -> None:
+    root = tmp_path / "round2"
+    _write_run(root / "round1_corpus" / "run1")
+    _write_run(root / "round1_corpus" / "run2", model="other-model")
+
+    runs, _ = rag_eval.load_round2_folders([root], _reference())
+
+    labels = {r["run"] for r in runs if r["combo_id"] == "f"}
+    assert labels == {"F · round1 corpus · gpt-test · run 1", "F · round1 corpus · other-model · run 2"}
+    stability = rag_eval.stability_rows(rag_eval.compute_metrics(runs, gold))
+    assert {(s["model"], s["combo_id"], s["runs"]) for s in stability if s["combo_id"] == "f"} == {
+        ("gpt-test", "f", 1),
+        ("other-model", "f", 1),
+    }
+
+
+def test_duplicate_run_names_get_distinct_labels(tmp_path: Path) -> None:
+    _write_run(tmp_path / "a" / "round1_corpus" / "run1")
+    _write_run(tmp_path / "b" / "round1_corpus" / "run1")
+    runs, folders = rag_eval.load_round2_folders([tmp_path / "a", tmp_path / "b"], _reference())
+    assert sorted({r["run"] for r in runs if r["combo_id"] == "f"}) == [
+        "F · round1 corpus · run 1 #1",
+        "F · round1 corpus · run 1 #2",
+    ]
+    # repo 外的資料夾只顯示末兩層（不洩漏本機路徑），所以靠標籤區分
+    assert [f["label"] for f in folders] == ["round1 corpus · run 1 #1", "round1 corpus · run 1 #2"]
+
+
+def test_consistency_is_required_within_a_run_folder_but_not_across(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = tmp_path / "round2"
+    _write_run(root / "round1_corpus" / "run1")
+    _write_run(root / "round1_corpus" / "run2", environment=_environment(git_commit="fffffff"))
+    out = tmp_path / "out"
+    assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(root), "--out", str(out)]) == 0
+    commits = [f["shared"]["git_commit"] for f in json.loads((out / "metrics.json").read_text(encoding="utf-8"))["round2_runs"]]
+    assert commits == ["abc1234def", "fffffff"]
+
+    # 同一個資料夾內混了兩份語料：語料是 run 身分的一部分 → 拒絕評估
+    mixed = root / "round1_corpus" / "run3"
+    _write_results(mixed, "e")
+    _write_results(mixed, "f", use_hybrid=True, environment=_current_environment())
+    assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(root), "--out", str(tmp_path / "out2")]) == 1
+    err = capsys.readouterr().err
+    assert "run3" in err
+    assert "corpus" in err
+    assert not (tmp_path / "out2" / "metrics.md").exists()
+
+
+def test_stability_reports_min_max_and_run_count_per_corpus_and_combo(tmp_path: Path, gold: dict) -> None:
+    root = tmp_path / "round2"
+    _write_run(root / "round1_corpus" / "run1")
+    run2 = _write_run(root / "round1_corpus" / "run2")
+    run3 = _write_run(root / "round1_corpus" / "run3")
+    _write_run(root / "current_corpus" / "run1", environment=_current_environment())
+
+    def fewer_members(data: dict) -> None:
+        data["questions"][1]["answer"] = "成員有 Boogaloo Sam。"
+        data["questions"][0]["cites"][0]["distance_to_question"] = 0.1  # Q1 平均 0.3 → 0.25，五題平均 0.36 → 0.35
+
+    def llm_failed_q2(data: dict) -> None:
+        data["questions"][1].update(error="llm_error: RuntimeError", answer="【LLM 呼叫失敗】")
+
+    _edit_results(run2 / "combo_f" / "results.json", fewer_members)
+    _edit_results(run3 / "combo_f" / "results.json", llm_failed_q2)
+
+    runs, _ = rag_eval.load_round2_folders([root], _reference())
+    stability = rag_eval.stability_rows(rag_eval.compute_metrics(runs, gold))
+
+    assert [(s["corpus"], s["combo_id"], s["runs"]) for s in stability] == [
+        ("round1", "e", 3),
+        ("round1", "f", 3),
+        ("round1", "g", 3),
+        ("current", "e", 1),
+        ("current", "f", 1),
+        ("current", "g", 1),
+    ]
+    f = stability[1]
+    assert f["combo_label"] == "F"
+    assert f["metrics"]["q2_members_named"] == {"min": 1, "max": 2, "n": 2}  # run3 為 n/a
+    assert f["metrics"]["mean_distance_to_question"]["min"] == pytest.approx(0.36 - 0.1 / 2 / 5)
+    assert f["metrics"]["mean_distance_to_question"]["max"] == pytest.approx(0.36)
+    assert f["metrics"]["q4_gold_chunks"] == {"min": 1, "max": 1, "n": 3}
+
+    out = tmp_path / "out"
+    assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(root), "--out", str(out)]) == 0
+    md = (out / "metrics.md").read_text(encoding="utf-8")
+    stability_md = md.split("## Stability across repeats")[1]
+    assert "| F | round1 | gpt-test | 3 | 0.350–0.360 | 1–2 (2 of 3 runs) | 3–3 | 1–1 | 3–3 |" in stability_md
+    assert "| E′ (control) | current | gpt-test | 1 |" in stability_md
+    assert md.index("## Results") < md.index("## Stability across repeats")
+
+
+def test_metrics_header_states_the_known_confounds(tmp_path: Path) -> None:
+    out = tmp_path / "out"
+    assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(tmp_path / "none"), "--out", str(out)]) == 0
+    md = (out / "metrics.md").read_text(encoding="utf-8")
+    header = md.split("## Metrics")[0]
+    assert "first 128 tokens" in header
+    assert "BM25 indexes the full chunk text" in header
+    assert "`Pete`" in header and "loose" in header
+    assert "39 documents" in header
+    assert "gemini-2.5-flash" in header and "course proxy" in header
+    assert "model and corpus recorded in their results.json" in header
+
+
+# ─── round-1 重現檢查（--check-reproduction）────────────────────────────────
+
+_REPRO_COMBO_KEYS = ("chunk_desc", "top_k", "max_distance", "truncate_to", "prompt_style", "use_hybrid", "use_expand")
+
+
+def _write_reproduction_run(
+    run_dir: Path, *, offset: float = 0.0004, corpus: str = "round1", skip: tuple[str, ...] = ()
+) -> Path:
+    """依 round-1 的 q*.md 寫出逐筆重現的 combo_a..e/results.json（距離加上 offset）與 run.json。"""
+    environment = _environment() if corpus == "round1" else _current_environment()
+    for combo_id, spec in rag_eval.ROUND1_COMBOS.items():
+        if combo_id in skip:
+            continue
+        questions = []
+        for n in range(1, 6):
+            parsed = _round1(combo_id, n)
+            cites = [
+                {
+                    "chunk_id": f"{src}::{idx}",
+                    "source_file": src,
+                    "chunk_index": idx,
+                    "section_title": "",
+                    "distance": round(d + offset, 6),
+                    "distance_to_question": round(d + offset, 6),
+                    "retrieved_by": "dense",
+                    "text": "t",
+                }
+                for src, idx, d in parsed["cites"]
+            ]
+            questions.append(
+                {"index": n, "question": parsed["question"], "expanded_queries": None, "cites": cites,
+                 "answer": "", "error": None}
+            )
+        payload = {
+            "combo": {
+                "id": combo_id,
+                "name": f"Combo {combo_id.upper()}",
+                **{k: spec[k] for k in _REPRO_COMBO_KEYS},
+                "collection": f"cypher_og_{corpus}_combo_{combo_id}",
+            },
+            "model": "gemini-2.5-flash",
+            "retrieval_only": True,
+            "environment": environment,
+            "generated_at": "2026-11-09T00:00:00+00:00",
+            "questions": questions,
+        }
+        path = run_dir / f"combo_{combo_id}" / "results.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    run = {
+        "generated_at": "2026-11-09T00:00:00+00:00",
+        "git": {"commit": "abc1234def", "dirty": False},
+        "llm": {"model": "gemini-2.5-flash", "proxy_configured": False},
+        "embedding": {"model": "paraphrase-multilingual-MiniLM-L12-v2", "max_seq_length": 128},
+        "corpus": {
+            "name": corpus,
+            "definition": "experiments/corpus_round1.json" if corpus == "round1" else "data/raw (all supported files)",
+            "document_count": environment["document_count"],
+            "documents_digest": environment["documents_digest"],
+            "processed_digest": environment["corpus_sha256"],
+            "matches_pin": True,
+        },
+        "reuse_processed": True,
+        "retrieval_only": True,
+        "combos": {
+            cid: {"collection": f"cypher_og_{corpus}_combo_{cid}", "chunk_count": 1248, "status": "ok"}
+            for cid in rag_eval.ROUND1_COMBOS
+            if cid not in skip
+        },
+    }
+    (run_dir / "run.json").write_text(json.dumps(run), encoding="utf-8")
+    return run_dir
+
+
+def _check(run_dir: Path, report: Path) -> int:
+    return rag_eval.main(["--check-reproduction", str(run_dir), "--report-out", str(report)])
+
+
+def test_reproduction_cell_comparison() -> None:
+    recorded = [("a.txt", 1, 0.300), ("b.txt", 2, 0.400)]
+    ok = rag_eval.compare_reproduction(recorded, [("a.txt", 1, 0.3009), ("b.txt", 2, 0.3995 + 0.0)])
+    assert ok["match"] is True
+    assert ok["max_abs_distance_diff"] == pytest.approx(0.0009)
+    far = rag_eval.compare_reproduction(recorded, [("a.txt", 1, 0.3011), ("b.txt", 2, 0.4)])
+    assert far["match"] is False and far["same_chunks"] is True
+    inserted = rag_eval.compare_reproduction(recorded, [("new.txt", 0, 0.2), ("a.txt", 1, 0.3)])
+    assert inserted["match"] is False
+    assert inserted["added"] == ["new.txt::0"] and inserted["removed"] == ["b.txt::2"]
+    swapped = rag_eval.compare_reproduction(recorded, [("b.txt", 2, 0.4), ("a.txt", 1, 0.3)])
+    assert swapped["match"] is False and swapped["added"] == [] and swapped["removed"] == []
+    assert rag_eval.compare_reproduction(recorded, None)["match"] is False
+    assert rag_eval.compare_reproduction([], [])["match"] is True
+
+
+def test_exact_reproduction_reports_25_of_25(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = _write_reproduction_run(tmp_path / "run")
+    report = tmp_path / "report.md"
+
+    assert _check(run_dir, report) == 0
+
+    out = capsys.readouterr().out
+    assert "25/25" in out
+    assert "| Combo | Q1 | Q2 | Q3 | Q4 | Q5 | Matched |" in out
+    text = report.read_text(encoding="utf-8")
+    assert "25/25" in text
+    assert "## Method" in text and "## Environment" in text and "## Corpus" in text and "## Result" in text
+    assert "≤ 0.001" in text
+    assert "round1" in text and "39" in text
+    assert "popping_glossary.md" in text  # round1 語料排除的文件
+    assert "abc1234" in text and "max_seq_length 128" in text
+    assert "| A | ok" in text
+    assert str(tmp_path) not in text  # 不洩漏本機絕對路徑
+
+
+@pytest.mark.parametrize(("offset", "code", "matched"), [(0.0009, 0, "25/25"), (0.0015, 1, "0/25")])
+def test_reproduction_tolerance_is_one_thousandth(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], offset: float, code: int, matched: str
+) -> None:
+    run_dir = _write_reproduction_run(tmp_path / "run", offset=offset)
+    assert _check(run_dir, tmp_path / "report.md") == code
+    assert matched in capsys.readouterr().out
+
+
+def test_an_inserted_chunk_is_a_mismatch_and_is_named(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    run_dir = _write_reproduction_run(tmp_path / "run")
+
+    def insert(data: dict) -> None:
+        cites = data["questions"][1]["cites"]
+        new = {**cites[0], "chunk_id": "popping_glossary.txt::4", "source_file": "popping_glossary.txt", "chunk_index": 4}
+        data["questions"][1]["cites"] = [cites[0], new, *cites[1:-1]]
+
+    _edit_results(run_dir / "combo_b" / "results.json", insert)
+    report = tmp_path / "report.md"
+
+    assert _check(run_dir, report) == 1
+
+    assert "24/25" in capsys.readouterr().out
+    text = report.read_text(encoding="utf-8")
+    assert "24/25" in text
+    assert "MISMATCH" in text
+    assert "+popping_glossary.txt::4" in text
+
+
+def test_reordered_chunks_are_a_mismatch(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    run_dir = _write_reproduction_run(tmp_path / "run")
+
+    def swap(data: dict) -> None:
+        cites = data["questions"][0]["cites"]
+        data["questions"][0]["cites"] = [cites[1], cites[0], *cites[2:]]
+
+    _edit_results(run_dir / "combo_c" / "results.json", swap)
+    assert _check(run_dir, tmp_path / "report.md") == 1
+    assert "24/25" in capsys.readouterr().out
+    assert "order differs" in (tmp_path / "report.md").read_text(encoding="utf-8")
+
+
+def test_a_missing_combo_counts_as_five_mismatches(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    run_dir = _write_reproduction_run(tmp_path / "run", skip=("e",))
+    assert _check(run_dir, tmp_path / "report.md") == 1
+    assert "20/25" in capsys.readouterr().out
+    assert "missing" in (tmp_path / "report.md").read_text(encoding="utf-8")
+
+
+def test_a_combo_with_other_settings_is_a_mismatch(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    run_dir = _write_reproduction_run(tmp_path / "run")
+    _edit_results(run_dir / "combo_d" / "results.json", lambda data: data["combo"].update(truncate_to=None))
+    assert _check(run_dir, tmp_path / "report.md") == 1
+    assert "20/25" in capsys.readouterr().out
+    assert "settings differ" in (tmp_path / "report.md").read_text(encoding="utf-8")
+
+
+def test_reproduction_report_defaults_to_experiments(tmp_path: Path) -> None:
+    assert rag_eval.REPRODUCTION_REPORT_PATH == EXPERIMENTS / "round1_reproduction.md"
+    args = rag_eval.parse_args(["--check-reproduction", str(tmp_path)])
+    assert args.check_reproduction == tmp_path
+    assert args.report_out is None
+
+
+@pytest.mark.parametrize(
+    "target",
+    [
+        "experiments/combo_a/report.md",
+        "experiments/summary.md",
+        "data/report.md",
+        "Experiments/Summary.md",  # macOS APFS 預設不分大小寫
+        "EXPERIMENTS/Combo_E/report.md",
+        "experiments/report.txt",
+    ],
+)
+def test_reproduction_report_never_lands_in_protected_places(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], target: str
+) -> None:
+    # 假的 repo：即使守衛失效，也只會寫進 tmp_path，不會碰到真正的 experiments/
+    fake_root = tmp_path / "repo"
+    for sub in ("experiments/combo_a", "experiments/combo_e", "data"):
+        (fake_root / sub).mkdir(parents=True)
+    (fake_root / "experiments" / "summary.md").write_text("round-1 summary", encoding="utf-8")
+    monkeypatch.setattr(rag_eval, "ROOT", fake_root)
+    monkeypatch.setattr(rag_eval, "EXPERIMENTS_DIR", fake_root / "experiments")
+    run_dir = _write_reproduction_run(tmp_path / "run")
+    before = {p.relative_to(fake_root).as_posix(): p.stat().st_mtime_ns for p in fake_root.rglob("*")}
+
+    assert _check(run_dir, fake_root / target) == 2
+
+    assert {p.relative_to(fake_root).as_posix(): p.stat().st_mtime_ns for p in fake_root.rglob("*")} == before
+    assert (fake_root / "experiments" / "summary.md").read_text(encoding="utf-8") == "round-1 summary"
+    assert "report" in capsys.readouterr().err
+
+
+def test_reproduction_report_may_go_to_a_new_file_under_experiments(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fake_root = tmp_path / "repo"
+    (fake_root / "experiments").mkdir(parents=True)
+    monkeypatch.setattr(rag_eval, "ROOT", fake_root)
+    monkeypatch.setattr(rag_eval, "EXPERIMENTS_DIR", fake_root / "experiments")
+    run_dir = _write_reproduction_run(tmp_path / "run")
+    report = fake_root / "experiments" / "round1_reproduction.md"
+    argv = ["--check-reproduction", str(run_dir), "--round1", str(EXPERIMENTS), "--report-out", str(report)]
+    assert rag_eval.main(argv) == 0
+    assert "25/25" in (fake_root / "experiments" / "round1_reproduction.md").read_text(encoding="utf-8")

@@ -383,3 +383,89 @@ def test_cli_errors_do_not_leak_absolute_paths(data_dirs, monkeypatch, capsys, t
     err = capsys.readouterr().err
     assert "raw/gone.pdf" in err
     assert str(tmp_path) not in err
+
+
+# --- include: index only selected raw documents ------------------------------
+
+
+def test_rebuild_can_index_only_the_included_documents(data_dirs):
+    raw, processed, _, coll = data_dirs
+    for name, text in (("one.md", "first"), ("two.md", "second"), ("three.md", "third")):
+        (raw / name).write_text(f"raw {text}", encoding="utf-8")
+        (processed / f"{name[:-3]}.txt").write_text(f"processed {text}", encoding="utf-8")
+
+    hashes = data_update.rebuild_processed_and_index(
+        chunk_fn=lambda t: [t], collection_name="subset_coll", reuse_processed=True, include={"two.md", "one.md"}
+    )
+
+    # 摘要（語料指紋的輸入）只含所選文件；插入順序仍依 data/raw 排序
+    assert hashes == {
+        "one.txt": rag_common.text_sha256("processed first"),
+        "two.txt": rag_common.text_sha256("processed second"),
+    }
+    assert coll.get(include=["documents"])["documents"] == ["processed first", "processed second"]
+    assert load_bm25_index("subset_coll")[1] == ["one.txt::0", "two.txt::0"]
+    assert sorted(p.name for p in processed.iterdir()) == ["one.txt", "three.txt", "two.txt"]
+
+
+def test_include_none_still_indexes_every_document(data_dirs):
+    raw, _, _, coll = data_dirs
+    (raw / "one.md").write_text("first", encoding="utf-8")
+    (raw / "two.txt").write_text("second", encoding="utf-8")
+    hashes = data_update.rebuild_processed_and_index(
+        chunk_fn=lambda t: [t], collection_name="all_coll", reuse_processed=True, include=None
+    )
+    assert sorted(hashes) == ["one.txt", "two.txt"]
+    assert coll.count() == 2
+
+
+@pytest.mark.parametrize(
+    ("include", "error", "match"),
+    [
+        ({"one.md", "missing.md"}, ValueError, "missing.md"),
+        (set(), ValueError, "include"),
+        ("one.md", TypeError, "include"),
+    ],
+)
+def test_invalid_include_fails_before_the_collection_is_cleared(data_dirs, include, error, match):
+    raw, _, _, coll = data_dirs
+    (raw / "one.md").write_text("first", encoding="utf-8")
+    coll.rows = {"old.txt::0": ("old text", {"source_file": "old.txt"})}
+
+    with pytest.raises(error, match=match):
+        data_update.rebuild_processed_and_index(
+            chunk_fn=lambda t: [t], collection_name="bad_include", reuse_processed=True, include=include
+        )
+    assert coll.rows == {"old.txt::0": ("old text", {"source_file": "old.txt"})}
+
+
+def test_include_is_refused_when_data_processed_would_be_rewritten(data_dirs):
+    """寫回 data/processed 的 --rebuild 會先清空該目錄；只寫回部分文件會讓其他文件的已提交文字消失。"""
+    raw, processed, manifest, coll = data_dirs
+    (raw / "one.md").write_text("first", encoding="utf-8")
+    (raw / "two.md").write_text("second", encoding="utf-8")
+    (processed / "two.txt").write_text("committed two", encoding="utf-8")
+    manifest.write_text('{"keep": "me"}', encoding="utf-8")
+
+    with pytest.raises(ValueError, match="include"):
+        data_update.rebuild_processed_and_index(chunk_fn=lambda t: [t], collection_name="persist_coll", include={"one.md"})
+
+    assert (processed / "two.txt").read_text(encoding="utf-8") == "committed two"
+    assert manifest.read_text(encoding="utf-8") == '{"keep": "me"}'
+    assert coll.count() == 0
+
+
+def test_include_works_when_re_extracting_in_memory(data_dirs):
+    raw, processed, _, coll = data_dirs
+    (raw / "one.md").write_text("fresh one", encoding="utf-8")
+    (raw / "two.md").write_text("fresh two", encoding="utf-8")
+    hashes = data_update.rebuild_processed_and_index(
+        chunk_fn=lambda t: [t],
+        collection_name="mem_subset",
+        reuse_processed=False,
+        write_processed=False,
+        include=["two.md"],
+    )
+    assert hashes == {"two.txt": rag_common.text_sha256("fresh two")}
+    assert coll.get(include=["documents"])["documents"] == ["fresh two"]
+    assert list(processed.iterdir()) == []

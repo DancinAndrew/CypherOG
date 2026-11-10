@@ -11,6 +11,9 @@ import pytest
 import experiment_runner as er
 import rag_eval
 import rag_query
+from rag_common import document_list_digest, load_corpus_definition, load_corpus_pin, pinned_digest_for
+
+ROUND1_DOCS = load_corpus_definition()["documents"]
 
 CITE_KEYS = {
     "chunk_id",
@@ -133,10 +136,10 @@ def test_run_combo_and_summary_reapply_the_guard(monkeypatch):
 # --- combo table ------------------------------------------------------------
 
 
-def test_combos_use_truncate_to_and_cypher_og_collections():
+def test_combos_use_truncate_to_and_current_corpus_collections_by_default():
     for combo in er.COMBOS:
         assert "rerank" not in combo
-        assert combo["collection"] == f"cypher_og_combo_{combo['id']}"
+        assert combo["collection"] == f"cypher_og_current_combo_{combo['id']}"
     assert er.COMBO_MAP["d"]["truncate_to"] == 5
     assert er.COMBO_MAP["d"]["top_k"] == 10
     assert er.COMBO_MAP["d"]["name"] == "Combo D — 小 chunk + top-10 距離截斷"
@@ -184,7 +187,7 @@ def test_retrieval_only_records_distances_to_the_original_question(monkeypatch, 
     result = er._run_query(er.COMBO_MAP["d"], "Q?", retrieval_only=True)
 
     assert seen["retrieve"]["truncate_to"] == 5
-    assert seen["distances"] == ("Q?", ["a.txt::0", "b.txt::3"], "cypher_og_combo_d")
+    assert seen["distances"] == ("Q?", ["a.txt::0", "b.txt::3"], "cypher_og_current_combo_d")
     assert result["answer"] == ""
     assert result["error"] is None
     assert result["expanded_queries"] is None
@@ -266,13 +269,13 @@ def test_hybrid_combo_retrieves_in_strict_mode(monkeypatch, no_llm):
     er._run_query(er.COMBO_MAP["f"], "Q?", retrieval_only=True)
 
     assert seen["strict"] is True
-    assert seen["collection_name"] == "cypher_og_combo_f"
+    assert seen["collection_name"] == "cypher_og_current_combo_f"
 
 
 def test_hybrid_combo_without_a_bm25_index_raises_instead_of_falling_back(monkeypatch, no_llm):
     monkeypatch.setattr(rag_query, "load_bm25_index", lambda name=None: (None, [], []))
     monkeypatch.setattr(rag_query, "retrieve_context", lambda *a, **k: pytest.fail("must not fall back"))
-    with pytest.raises(RuntimeError, match="cypher_og_combo_f"):
+    with pytest.raises(RuntimeError, match="cypher_og_current_combo_f"):
         er._run_query(er.COMBO_MAP["f"], "Q?", retrieval_only=True)
 
 
@@ -363,7 +366,7 @@ def test_run_combo_writes_the_results_contract(tmp_path, monkeypatch, fake_index
         "failed_questions": [],
     }
     rebuilds = fake_index
-    assert rebuilds[0]["collection_name"] == "cypher_og_combo_f"
+    assert rebuilds[0]["collection_name"] == "cypher_og_current_combo_f"
     assert rebuilds[0]["reuse_processed"] is True
     assert rebuilds[0]["write_processed"] is False
     combo_dir = tmp_path / "combo_f"
@@ -477,7 +480,12 @@ def test_results_round_trip_into_rag_eval(tmp_path, monkeypatch, fake_index):
         "hybrid_retrieve",
         lambda q, **k: ("ctx", [dense_cite("a.txt::0", 0.2, "both"), {**dense_cite("c.txt::1", 0.7, "bm25"), "text": "Skeeter Rabbit"}]),
     )
-    er.run_combo(er.COMBO_MAP["f"], tmp_path, model="gpt-test", environment=FAKE_ENV)
+    corpus = er.load_corpus_selection("round1")
+    environment = er.build_environment(git={"commit": "abc1234", "dirty": False}, reuse_processed=True, corpus=corpus)
+    er.run_combo(
+        er.combo_for_corpus(er.COMBO_MAP["f"], "round1"), tmp_path, model="gpt-test",
+        environment=environment, corpus=corpus,
+    )
 
     run = rag_eval.load_round2_run(tmp_path / "combo_f" / "results.json")
     gold = rag_eval.load_gold(rag_eval.GOLD_PATH)
@@ -491,6 +499,9 @@ def test_results_round_trip_into_rag_eval(tmp_path, monkeypatch, fake_index):
     assert row["q2_members_in_context"] == 1
     assert row["failed_questions"] == []
     assert run["consistency"]["corpus_sha256"] == er.corpus_digest(TEXT_HASHES)
+    assert run["corpus"] == "round1"
+    assert run["consistency"]["document_count"] == 39
+    assert run["consistency"]["documents_digest"] == document_list_digest(ROUND1_DOCS)
     assert "dense channel only" in row["retrieval"]
 
 
@@ -636,9 +647,12 @@ def test_main_writes_run_metadata_without_secrets(tmp_path, monkeypatch):
     assert "proxy.invalid" not in raw
     assert run["llm"] == {"model": "gpt-test-model", "proxy_configured": True}
     assert run["combos"]["f"]["chunk_count"] == 11
-    assert run["combos"]["f"]["collection"] == "cypher_og_combo_f"
+    assert run["combos"]["f"]["collection"] == "cypher_og_current_combo_f"
     assert run["questions"] == er.QUESTIONS
-    assert run["corpus"]["document_count"] > 0
+    assert run["corpus"]["name"] == "current"  # 預設語料：data/raw 全部文件
+    assert run["corpus"]["document_count"] == 42
+    assert run["corpus"]["documents"] == [p.name for p in er.list_raw_documents()]
+    assert run["corpus"]["documents_digest"] == document_list_digest(run["corpus"]["documents"])
     assert run["corpus"]["matches_pin"] is True
     assert len(run["corpus"]["processed_sha256"]) == 42
     assert run["corpus"]["processed_digest"] == er.corpus_digest(run["corpus"]["processed_sha256"])
@@ -761,3 +775,175 @@ def test_dotenv_is_loaded_only_from_the_repo():
     bare_call = re.compile(r"^\s*load_dotenv\(\s*\)", re.MULTILINE)
     assert [name for name, src in sources.items() if bare_call.search(src)] == []
     assert re.search(r'^load_dotenv\(ROOT / "\.env"\)', sources["rag_common.py"], re.MULTILINE)
+
+
+# --- corpus selection (--corpus round1 | current) ----------------------------
+
+STRUCTURED_NOTES = {"popping_glossary.md", "popping_history_timeline.md", "popping_style_taxonomy.md"}
+
+
+def test_collection_names_include_the_corpus():
+    assert er.CORPUS_CHOICES == ("round1", "current")
+    assert er.DEFAULT_CORPUS == "current"
+    assert er.collection_for("round1", "e") == "cypher_og_round1_combo_e"
+    combo = er.combo_for_corpus(er.COMBO_MAP["f"], "round1")
+    assert combo["collection"] == "cypher_og_round1_combo_f"
+    assert {k: v for k, v in combo.items() if k != "collection"} == {
+        k: v for k, v in er.COMBO_MAP["f"].items() if k != "collection"
+    }
+    assert er.COMBO_MAP["f"]["collection"] == "cypher_og_current_combo_f"  # 共用設定不被修改
+    with pytest.raises(ValueError, match="other"):
+        er.combo_for_corpus(er.COMBO_MAP["f"], "other")
+
+
+def test_corpus_selections_list_raw_document_names():
+    round1 = er.load_corpus_selection("round1")
+    current = er.load_corpus_selection("current")
+    assert round1["name"] == "round1"
+    assert round1["documents"] == ROUND1_DOCS
+    assert current["name"] == "current"
+    assert current["documents"] == [p.name for p in er.list_raw_documents()]
+    assert set(current["documents"]) - set(round1["documents"]) == STRUCTURED_NOTES
+    with pytest.raises(ValueError):
+        er.load_corpus_selection("everything")
+
+
+def test_round1_selection_refuses_documents_missing_from_data_raw(tmp_path, monkeypatch):
+    path = tmp_path / "corpus_round1.json"
+    path.write_text(json.dumps({"name": "round1", "documents": ["Popping.md", "gone.md"]}), encoding="utf-8")
+    monkeypatch.setattr(er, "CORPUS_ROUND1_PATH", path)
+    with pytest.raises(ValueError, match="gone.md"):
+        er.load_corpus_selection("round1")
+
+
+def test_round1_selection_refuses_a_definition_with_another_name(tmp_path, monkeypatch):
+    path = tmp_path / "corpus_round1.json"
+    path.write_text(json.dumps({"name": "round2", "documents": ["Popping.md"]}), encoding="utf-8")
+    monkeypatch.setattr(er, "CORPUS_ROUND1_PATH", path)
+    with pytest.raises(ValueError, match="round2"):
+        er.load_corpus_selection("round1")
+
+
+def test_corpus_environment_records_name_count_and_list_digest():
+    env = er.corpus_environment(er.load_corpus_selection("round1"))
+    assert env == {"corpus": "round1", "document_count": 39, "documents_digest": document_list_digest(ROUND1_DOCS)}
+    built = er.build_environment(git={"commit": "c", "dirty": False}, reuse_processed=True, corpus=er.load_corpus_selection("round1"))
+    assert built["corpus"] == "round1" and built["document_count"] == 39
+
+
+def test_corpus_flag_defaults_to_current_and_rejects_unknown_names():
+    assert er.parse_args([]).corpus == "current"
+    assert er.parse_args(["--corpus", "round1"]).corpus == "round1"
+    with pytest.raises(SystemExit) as exc:
+        er.parse_args(["--corpus", "all"])
+    assert exc.value.code == 2
+
+
+def recording_run_combo(seen: list):
+    def run(combo, out_dir, **kwargs):
+        seen.append((combo, kwargs))
+        write_results(out_dir, fake_results(combo["id"], [0.2], "answer"))
+        return ok_info()
+
+    return run
+
+
+def test_main_with_the_round1_corpus_uses_its_own_collections_and_records_it(tmp_path, monkeypatch):
+    seen: list = []
+    monkeypatch.setattr(er, "run_combo", recording_run_combo(seen))
+    monkeypatch.setattr(er, "_git_state", lambda: {"commit": "abc1234", "dirty": False})
+
+    assert er.main(["--combos", "e", "f", "--corpus", "round1", "--retrieval-only", "--out", str(tmp_path)]) == 0
+
+    assert [combo["collection"] for combo, _ in seen] == ["cypher_og_round1_combo_e", "cypher_og_round1_combo_f"]
+    kwargs = seen[0][1]
+    assert kwargs["corpus"]["name"] == "round1"
+    assert kwargs["corpus"]["documents"] == ROUND1_DOCS
+    assert {k: kwargs["environment"][k] for k in ("corpus", "document_count", "documents_digest")} == {
+        "corpus": "round1",
+        "document_count": 39,
+        "documents_digest": document_list_digest(ROUND1_DOCS),
+    }
+    run = json.loads((tmp_path / "run.json").read_text(encoding="utf-8"))
+    corpus = run["corpus"]
+    assert corpus["name"] == "round1"
+    assert corpus["definition"] == "experiments/corpus_round1.json"
+    assert corpus["document_count"] == 39
+    assert corpus["documents"] == ROUND1_DOCS
+    assert corpus["documents_digest"] == document_list_digest(ROUND1_DOCS)
+    # 語料指紋只涵蓋所選的 39 份文件
+    assert len(corpus["processed_sha256"]) == 39
+    assert corpus["processed_digest"] == pinned_digest_for(ROUND1_DOCS, load_corpus_pin())
+    assert corpus["matches_pin"] is True
+    assert run["combos"]["e"]["collection"] == "cypher_og_round1_combo_e"
+
+
+def test_pin_check_covers_exactly_the_selected_documents(tmp_path, monkeypatch, capsys):
+    """round1 不含 popping_glossary：該檔變動不影響 round1，但 current 必須拒絕。"""
+    changed = {**er.processed_corpus_hashes(), "popping_glossary.txt": "0" * 64}
+    monkeypatch.setattr(er, "processed_corpus_hashes", lambda processed_dir=None: dict(changed))
+    monkeypatch.setattr(er, "run_combo", recording_run_combo([]))
+
+    assert er.main(["--combos", "e", "--corpus", "round1", "--out", str(tmp_path / "r1")]) == 0
+    assert er.main(["--combos", "e", "--corpus", "current", "--out", str(tmp_path / "cur")]) == 2
+    assert "popping_glossary.txt" in capsys.readouterr().err
+    assert not (tmp_path / "cur" / "run.json").exists()
+
+
+def test_pin_check_flags_a_selected_document_without_processed_text(tmp_path, monkeypatch, capsys):
+    missing = {k: v for k, v in er.processed_corpus_hashes().items() if k != "Popping.txt"}
+    monkeypatch.setattr(er, "processed_corpus_hashes", lambda processed_dir=None: dict(missing))
+    monkeypatch.setattr(er, "run_combo", lambda *a, **k: pytest.fail("no combo may run"))
+    assert er.main(["--combos", "e", "--corpus", "round1", "--out", str(tmp_path)]) == 2
+    assert "Popping.txt" in capsys.readouterr().err
+
+
+def test_check_pinned_corpus_flags_unpinned_selected_documents():
+    hashes = {"Popping.txt": load_corpus_pin()["Popping.txt"], "new.txt": "1" * 64}
+    assert er.check_pinned_corpus(hashes, ["Popping.md", "new.md"]) == ["new.txt"]
+    assert er.check_pinned_corpus(hashes, ["Popping.md"]) == []
+
+
+def test_an_out_folder_named_for_another_corpus_is_refused(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(er, "run_combo", lambda *a, **k: pytest.fail("no combo may run"))
+    assert er.main(["--combos", "e", "--corpus", "current", "--out", str(tmp_path / "round1_corpus" / "run1")]) == 2
+    assert "round1_corpus" in capsys.readouterr().err
+    assert er.main(["--combos", "e", "--corpus", "round1", "--out", str(tmp_path / "current_corpus")]) == 2
+
+    monkeypatch.setattr(er, "run_combo", recording_run_combo([]))
+    assert er.main(["--combos", "e", "--corpus", "round1", "--out", str(tmp_path / "round1_corpus" / "run1")]) == 0
+
+
+def test_run_combo_indexes_only_the_selected_documents(tmp_path, monkeypatch, no_llm, fake_index):
+    monkeypatch.setattr(er, "retrieve_context", lambda q, **k: ("", []))
+    corpus = er.load_corpus_selection("round1")
+    env = er.build_environment(git={"commit": "abc", "dirty": False}, reuse_processed=True, corpus=corpus)
+
+    er.run_combo(
+        er.combo_for_corpus(er.COMBO_MAP["e"], "round1"), tmp_path, model="m", retrieval_only=True,
+        environment=env, corpus=corpus,
+    )
+
+    assert fake_index[0]["include"] == ROUND1_DOCS
+    assert fake_index[0]["collection_name"] == "cypher_og_round1_combo_e"
+    payload = json.loads((tmp_path / "combo_e" / "results.json").read_text(encoding="utf-8"))
+    assert payload["combo"]["collection"] == "cypher_og_round1_combo_e"
+    assert payload["environment"]["corpus"] == "round1"
+    assert payload["environment"]["document_count"] == 39
+
+
+def test_run_combo_refuses_a_collection_of_another_corpus(tmp_path, monkeypatch, no_llm, fake_index):
+    corpus = er.load_corpus_selection("round1")
+    with pytest.raises(ValueError, match="cypher_og_round1_combo_e"):
+        er.run_combo(er.COMBO_MAP["e"], tmp_path, model="m", environment=FAKE_ENV, corpus=corpus)
+    assert fake_index == []
+
+
+def test_skip_rebuild_fingerprints_only_the_selected_documents(tmp_path, monkeypatch, no_llm, fake_index):
+    monkeypatch.setattr(er, "retrieve_context", lambda q, **k: ("", []))
+    corpus = er.load_corpus_selection("round1")
+    info = er.run_combo(
+        er.combo_for_corpus(er.COMBO_MAP["e"], "round1"), tmp_path, model="m", skip_rebuild=True,
+        retrieval_only=True, environment=FAKE_ENV, corpus=corpus,
+    )
+    assert info["corpus_sha256"] == pinned_digest_for(ROUND1_DOCS, load_corpus_pin())

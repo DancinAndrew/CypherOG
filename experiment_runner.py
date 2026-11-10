@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 """RAG 檢索策略實驗跑分腳本。
 
-每個 combo 使用獨立的 Chroma collection（cypher_og_combo_<id>）：重建索引後對固定 5 題
+每個 combo 使用獨立的 Chroma collection（cypher_og_<corpus>_combo_<id>）：重建索引後對固定 5 題
 執行檢索（＋生成），結果寫到 --out 指定的目錄（預設 experiments/round2，與 rag_eval.py 一致）。
+
+語料（--corpus）：
+  current（預設）  data/raw 內全部支援格式的文件（目前 42 份）。
+  round1           experiments/corpus_round1.json 列出的 39 份文件，即第一輪索引實際收錄的文件
+                   （少了三份結構化筆記；以此重跑 A–E 可逐筆重現第一輪的檢索結果）。
+  兩份語料的 collection 名稱不同，永不共用索引；run.json 與 results.json 的 environment 記錄
+  語料名稱、文件數與文件清單指紋。round 2 的建議輸出位置：experiments/round2/<corpus>_corpus/run<N>/
+  （--out 的資料夾名稱若是 <其他語料>_corpus 會被拒絕）。
 
 歷史紀錄：
   第一輪（2026-04）只跑了 Combo A–E，結果在 experiments/combo_a … combo_e 與
@@ -31,10 +39,12 @@ Combo 一覽：
   run.json    執行環境紀錄（git commit、模型、embedding、語料數、各 combo chunk 數）
   summary.md  彙整 <out> 內所有 combo_*/results.json（分次執行 f、g 也會合併成一份）
 
-預設以 data/processed 中已提交的文字建索引，且先比對 experiments/corpus_pin.json，不一致就拒絕執行；
-加 --re-extract 才會從 data/raw 重新抽取（只在記憶體中，不改寫 data/processed 與 ingest manifest）。
+預設以 data/processed 中已提交的文字建索引，且先比對 experiments/corpus_pin.json（只比對所選語料的文件），
+不一致就拒絕執行；加 --re-extract 才會從 data/raw 重新抽取（只在記憶體中，不改寫 data/processed 與 ingest manifest）。
 
 Usage:
+    python experiment_runner.py --combos e f g --corpus round1 --out experiments/round2/round1_corpus/run1
+    python experiment_runner.py --combos a b c d e --corpus round1 --retrieval-only --out experiments/round1_reproduction_run
     python experiment_runner.py --combos e f g --out experiments/round2
     python experiment_runner.py --combos f --out experiments/round2 --skip-rebuild
     python experiment_runner.py --combos e --retrieval-only   # 只檢索、不生成回答
@@ -49,7 +59,7 @@ import os
 import subprocess
 import sys
 import time
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -66,19 +76,22 @@ from data_update import (
 )
 from rag_common import (
     CORPUS_PIN_PATH,
+    CORPUS_ROUND1_PATH,
     EMBEDDING_MODEL,
     corpus_digest,
-    corpus_mismatches,
     describe_exception,
     display_path,
+    document_list_digest,
     effective_llm_model,
     get_chroma_collection,
     litellm_chat_completion,
     llm_proxy_configured,
     load_bm25_index,
+    load_corpus_definition,
     load_corpus_pin,
     loaded_embedding_max_seq_length,
     processed_corpus_hashes,
+    processed_name_for,
 )
 from rag_query import (
     build_messages,
@@ -97,13 +110,25 @@ QUESTIONS: list[str] = [
     "如何判斷一場 Popping battle 的勝負？",
 ]
 
+# ─── 語料 ──────────────────────────────────────────────────────────────────────
+# round1：第一輪索引實際收錄的 39 份文件（experiments/corpus_round1.json）；current：data/raw 全部文件
+CORPUS_CHOICES: tuple[str, ...] = ("round1", "current")
+DEFAULT_CORPUS = "current"
+
+
+def collection_for(corpus: str, combo_id: str) -> str:
+    """combo 在指定語料下的 Chroma collection 名稱；名稱含語料，兩份語料永不共用索引。"""
+    return f"cypher_og_{corpus}_combo_{combo_id}"
+
+
 # ─── Combo 設定 ───────────────────────────────────────────────────────────────
+# "collection" 為預設語料（current）的名稱；其他語料請用 combo_for_corpus() 取得副本
 COMBOS: list[dict] = [
     {
         "id": "a",
         "name": "Combo A — Baseline（字元暴力切）",
         "desc": "最差基準線：純字元切割、無距離過濾、弱 prompt。",
-        "collection": "cypher_og_combo_a",
+        "collection": collection_for(DEFAULT_CORPUS, "a"),
         "chunk_fn": lambda t: naive_chunk_text(t, 500),
         "chunk_desc": "naive / size=500 / overlap=0",
         "top_k": 5,
@@ -117,7 +142,7 @@ COMBOS: list[dict] = [
         "id": "b",
         "name": "Combo B — 段落感知 + 距離過濾",
         "desc": "升級 chunking 與 retrieval，保持弱 prompt，單獨觀察前兩項改善效果。",
-        "collection": "cypher_og_combo_b",
+        "collection": collection_for(DEFAULT_CORPUS, "b"),
         "chunk_fn": lambda t: chunk_text(t, 600, 100),
         "chunk_desc": "recursive / size=600 / overlap=100",
         "top_k": 5,
@@ -131,7 +156,7 @@ COMBOS: list[dict] = [
         "id": "c",
         "name": "Combo C — 大 chunk + 強 prompt",
         "desc": "大 chunk 保留完整語境，搭配強制規則 prompt 與 XML 標籤，觀察幻覺減少效果。",
-        "collection": "cypher_og_combo_c",
+        "collection": collection_for(DEFAULT_CORPUS, "c"),
         "chunk_fn": lambda t: chunk_text(t, 1200, 200),
         "chunk_desc": "recursive / size=1200 / overlap=200",
         "top_k": 3,
@@ -148,7 +173,7 @@ COMBOS: list[dict] = [
             "小 chunk + 嚴格距離過濾；先取距離最近的 10 個再截斷為前 5 個。"
             "沒有 reranker 模型，結果等同直接取 top-5。"
         ),
-        "collection": "cypher_og_combo_d",
+        "collection": collection_for(DEFAULT_CORPUS, "d"),
         "chunk_fn": lambda t: chunk_text(t, 300, 50),
         "chunk_desc": "recursive / size=300 / overlap=50",
         "top_k": 10,
@@ -162,7 +187,7 @@ COMBOS: list[dict] = [
         "id": "e",
         "name": "Combo E — CoT + 結構化 context",
         "desc": "與 B 相同的 chunking/retrieval，但加 Chain-of-Thought prompt，強制 LLM 先列 facts 再綜合。",
-        "collection": "cypher_og_combo_e",
+        "collection": collection_for(DEFAULT_CORPUS, "e"),
         "chunk_fn": lambda t: chunk_text(t, 600, 100),
         "chunk_desc": "recursive / size=600 / overlap=100",
         "top_k": 5,
@@ -179,7 +204,7 @@ COMBOS: list[dict] = [
             "在 Combo E 基礎上加入 BM25 詞彙檢索，與向量結果以標準 RRF 融合；"
             "距離門檻只作用於向量通道，只被 BM25 找到的 chunk 也能入選。"
         ),
-        "collection": "cypher_og_combo_f",
+        "collection": collection_for(DEFAULT_CORPUS, "f"),
         "chunk_fn": lambda t: chunk_text(t, 600, 100),
         "chunk_desc": "recursive / size=600 / overlap=100",
         "top_k": 5,
@@ -196,7 +221,7 @@ COMBOS: list[dict] = [
             "在 Combo E 基礎上加入 Query Expansion：用 LLM 將查詢改寫為中英文多角度子查詢，"
             "各子查詢結果去重並保留最小距離。"
         ),
-        "collection": "cypher_og_combo_g",
+        "collection": collection_for(DEFAULT_CORPUS, "g"),
         "chunk_fn": lambda t: chunk_text(t, 600, 100),
         "chunk_desc": "recursive / size=600 / overlap=100",
         "top_k": 5,
@@ -236,6 +261,65 @@ DEFAULT_OUT_DIR = EXPERIMENTS_DIR / "round2"
 
 class ExperimentError(RuntimeError):
     """實驗前置條件不成立（collection 為空、缺 BM25 索引等）；訊息由本程式產生。"""
+
+
+# ─── 語料選擇 ──────────────────────────────────────────────────────────────────
+
+
+def combo_for_corpus(combo: Mapping[str, Any], corpus: str) -> dict:
+    """回傳 combo 的新副本，collection 換成該語料專用的名稱（不修改共用的 COMBO_MAP）。"""
+    if corpus not in CORPUS_CHOICES:
+        raise ValueError(f"未知的語料 {corpus!r}（可用：{', '.join(CORPUS_CHOICES)}）")
+    return {**combo, "collection": collection_for(corpus, combo["id"])}
+
+
+def load_corpus_selection(name: str) -> dict:
+    """--corpus → {"name", "documents": [data/raw 檔名（排序）], "definition": 來源說明}。
+
+    round1：experiments/corpus_round1.json 列出的文件，必須全部存在於 data/raw，且定義檔名稱須為 round1；
+    current：data/raw 內全部支援格式的文件。不符時拋 ValueError（定義檔無法讀取時拋 OSError）。
+    """
+    available = [p.name for p in list_raw_documents()]
+    if name == "current":
+        return {"name": name, "documents": available, "definition": "data/raw (all supported files)"}
+    if name != "round1":
+        raise ValueError(f"未知的語料 {name!r}（可用：{', '.join(CORPUS_CHOICES)}）")
+    definition = load_corpus_definition(CORPUS_ROUND1_PATH)
+    if definition["name"] != name:
+        raise ValueError(f"{display_path(CORPUS_ROUND1_PATH)} 的語料名稱是 {definition['name']!r}，不是 {name!r}")
+    missing = sorted(set(definition["documents"]) - set(available))
+    if missing:
+        shown = "、".join(missing[:3]) + ("…" if len(missing) > 3 else "")
+        raise ValueError(
+            f"{display_path(CORPUS_ROUND1_PATH)} 有 {len(missing)} 份文件不在 data/raw（{shown}）"
+        )
+    return {"name": name, "documents": definition["documents"], "definition": display_path(CORPUS_ROUND1_PATH)}
+
+
+def corpus_environment(corpus: Mapping[str, Any]) -> dict:
+    """results.json environment 的語料欄位：名稱、文件數、文件清單指紋（rag_eval 視為 run 身分的一部分）。"""
+    documents = list(corpus["documents"])
+    return {
+        "corpus": corpus["name"],
+        "document_count": len(documents),
+        "documents_digest": document_list_digest(documents),
+    }
+
+
+def selected_processed_hashes(hashes: Mapping[str, str], documents: Sequence[str]) -> dict[str, str]:
+    """只保留所選 data/raw 文件對應的 data/processed 指紋（缺檔者不列入；依檔名排序的新 dict）。"""
+    names = {processed_name_for(d) for d in documents}
+    return {name: hashes[name] for name in sorted(hashes) if name in names}
+
+
+def check_out_dir_corpus(out_dir: Path, corpus: str) -> None:
+    """--out 的資料夾（或其上一層）名為 <語料>_corpus 時，必須是本次的語料，否則拋 ValueError。
+
+    round 2 的輸出位置是 experiments/round2/<corpus>_corpus/run<N>/；資料夾名稱與內容不一致會誤導讀者。
+    """
+    for part in (out_dir.name, out_dir.parent.name):
+        if part.endswith("_corpus") and part != f"{corpus}_corpus":
+            raise ValueError(f"--out 的資料夾 {part} 與 --corpus {corpus} 不符（應為 {corpus}_corpus）")
 
 
 def _same_dir(path: Path, target: Path) -> bool:
@@ -488,13 +572,19 @@ def _write_combo_config(combo_dir: Path, combo: dict, model: str) -> None:
     (combo_dir / "config.md").write_text("\n".join(lines), encoding="utf-8")
 
 
-def build_environment(*, git: Mapping[str, Any], reuse_processed: bool) -> dict:
-    """results.json 的 environment 基本欄位（rag_eval 用來確認 round-2 各組可比）；不含金鑰或 endpoint。"""
+def build_environment(
+    *, git: Mapping[str, Any], reuse_processed: bool, corpus: Mapping[str, Any] | None = None
+) -> dict:
+    """results.json 的 environment 基本欄位（rag_eval 用來確認 round-2 各組可比）；不含金鑰或 endpoint。
+
+    corpus（load_corpus_selection 的結果）提供時，加上 corpus、document_count、documents_digest。
+    """
     return {
         "git_commit": git.get("commit"),
         "git_dirty": git.get("dirty"),
         "embedding_model": EMBEDDING_MODEL,
         "text_source": "data/processed" if reuse_processed else "data/raw (re-extracted in memory)",
+        **(corpus_environment(corpus) if corpus is not None else {}),
     }
 
 
@@ -513,8 +603,9 @@ def build_results_payload(
 ) -> dict:
     """依 results.json 契約組出 payload（rag_eval.py 讀取此格式）。
 
-    environment：git_commit、git_dirty、embedding_model、text_source、corpus_sha256（建索引所用文字的指紋）、
-    chunk_count、index_rebuilt；rag_eval 要求 round-2 各組的這些值（index_rebuilt、git_dirty 除外）一致。
+    environment：git_commit、git_dirty、embedding_model、text_source、corpus、document_count、documents_digest、
+    corpus_sha256（建索引所用文字的指紋）、chunk_count、index_rebuilt；rag_eval 要求同一個 run 資料夾內
+    各組的這些值（index_rebuilt、git_dirty 除外）一致。
     """
     return {
         "combo": _combo_public(combo),
@@ -589,16 +680,26 @@ def run_combo(
     retrieval_only: bool = False,
     reuse_processed: bool = True,
     environment: Mapping[str, Any] | None = None,
+    corpus: Mapping[str, Any] | None = None,
 ) -> dict:
     """跑單一 combo：（重建索引）→ 5 題 → 寫 config.md、q<n>.md、results.json。
 
     開始前再次套用 --out 規則（第二道防線），並把既有的 combo_<id>/ 移到 <out>/.previous/。
-    重建索引一律不寫入 data/（write_processed=False）。collection 為空、或 Hybrid combo 沒有
-    可用的 BM25 索引時拋 ExperimentError，不寫 results.json。
+    重建索引一律不寫入 data/（write_processed=False），且只收錄 corpus["documents"]。
+    corpus 為 load_corpus_selection() 的結果；None 時為預設語料（current）。combo 的 collection
+    必須是該語料專用的名稱（combo_for_corpus），否則拋 ValueError，避免兩份語料共用索引。
+    collection 為空、或 Hybrid combo 沒有可用的 BM25 索引時拋 ExperimentError，不寫 results.json。
     environment 為 build_environment() 的結果；None 時於此計算。
     回傳 {"chunk_count", "corpus_sha256", "status": "ok" | "degraded", "failed_questions": [題號]}。
     """
     resolve_out_dir(out_dir)
+    selection = corpus if corpus is not None else load_corpus_selection(DEFAULT_CORPUS)
+    expected_collection = collection_for(selection["name"], combo["id"])
+    if combo["collection"] != expected_collection:
+        raise ValueError(
+            f"combo {combo['id']} 的 collection {combo['collection']!r} 不屬於語料 {selection['name']!r}"
+            f"（應為 {expected_collection!r}）"
+        )
     print(f"\n{'='*60}")
     print(f"  {combo['id'].upper()}: {combo['name']}")
     print(f"{'='*60}")
@@ -616,13 +717,18 @@ def run_combo(
             collection_name=combo["collection"],
             reuse_processed=reuse_processed,
             write_processed=False,
+            include=list(selection["documents"]),
         )
         corpus_sha256 = corpus_digest(text_hashes)
         print(f"完成 ({time.time()-t0:.1f}s)")
     else:
         print("  [1/2] 跳過 rebuild（--skip-rebuild）")
-        # 沿用先前建立的索引：只能記錄目前 data/processed 的指紋（index_rebuilt=False 標示此情況）
-        corpus_sha256 = corpus_digest(processed_corpus_hashes()) if reuse_processed else None
+        # 沿用先前建立的索引：只能記錄所選文件目前 data/processed 的指紋（index_rebuilt=False 標示此情況）
+        corpus_sha256 = (
+            corpus_digest(selected_processed_hashes(processed_corpus_hashes(), selection["documents"]))
+            if reuse_processed
+            else None
+        )
 
     chunk_count = int(get_chroma_collection(combo["collection"]).count())
     if chunk_count == 0:
@@ -645,7 +751,7 @@ def run_combo(
         results.append(result)
 
     env = environment if environment is not None else build_environment(
-        git=_git_state(), reuse_processed=reuse_processed
+        git=_git_state(), reuse_processed=reuse_processed, corpus=selection
     )
     _write_json(
         combo_dir / "results.json",
@@ -858,23 +964,33 @@ def build_run_manifest(
     retrieval_only: bool,
     reuse_processed: bool,
     previous_runs: list[dict],
+    corpus: Mapping[str, Any] | None = None,
     processed_hashes: Mapping[str, str] | None = None,
     matches_pin: bool | None = None,
 ) -> dict:
     """run.json 內容：時間、git、LLM 模型與是否走 proxy（不含金鑰/endpoint）、embedding、語料、各 combo。
 
-    corpus.processed_sha256 為執行時 data/processed 各檔的 sha256；matches_pin 為其是否等於
-    experiments/corpus_pin.json（--re-extract 時不檢查，為 None）。
+    corpus 為 load_corpus_selection() 的結果（None 時為預設語料 current）：記錄名稱、定義來源、文件清單、
+    文件數與清單指紋。corpus.processed_sha256 為所選文件在執行時 data/processed 的 sha256（只含所選文件），
+    processed_digest 為其 corpus_digest；matches_pin 為其是否等於 experiments/corpus_pin.json
+    （--re-extract 時不檢查，為 None）。
     """
-    hashes = dict(processed_hashes if processed_hashes is not None else processed_corpus_hashes())
+    selection = corpus if corpus is not None else load_corpus_selection(DEFAULT_CORPUS)
+    documents = list(selection["documents"])
+    all_hashes = processed_hashes if processed_hashes is not None else processed_corpus_hashes()
+    hashes = selected_processed_hashes(all_hashes, documents)
     return {
         "generated_at": _iso_now(),
         "git": git,
         "llm": {"model": model, "proxy_configured": llm_proxy_configured()},
         "embedding": {"model": EMBEDDING_MODEL, "max_seq_length": loaded_embedding_max_seq_length()},
         "corpus": {
+            "name": selection["name"],
+            "definition": selection["definition"],
             "raw_dir": "data/raw",
-            "document_count": len(list_raw_documents()),
+            "document_count": len(documents),
+            "documents_digest": document_list_digest(documents),
+            "documents": documents,
             "processed_digest": corpus_digest(hashes),
             "matches_pin": matches_pin,
             "processed_sha256": hashes,
@@ -926,36 +1042,52 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="從 data/raw 重新抽取文字建索引（只在記憶體中，不改寫 data/processed 與 ingest manifest）；"
         "預設使用已提交且與 experiments/corpus_pin.json 一致的 data/processed",
     )
+    p.add_argument(
+        "--corpus",
+        choices=CORPUS_CHOICES,
+        default=DEFAULT_CORPUS,
+        help="建索引的語料：current（預設，data/raw 全部文件）或 round1（experiments/corpus_round1.json 的 39 份，"
+        "第一輪索引實際收錄的文件）；collection 名稱為 cypher_og_<corpus>_combo_<id>",
+    )
     return p.parse_args(argv)
 
 
-def check_pinned_corpus(hashes: Mapping[str, str]) -> list[str]:
-    """比對 data/processed 與 corpus_pin.json，回傳不一致的檔名；鎖定檔無法讀取時拋 OSError / ValueError。"""
-    return corpus_mismatches(hashes, load_corpus_pin(CORPUS_PIN_PATH))
+def check_pinned_corpus(hashes: Mapping[str, str], documents: Sequence[str]) -> list[str]:
+    """比對所選 data/raw 文件的 data/processed 文字與 corpus_pin.json，回傳不一致的 processed 檔名（排序）。
+
+    恰好涵蓋所選文件：缺少 processed 文字、未被鎖定、或內容不同都算不一致；未選的文件不檢查。
+    鎖定檔無法讀取時拋 OSError / ValueError。
+    """
+    pinned = load_corpus_pin(CORPUS_PIN_PATH)
+    names = {processed_name_for(d) for d in documents}
+    return sorted(name for name in names if name not in pinned or hashes.get(name) != pinned[name])
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     try:
         out_dir = resolve_out_dir(args.out if args.out is not None else DEFAULT_OUT_DIR)
+        check_out_dir_corpus(out_dir, args.corpus)
+        corpus = load_corpus_selection(args.corpus)
         out_dir.mkdir(parents=True, exist_ok=True)
     except (ValueError, OSError) as exc:
         _warn(f"[experiment_runner] 錯誤：{describe_exception(exc)}")
         return 2
+    print(f"語料：{corpus['name']}（{len(corpus['documents'])} 份文件；{corpus['definition']}）")
 
     reuse_processed = not args.re_extract
     processed_hashes = processed_corpus_hashes()
     matches_pin: bool | None = None
     if reuse_processed:
         try:
-            mismatched = check_pinned_corpus(processed_hashes)
+            mismatched = check_pinned_corpus(processed_hashes, corpus["documents"])
         except (OSError, ValueError) as exc:
             _warn(f"[experiment_runner] 錯誤：無法讀取 {display_path(CORPUS_PIN_PATH)}（{describe_exception(exc)}）。")
             return 2
         if mismatched:
             shown = "、".join(mismatched[:3]) + ("…" if len(mismatched) > 3 else "")
             _warn(
-                f"[experiment_runner] 錯誤：data/processed 有 {len(mismatched)} 個檔案與 "
+                f"[experiment_runner] 錯誤：語料 {corpus['name']} 有 {len(mismatched)} 個 data/processed 檔案與 "
                 f"{display_path(CORPUS_PIN_PATH)} 不一致（{shown}）。請用 git 還原 data/processed，"
                 "或明確加 --re-extract 從 data/raw 重新抽取。"
             )
@@ -964,10 +1096,10 @@ def main(argv: list[str] | None = None) -> int:
 
     git = _git_state()
     model = effective_llm_model()
-    environment = build_environment(git=git, reuse_processed=reuse_processed)
+    environment = build_environment(git=git, reuse_processed=reuse_processed, corpus=corpus)
     combos_info: dict[str, dict] = {}
 
-    for combo in (COMBO_MAP[cid] for cid in args.combos):
+    for combo in (combo_for_corpus(COMBO_MAP[cid], corpus["name"]) for cid in args.combos):
         try:
             info = run_combo(
                 combo,
@@ -977,6 +1109,7 @@ def main(argv: list[str] | None = None) -> int:
                 retrieval_only=args.retrieval_only,
                 reuse_processed=reuse_processed,
                 environment=environment,
+                corpus=corpus,
             )
             combos_info[combo["id"]] = {
                 "collection": combo["collection"],
@@ -1010,6 +1143,7 @@ def main(argv: list[str] | None = None) -> int:
             retrieval_only=args.retrieval_only,
             reuse_processed=reuse_processed,
             previous_runs=_previous_runs(run_path),
+            corpus=corpus,
             processed_hashes=processed_hashes,
             matches_pin=matches_pin,
         ),
