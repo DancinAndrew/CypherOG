@@ -9,8 +9,8 @@
 | Comparison | Result |
 |---|---|
 | Five setups on 39 documents (Apr 2026, reproduced exactly with today's code: 25/25 retrievals) | The setup with 300-character chunks cut mean cosine distance by 10% (0.359 vs 0.399), yet its answer named 2 of the 9 Electric Boogaloos members versus the baseline's 9. Distance is not answer quality. |
-| BM25 + dense via reciprocal rank fusion vs dense only (Nov 2026, same 39 documents, 3 runs each) | Hybrid retrieval answered a Juste Debout question that every dense-only setup missed (3/3 runs; the key chunk sat at cosine distance 0.798, outside dense reach), but named 3 of 9 members where dense retrieval named 9. It therefore ships as the opt-in `--hybrid` flag. |
-| Adding my three curated Chinese notes (42 documents) | Plain dense retrieval then answered the Juste Debout question as well, without losing any members. |
+| BM25 + dense via reciprocal rank fusion vs dense only (Nov 2026, same 39 documents, 3 runs each) | Hybrid retrieval found Juste Debout facts that every dense-only setup missed, and its answers stated them (3/3 runs; the key chunk sat at cosine distance 0.798, outside dense reach), though none covered the event's rules; it also named 3 of 9 members where dense retrieval named 9. It therefore ships as the opt-in `--hybrid` flag. |
+| Adding my three curated Chinese notes (42 documents) | Plain dense retrieval then found Juste Debout facts as well, without losing any members. |
 
 ---
 
@@ -164,7 +164,7 @@ graph LR
 
 **實驗佐證：**
 
-- Q1「What is Popping and who created it?」：Combo B（recursive 600）平均 chunk 距離 **0.355**，Combo A（naive 500）為 **0.387**，平均距離下降 **8.4%**。這只是 Q1 一題的檢索距離，不是精準率（precision）。
+- Q1「What is Popping and who created it?」：Combo B（recursive 600）平均 chunk 距離 **0.3548**，Combo A（naive 500）為 **0.3873**，平均距離下降 **8.4%**。這只是 Q1 一題的檢索距離，不是精準率（precision）。
 - Q2「Electric Boogaloos 成員列舉」：Combo D（size=300）距離最低，但回答只提到 Boogaloo Sam 和 Pete，**遺漏了 Skeeter Rabbit、Suga Pop、Mr. Wiggles 等 7 名成員**；Combo B 與 E 的回答列出全部 9 位。
 - Q2 同題：Combo C（size=1200）保留了較完整的段落，回答提到 Suga Pop 與 Michael Jackson 合作等細節，但 top-k=3 讓覆蓋面較窄，只點名 3 位成員。
 
@@ -254,7 +254,7 @@ score(chunk) = 1 / (60 + 向量名次) + 1 / (60 + BM25 名次)     （某一方
 - 只被 BM25 找到的 chunk 會回報它與問題的真實 cosine 距離。
 - BM25 索引每個 collection 一份（`chroma_db/bm25_<collection>.json`），全量重建與增量更新後都會重建。
 
-第二輪結果（39 份語料，3 次的檢索結果完全相同）：F 是唯一答出 Q4 的組合，5 個 chunk 中有 2 個含 Juste Debout 的事實；3 次回答都說出地點（巴黎）與場館（Accor Arena），其中 1 次另外說出雙人賽制，且都能在取回的段落中找到出處。關鍵的 `Juste Debout.txt` 第 0 段與問題的 cosine 距離是 0.798，遠在向量檢索與門檻之外，只有 BM25 的字面匹配能找到它。
+第二輪結果（39 份語料，3 次的檢索結果完全相同）：F 是唯一取回 Q4 事實的組合，5 個 chunk 中有 2 個含 Juste Debout 的事實；3 次回答都說出地點（巴黎）與場館（Accor Arena），其中 1 次另外說出雙人賽制，且都能在取回的段落中找到出處。關鍵的 `Juste Debout.txt` 第 0 段與問題的 cosine 距離是 0.798，遠在向量檢索與門檻之外，只有 BM25 的字面匹配能找到它。
 
 代價是 Q2：RRF 讓兩個檢索器都找到的 chunk 排在前面。成員名單所在的段落在向量檢索排第 5，但不在 BM25 的前 15 名，融合分數只有 1/65 ≈ 0.0154；Suga Pop 條目的段落在向量檢索只排第 15，因為 BM25 排第 6，融合分數 0.0285 反而進入前 5。名單段落因此被擠出，回答只點名 3 位成員。
 
@@ -281,7 +281,7 @@ python rag_query.py --query "Juste Debout 比賽的規則和歷史？" --hybrid
 python rag_query.py --query "震感舞是誰發明的？" --expand-query
 ```
 
-**資料比檢索技巧更有效：** 在加入三份中文整理筆記的 42 份語料上，純向量的 E′ 就能從時間線筆記找到 Juste Debout 的資料並答出 3 類事實，同時保留 9 位成員；F 在這份語料上對 Q4 沒有額外幫助，Q2 只點名 4 位。
+**資料比檢索技巧更有效：** 在加入三份中文整理筆記的 42 份語料上，純向量的 E′ 就能從時間線筆記找到 Juste Debout 的資料並說出 3 類事實，同時保留 9 位成員；F 在這份語料上對 Q4 沒有額外幫助，Q2 只點名 4 位。
 
 ---
 
@@ -576,4 +576,4 @@ python data_update.py --rebuild
 - **CypherHub 整合**：將此 RAG 包裝成 FastAPI 微服務，嵌入 CypherHub 的活動頁面，讓參賽者在購票前能直接詢問「這個 Battle 的評分標準是什麼？」或「Popping 初學者適合報哪個組別？」
 - **混合搜尋（Hybrid Search）**：✅ **已實作**（`--hybrid`）— BM25（rank-bm25）與向量搜尋以標準 RRF 合併；2026-11 修正了融合公式並完成評估（見 3.4 節）。
 - **Query Expansion**：✅ **已實作**（`--expand-query`）— 用 LLM 將查詢改寫為多角度子查詢；第二輪評估結果見 3.4 節。
-- **結構化知識文件**：✅ **已新增**（第一輪實驗之後）— 個人整理的術語辭典、歷史時間線、風格分類體系；加入後純向量檢索也能答出 Juste Debout 的問題。
+- **結構化知識文件**：✅ **已新增**（第一輪實驗之後）— 個人整理的術語辭典、歷史時間線、風格分類體系；加入後純向量檢索也能取回 Juste Debout 的事實。

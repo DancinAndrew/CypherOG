@@ -60,10 +60,10 @@ Round 1 answers came from gemini-2.5-flash through a course proxy; round 2 used 
 **What the numbers show**
 
 1. **Lower distance did not mean better answers.** D had the lowest mean distance (10% below A) but named 2 members to A's 9: its 300-character chunks split the member list, and the fragment holding it did not reach the top 5.
-2. **Hybrid retrieval recovers exact-name content that dense retrieval misses.** On the same 39 documents, F was the only setup to answer the Juste Debout question, in all three runs. The decisive chunk (`Juste Debout.txt` #0) sits at cosine distance 0.798 from the question, outside the reach of dense retrieval and its 0.65 cutoff; BM25 found it by matching the name.
+2. **Hybrid retrieval recovers exact-name content that dense retrieval misses.** On the same 39 documents, F was the only setup whose answers stated Juste Debout facts, in all three runs; none of them covered the event's rules. The decisive chunk (`Juste Debout.txt` #0) sits at cosine distance 0.798 from the question, outside the reach of dense retrieval and its 0.65 cutoff; BM25 found it by matching the name.
 3. **Fusion rewards agreement, which cost list completeness.** The member-list chunk ranked 5th in dense retrieval but outside BM25's top 15, so its fused score (1/65) lost to chunks both retrievers found; the Suga Pop chunk, 15th in dense retrieval but 6th in BM25, took a top-5 slot. F named 3 members instead of 9.
 4. **Query expansion was weaker and less stable.** G recovered one Juste Debout chunk but named 0–2 members, varying across runs.
-5. **Curated data beat retrieval tricks here.** With the three Chinese notes added (42 documents), plain dense retrieval (E′) answered the Juste Debout question too, while keeping all 9 members.
+5. **Curated data beat retrieval tricks here.** With the three Chinese notes added (42 documents), plain dense retrieval (E′) found Juste Debout facts too, while keeping all 9 members.
 
 The default therefore stays E (dense, chain-of-thought); hybrid retrieval and query expansion are opt-in flags.
 
