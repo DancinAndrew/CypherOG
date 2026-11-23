@@ -24,11 +24,17 @@ from rag_common import (  # noqa: E402
     document_list_digest,
     load_corpus_definition,
     load_corpus_pin,
+    load_withheld,
     pinned_digest_for,
 )
 
 EXPERIMENTS = ROOT / "experiments"
 ROUND1_IDS = ("a", "b", "c", "d", "e")
+
+# 不隨 repo 散布的文件（experiments/withheld.json）：公開 repo 沒有，讀者可自備與鎖定指紋相同的副本
+WITHHELD = load_withheld(pinned=load_corpus_pin(EXPERIMENTS / "corpus_pin.json"))
+CHAPTER_TXT = sorted(WITHHELD)[0]
+ABSENT = rag_eval.absent_withheld_files(rag_eval.PROCESSED_DIR)
 
 
 @pytest.fixture(scope="module")
@@ -38,6 +44,15 @@ def gold() -> dict:
 
 def _round1(combo_id: str, q: int) -> dict:
     return rag_eval.parse_round1_question(EXPERIMENTS / f"combo_{combo_id}" / f"q{q}.md")
+
+
+def _round1_needs(combo_id: str, names: list[str]) -> bool:
+    """該組的 round-1 記錄是否引用了 names 中的任一 processed 檔。"""
+    return any(src in names for q in range(1, 6) for src, _, _ in _round1(combo_id, q)["cites"])
+
+
+# round-1 中可以還原的組別（列標籤）：withheld 文件不在時，引用它的 B、E 會略過
+ROUND1_ROWS = [c.upper() for c in ROUND1_IDS if not _round1_needs(c, ABSENT)]
 
 
 # ─── gold.json（預先登錄內容）────────────────────────────────────────────────
@@ -247,6 +262,9 @@ def test_mean_distance_skips_questions_without_cites() -> None:
 
 @pytest.mark.parametrize("combo_id", ROUND1_IDS)
 def test_round1_chunk_reconstruction(combo_id: str) -> None:
+    if _round1_needs(combo_id, ABSENT):
+        pytest.skip(f"combo {combo_id} cites {', '.join(ABSENT)}, which is withheld (experiments/withheld.json) "
+                    "and absent here; its chunks can only be rebuilt from a supplied copy")
     for q in range(1, 6):
         parsed = _round1(combo_id, q)
         chunks = rag_eval.reconstruct_round1_chunks(parsed["cites"], combo_id)
@@ -289,10 +307,54 @@ def processed_copy(tmp_path: Path) -> Path:
 
 
 def test_changed_processed_text_is_refused(processed_copy: Path) -> None:
-    target = processed_copy / "a-historical-overview-of-hip-hop-dances-johnson-imani-kai.txt"
+    target = processed_copy / "Popping.txt"
     target.write_text(target.read_text(encoding="utf-8") + " re-extracted", encoding="utf-8")
+    with pytest.raises(ValueError, match="Popping.txt"):
+        rag_eval.check_round1_corpus(processed_copy, EXPERIMENTS / "corpus_pin.json")
+
+
+def test_a_supplied_withheld_copy_must_match_the_pin(processed_copy: Path) -> None:
+    """讀者自備的 withheld 副本與鎖定指紋不同 → 拒絕（不論 repo 內原本有沒有這個檔）。"""
+    (processed_copy / CHAPTER_TXT).write_text("my own extraction of the chapter", encoding="utf-8")
     with pytest.raises(ValueError, match="a-historical-overview"):
         rag_eval.check_round1_corpus(processed_copy, EXPERIMENTS / "corpus_pin.json")
+
+
+def test_an_absent_withheld_file_is_reported_not_refused(
+    processed_copy: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    (processed_copy / CHAPTER_TXT).unlink(missing_ok=True)
+    pin = json.loads((EXPERIMENTS / "corpus_pin.json").read_text(encoding="utf-8"))
+    assert rag_eval.check_round1_corpus(processed_copy, EXPERIMENTS / "corpus_pin.json") == pin["digest"]
+    assert rag_eval.absent_withheld_files(processed_copy) == [CHAPTER_TXT]
+    err = capsys.readouterr().err
+    assert CHAPTER_TXT in err and "withheld" in err
+    # 其他檔案仍然嚴格：withheld 以外的缺檔照樣拒絕
+    (processed_copy / "Popping.txt").unlink()
+    with pytest.raises(ValueError, match="Popping.txt"):
+        rag_eval.check_round1_corpus(processed_copy, EXPERIMENTS / "corpus_pin.json")
+
+
+def test_round1_chunks_of_an_absent_withheld_file_fail_with_a_clear_message(processed_copy: Path) -> None:
+    (processed_copy / CHAPTER_TXT).unlink(missing_ok=True)
+    with pytest.raises(ValueError, match="withheld.json"):
+        rag_eval.reconstruct_round1_chunks(_round1("b", 4)["cites"], "b", processed_copy)
+
+
+def test_cli_without_the_withheld_file_says_which_round1_rows_are_missing(
+    processed_copy: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    (processed_copy / CHAPTER_TXT).unlink(missing_ok=True)
+    monkeypatch.setattr(rag_eval, "PROCESSED_DIR", processed_copy)
+    out = tmp_path / "out"
+    assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(tmp_path / "none"), "--out", str(out)]) == 0
+    metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
+    assert [r["run"] for r in metrics["rows"]] == ["A", "C", "D"]
+    assert metrics["withheld_absent"] == [CHAPTER_TXT]
+    md = (out / "metrics.md").read_text(encoding="utf-8")
+    assert "**Withheld document.**" in md
+    assert "(B, E) cannot be rebuilt" in md
+    assert "except the withheld document" in md
 
 
 def test_missing_or_extra_processed_files_are_refused(processed_copy: Path) -> None:
@@ -379,7 +441,8 @@ def _environment(**overrides) -> dict:
 
 
 def _current_environment(**overrides) -> dict:
-    current = [p.name for p in list_raw_documents()]
+    # 記錄中的 current 語料是 42 份（含 withheld 文件，不論本機有沒有）
+    current = sorted({p.name for p in list_raw_documents()} | {e["raw"] for e in WITHHELD.values()})
     return _environment(
         corpus="current",
         document_count=len(current),
@@ -642,7 +705,7 @@ def test_cli_drops_round2_run_with_other_questions(
     out = tmp_path / "out"
     assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(round2), "--out", str(out)]) == 0
     rows = json.loads((out / "metrics.json").read_text(encoding="utf-8"))["rows"]
-    assert [r["run"] for r in rows] == ["A", "B", "C", "D", "E", "F · round1 corpus · round2"]
+    assert [r["run"] for r in rows] == [*ROUND1_ROWS, "F · round1 corpus · round2"]
     assert "combo_g" in capsys.readouterr().err
 
 
@@ -666,9 +729,9 @@ def test_cli_skips_round2_without_results(tmp_path: Path, capsys: pytest.Capture
     assert code == 0
     assert "round 2" in capsys.readouterr().out.lower()
     rows = json.loads((out / "metrics.json").read_text(encoding="utf-8"))["rows"]
-    assert [r["run"] for r in rows] == ["A", "B", "C", "D", "E"]
+    assert [r["run"] for r in rows] == ROUND1_ROWS
     named = {r["run"]: r["q2_members_named"] for r in rows}
-    assert named == {"A": 9, "B": 9, "C": 3, "D": 2, "E": 9}
+    assert named == {k: v for k, v in {"A": 9, "B": 9, "C": 3, "D": 2, "E": 9}.items() if k in ROUND1_ROWS}
     assert all(r["q4_fact_groups"] == 0 for r in rows)
     md = (out / "metrics.md").read_text(encoding="utf-8")
     assert (
@@ -686,9 +749,9 @@ def test_cli_includes_round2_rows(tmp_path: Path) -> None:
     assert rag_eval.main(["--round1", str(EXPERIMENTS), "--round2", str(round2), "--out", str(out)]) == 0
     metrics = json.loads((out / "metrics.json").read_text(encoding="utf-8"))
     assert [r["run"] for r in metrics["rows"]] == [
-        "A", "B", "C", "D", "E", "E\u2032 (control) · round1 corpus · round2", "F · round1 corpus · round2",
+        *ROUND1_ROWS, "E\u2032 (control) · round1 corpus · round2", "F · round1 corpus · round2",
     ]
-    assert [r["corpus"] for r in metrics["rows"]] == ["round1"] * 7
+    assert [r["corpus"] for r in metrics["rows"]] == ["round1"] * (len(ROUND1_ROWS) + 2)
     (folder,) = metrics["round2_runs"]
     assert folder["shared"]["model"] == "gpt-test"
     assert folder["shared"]["corpus"] == "round1"
@@ -712,6 +775,7 @@ def test_cli_records_the_gold_and_corpus_fingerprints(tmp_path: Path) -> None:
     assert metrics["round2_runs"] == []
     assert metrics["stability"] == []
     assert metrics["round1_corpus"]["document_count"] == 39
+    assert ("withheld_absent" in metrics) == bool(ABSENT)  # 完整語料時 metrics.json 的形狀不變
     md = (out / "metrics.md").read_text(encoding="utf-8")
     assert gold_sha in md
     assert "Within one run folder, rag_eval scores round 2 only when every combo shares the model" in md

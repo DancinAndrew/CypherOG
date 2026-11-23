@@ -5,9 +5,13 @@
 執行檢索（＋生成），結果寫到 --out 指定的目錄（預設 experiments/round2，與 rag_eval.py 一致）。
 
 語料（--corpus）：
-  current（預設）  data/raw 內全部支援格式的文件（目前 42 份）。
+  current（預設）  data/raw 內全部支援格式的文件（repo 內 41 份；另有 1 份因著作權不散布，見下）。
   round1           experiments/corpus_round1.json 列出的 39 份文件，即第一輪索引實際收錄的文件
                    （少了三份結構化筆記；以此重跑 A–E 可逐筆重現第一輪的檢索結果）。
+  不散布的文件（experiments/withheld.json）：round1 需要它，缺檔時拒絕執行並說明如何自備副本
+  （放到 data/raw/<檔名>，文字放到 data/processed，或執行 python data_update.py --extract-withheld 抽字；
+  文字須與鎖定指紋完全相同）；
+  current 缺它時照常執行，run.json 的 matches_pin 記為 "withheld:<N>"，不記為 True。
   兩份語料的 collection 名稱不同，永不共用索引；run.json 與 results.json 的 environment 記錄
   語料名稱、文件數與文件清單指紋。round 2 的建議輸出位置：experiments/round2/<corpus>_corpus/run<N>/
   （--out 的資料夾名稱若是 <其他語料>_corpus 會被拒絕）。
@@ -40,7 +44,7 @@ Combo 一覽：
   summary.md  彙整 <out> 內所有 combo_*/results.json（分次執行 f、g 也會合併成一份）
 
 預設以 data/processed 中已提交的文字建索引，且先比對 experiments/corpus_pin.json（只比對所選語料的文件），
-不一致就拒絕執行；加 --re-extract 才會從 data/raw 重新抽取（只在記憶體中，不改寫 data/processed 與 ingest manifest）。
+不一致就拒絕執行（自備的 withheld 文件也一樣）；加 --re-extract 才會從 data/raw 重新抽取（只在記憶體中，不改寫 data/processed 與 ingest manifest）。
 
 Usage:
     python experiment_runner.py --combos e f g --corpus round1 --out experiments/round2/round1_corpus/run1
@@ -78,6 +82,8 @@ from rag_common import (
     CORPUS_PIN_PATH,
     CORPUS_ROUND1_PATH,
     EMBEDDING_MODEL,
+    WITHHELD_PATH,
+    absent_withheld,
     corpus_digest,
     describe_exception,
     display_path,
@@ -89,7 +95,9 @@ from rag_common import (
     load_bm25_index,
     load_corpus_definition,
     load_corpus_pin,
+    load_withheld,
     loaded_embedding_max_seq_length,
+    pin_status,
     processed_corpus_hashes,
     processed_name_for,
 )
@@ -273,27 +281,54 @@ def combo_for_corpus(combo: Mapping[str, Any], corpus: str) -> dict:
     return {**combo, "collection": collection_for(corpus, combo["id"])}
 
 
+def _withheld_raw_names() -> list[str]:
+    """experiments/withheld.json 列出的 data/raw 檔名（排序）。"""
+    return sorted(entry["raw"] for entry in load_withheld(WITHHELD_PATH).values())
+
+
 def load_corpus_selection(name: str) -> dict:
-    """--corpus → {"name", "documents": [data/raw 檔名（排序）], "definition": 來源說明}。
+    """--corpus → {"name", "documents": [data/raw 檔名（排序）], "definition": 來源說明, "withheld_absent": [...]}。
 
     round1：experiments/corpus_round1.json 列出的文件，必須全部存在於 data/raw，且定義檔名稱須為 round1；
-    current：data/raw 內全部支援格式的文件。不符時拋 ValueError（定義檔無法讀取時拋 OSError）。
+    只缺 withheld 文件時也拒絕（訊息說明如何自備副本），不會以較少的文件冒充 round1。
+    current：data/raw 內全部支援格式的文件；withheld_absent 列出不在 data/raw 的 withheld 文件。
+    不符時拋 ValueError（定義檔無法讀取時拋 OSError）。
     """
     available = [p.name for p in list_raw_documents()]
     if name == "current":
-        return {"name": name, "documents": available, "definition": "data/raw (all supported files)"}
+        return {
+            "name": name,
+            "documents": available,
+            "definition": "data/raw (all supported files)",
+            "withheld_absent": absent_withheld(available, _withheld_raw_names()),
+        }
     if name != "round1":
         raise ValueError(f"未知的語料 {name!r}（可用：{', '.join(CORPUS_CHOICES)}）")
     definition = load_corpus_definition(CORPUS_ROUND1_PATH)
     if definition["name"] != name:
         raise ValueError(f"{display_path(CORPUS_ROUND1_PATH)} 的語料名稱是 {definition['name']!r}，不是 {name!r}")
     missing = sorted(set(definition["documents"]) - set(available))
+    withheld_missing = [m for m in missing if m in set(_withheld_raw_names())]
+    if missing and withheld_missing == missing:
+        shown = "、".join(missing)
+        raise ValueError(
+            f"round1 語料需要 {len(missing)} 份不隨本 repo 散布的文件（{shown}；著作權，見 "
+            f"{display_path(WITHHELD_PATH)} 與 data/SOURCES.md）。要完整重現第一輪，請把你自己的副本放在 "
+            "data/raw/<同一檔名>，並把它的文字放在 data/processed/<主檔名>.txt（或執行 "
+            "python data_update.py --extract-withheld 從副本抽字）；文字與鎖定的 sha256 不同就拒絕執行。"
+            "或改用 --corpus current。round1 不會以缺少它的文件執行。"
+        )
     if missing:
         shown = "、".join(missing[:3]) + ("…" if len(missing) > 3 else "")
         raise ValueError(
             f"{display_path(CORPUS_ROUND1_PATH)} 有 {len(missing)} 份文件不在 data/raw（{shown}）"
         )
-    return {"name": name, "documents": definition["documents"], "definition": display_path(CORPUS_ROUND1_PATH)}
+    return {
+        "name": name,
+        "documents": definition["documents"],
+        "definition": display_path(CORPUS_ROUND1_PATH),
+        "withheld_absent": [],
+    }
 
 
 def corpus_environment(corpus: Mapping[str, Any]) -> dict:
@@ -966,14 +1001,14 @@ def build_run_manifest(
     previous_runs: list[dict],
     corpus: Mapping[str, Any] | None = None,
     processed_hashes: Mapping[str, str] | None = None,
-    matches_pin: bool | None = None,
+    matches_pin: bool | str | None = None,
 ) -> dict:
     """run.json 內容：時間、git、LLM 模型與是否走 proxy（不含金鑰/endpoint）、embedding、語料、各 combo。
 
     corpus 為 load_corpus_selection() 的結果（None 時為預設語料 current）：記錄名稱、定義來源、文件清單、
     文件數與清單指紋。corpus.processed_sha256 為所選文件在執行時 data/processed 的 sha256（只含所選文件），
     processed_digest 為其 corpus_digest；matches_pin 為其是否等於 experiments/corpus_pin.json
-    （--re-extract 時不檢查，為 None）。
+    （True；另有 withheld 文件不在本機時為 "withheld:<N>"，並另列 withheld_absent；--re-extract 時不檢查，為 None）。
     """
     selection = corpus if corpus is not None else load_corpus_selection(DEFAULT_CORPUS)
     documents = list(selection["documents"])
@@ -994,6 +1029,8 @@ def build_run_manifest(
             "processed_digest": corpus_digest(hashes),
             "matches_pin": matches_pin,
             "processed_sha256": hashes,
+            # 只在有 withheld 文件不在本機時才寫出（完整語料的 run.json 形狀不變）
+            **({"withheld_absent": list(selection["withheld_absent"])} if selection.get("withheld_absent") else {}),
         },
         # True：索引文字取自已提交的 data/processed；False：--re-extract 從 data/raw 重新抽取（只在記憶體中）
         "reuse_processed": reuse_processed,
@@ -1077,7 +1114,7 @@ def main(argv: list[str] | None = None) -> int:
 
     reuse_processed = not args.re_extract
     processed_hashes = processed_corpus_hashes()
-    matches_pin: bool | None = None
+    matches_pin: bool | str | None = None
     if reuse_processed:
         try:
             mismatched = check_pinned_corpus(processed_hashes, corpus["documents"])
@@ -1086,13 +1123,26 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         if mismatched:
             shown = "、".join(mismatched[:3]) + ("…" if len(mismatched) > 3 else "")
+            withheld = sorted(set(mismatched) & {processed_name_for(n) for n in _withheld_raw_names()})
+            hint = (
+                f" 其中 {'、'.join(withheld)} 不隨 repo 散布（{display_path(WITHHELD_PATH)}）：自備副本的 "
+                "data/processed 文字必須與鎖定的 sha256 完全相同（python data_update.py --extract-withheld 可代為抽字與比對）。"
+                if withheld
+                else ""
+            )
             _warn(
                 f"[experiment_runner] 錯誤：語料 {corpus['name']} 有 {len(mismatched)} 個 data/processed 檔案與 "
                 f"{display_path(CORPUS_PIN_PATH)} 不一致（{shown}）。請用 git 還原 data/processed，"
-                "或明確加 --re-extract 從 data/raw 重新抽取。"
+                "或明確加 --re-extract 從 data/raw 重新抽取。" + hint
             )
             return 2
-        matches_pin = True
+        matches_pin = pin_status(corpus.get("withheld_absent", []))
+        if matches_pin is not True:
+            _warn(
+                f"[experiment_runner] 注意：{'、'.join(corpus['withheld_absent'])} 不隨 repo 散布、不在 data/raw；"
+                f"語料 {corpus['name']} 只有 {len(corpus['documents'])} 份，不等於鎖定的完整語料"
+                f"（run.json 的 matches_pin 記為 {matches_pin!r}）。"
+            )
 
     git = _git_state()
     model = effective_llm_model()

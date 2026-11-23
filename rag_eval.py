@@ -15,7 +15,9 @@
 - Round 1：experiments/combo_a..e/q1..q5.md 的既有記錄（不重跑）；chunk 原文未儲存，
   以各組 round-1 切法重新切 data/processed/<source_file> 還原。還原前先確認 data/processed
   與 experiments/corpus_pin.json 完全一致，否則拒絕評估。Round 1 的索引只收錄 39 份文件
-  （experiments/corpus_round1.json）。
+  （experiments/corpus_round1.json）。experiments/withheld.json 列出的文件不隨 repo 散布：缺檔時不算
+  不一致，但需要它的 round-1 組別（B、E 的 Q4）無法還原，會略過並在 metrics.md 註明；自備的副本
+  仍須與鎖定指紋完全相同。
 - Round 2：--round2 的每個目錄（預設 experiments/round2）都會遞迴搜尋 run 資料夾，也就是直接含
   combo_*/results.json 的目錄（例如 experiments/round2/round1_corpus/run1；略過 .previous/ 等隱藏目錄）。
   results.json 由 experiment_runner.py 寫出，契約見 load_round2_run。同一個 run 資料夾內各組的模型、
@@ -58,6 +60,7 @@ EXPERIMENTS_DIR = ROOT / "experiments"
 GOLD_PATH = EXPERIMENTS_DIR / "gold.json"
 CORPUS_PIN_PATH = EXPERIMENTS_DIR / "corpus_pin.json"
 CORPUS_ROUND1_PATH = EXPERIMENTS_DIR / "corpus_round1.json"
+WITHHELD_PATH = EXPERIMENTS_DIR / "withheld.json"
 ROUND2_DIR = EXPERIMENTS_DIR / "round2"
 PROCESSED_DIR = ROOT / "data" / "processed"
 REPRODUCTION_REPORT_PATH = EXPERIMENTS_DIR / "round1_reproduction.md"
@@ -333,6 +336,11 @@ def reconstruct_round1_chunks(
         if path.parent != base:
             raise ValueError(f"source_file 不在 processed 目錄內: {source_file!r}")
         if source_file not in cache:
+            if not path.is_file() and source_file in _withheld_names():
+                raise ValueError(
+                    f"{source_file} 不隨本 repo 散布（{_display_path(WITHHELD_PATH)}），無法還原它的 chunk；"
+                    "自備副本見該檔說明"
+                )
             text = path.read_text(encoding="utf-8")
             cache[source_file] = (text, chunker(text))
         text, chunks = cache[source_file]
@@ -393,16 +401,40 @@ def _describe_exc(exc: BaseException) -> str:
     return describe_exception(exc)
 
 
-def check_round1_corpus(processed_dir: Path, pin_path: Path) -> str:
-    """確認 processed_dir 與 corpus_pin.json 完全一致，回傳鎖定的語料 digest；不一致時拋 ValueError。
+def _withheld_names(withheld_path: Path | None = None) -> list[str]:
+    """withheld.json 列出的 processed 檔名（排序）。"""
+    from rag_common import load_withheld  # 延遲匯入：純函數不必載入 rag_common
+
+    return sorted(load_withheld(withheld_path if withheld_path is not None else WITHHELD_PATH))
+
+
+def absent_withheld_files(processed_dir: Path, withheld_path: Path | None = None) -> list[str]:
+    """withheld.json 列出、但不在 processed_dir 的 processed 檔名（排序）。"""
+    from rag_common import absent_withheld
+
+    present = [p.name for p in processed_dir.glob("*.txt") if p.is_file()]
+    return absent_withheld(present, _withheld_names(withheld_path))
+
+
+def check_round1_corpus(processed_dir: Path, pin_path: Path, withheld_path: Path | None = None) -> str:
+    """確認 processed_dir 與 corpus_pin.json 一致，回傳鎖定的語料 digest；不一致時拋 ValueError。
 
     round-1 的 chunk 原文是重切 data/processed 還原的；文字一變（例如 data_update.py --rebuild 以新版
     pypdf 重新抽取），還原出的 chunk 就不是當時的內容，而 section 標籤檢查不一定看得出來。
+    withheld.json 的文件缺檔時不算不一致（在 stderr 註明為 withheld），存在時仍須與鎖定指紋相同。
     """
-    from rag_common import corpus_digest, corpus_mismatches, load_corpus_pin, processed_corpus_hashes
+    from rag_common import corpus_digest, corpus_mismatches, load_corpus_pin, load_withheld, processed_corpus_hashes
 
     pinned = load_corpus_pin(pin_path)
-    bad = corpus_mismatches(processed_corpus_hashes(processed_dir), pinned)
+    withheld = load_withheld(withheld_path if withheld_path is not None else WITHHELD_PATH, pinned)
+    actual = processed_corpus_hashes(processed_dir)
+    bad = corpus_mismatches(actual, pinned, withheld)
+    absent = sorted(set(withheld) - set(actual))
+    if absent and not bad:
+        _warn(
+            f"{', '.join(absent)} 不隨本 repo 散布（withheld，見 {_display_path(WITHHELD_PATH)}），"
+            "不在 data/processed；需要它的 round-1 組別無法還原，會略過"
+        )
     if bad:
         shown = ", ".join(bad[:3]) + (", …" if len(bad) > 3 else "")
         raise ValueError(
@@ -687,11 +719,13 @@ def pinned_corpus_digests(pin_path: Path = CORPUS_PIN_PATH) -> dict[str, str | N
     與 results.json 的 corpus_sha256 比較，可確認 round 2 建索引用的就是已鎖定的文字。
     """
     from data_update import list_raw_documents  # 延遲匯入：純函數不必載入 data_update
-    from rag_common import load_corpus_definition, load_corpus_pin, pinned_digest_for
+    from rag_common import load_corpus_definition, load_corpus_pin, load_withheld, pinned_digest_for
 
     pinned = load_corpus_pin(pin_path)
     round1 = load_corpus_definition(CORPUS_ROUND1_PATH)["documents"]
-    current = [p.name for p in list_raw_documents()]
+    # current 的鎖定版本包含 withheld 文件（不論本機有沒有），所以已記錄的 42 份 run 仍對得上
+    withheld_raw = [entry["raw"] for entry in load_withheld(WITHHELD_PATH).values()]
+    current = sorted({p.name for p in list_raw_documents()} | set(withheld_raw))
     return {"round1": pinned_digest_for(round1, pinned), "current": pinned_digest_for(current, pinned)}
 
 
@@ -1016,11 +1050,13 @@ def render_markdown(
     corpus_pin_digest: str,
     round2_folders: Sequence[Mapping[str, Any]] = (),
     stability: Sequence[Mapping[str, Any]] = (),
+    withheld_absent: Sequence[str] = (),
 ) -> str:
     """產生 metrics.md：開頭的判讀注意事項、指標說明、兩輪差異、逐 run 比較表與跨重複執行的穩定度表。
 
     corpus_docs：data/processed 目前的文件數；round1_docs：round-1 索引收錄的文件數（corpus_round1.json）。
     round2_folders：load_round2_folders 回傳的資料夾摘要（已通過資料夾內一致性檢查）；stability：stability_rows 的結果。
+    withheld_absent：不在 data/processed 的 withheld 文件；非空時註明哪些 round-1 組別因此沒有列出。
     """
     members = ", ".join(gold["q2_members"]["members"])
     groups = ", ".join(gold["q4_juste_debout"]["fact_groups"])
@@ -1041,6 +1077,20 @@ def render_markdown(
         else []
     )
     failures = _failed_question_notes(rows)
+    shown_round1 = {r["combo_id"] for r in round1_rows}
+    missing_round1 = [c.upper() for c in ROUND1_COMBOS if c not in shown_round1]
+    withheld_note = (
+        [
+            f"- **Withheld document.** {', '.join(f'`{n}`' for n in withheld_absent)} is not distributed with "
+            "this repository (copyright; `experiments/withheld.json`) and is absent from `data/processed`. "
+            "Round-1 combos whose recorded cites need it "
+            f"({', '.join(missing_round1) if missing_round1 else 'none'}) cannot be rebuilt and are left out of "
+            "this table; the metrics originally committed to this repository were generated with it. A copy you supply must "
+            "match its pinned sha256.",
+        ]
+        if withheld_absent
+        else []
+    )
 
     lines = [
         "# Pre-registered retrieval evaluation (round 1 vs round 2)",
@@ -1090,8 +1140,10 @@ def render_markdown(
         f"`data/processed` now holds {corpus_docs}). Chunk texts were not stored, so they are rebuilt by "
         "re-chunking `data/processed/<source_file>` with each combo's round-1 chunker, after checking that "
         f"`data/processed` matches `experiments/corpus_pin.json` (digest `{_short(corpus_pin_digest)}…`, text "
-        f"committed before round 1); {matched}/{checked} rebuilt chunks reproduce the section label recorded "
+        f"committed before round 1{'; except the withheld document below' if withheld_absent else ''}); "
+        f"{matched}/{checked} rebuilt chunks reproduce the section label recorded "
         "next to their cite.",
+        *withheld_note,
         f"- **Round 2** (E′ control, F hybrid, G query expansion): {round2_status}. Model: {model_note}. "
         "Round-2 chunk texts and distances come from `results.json`, i.e. from the index built at run time.",
         *_round2_check_note(round2_folders),
@@ -1510,6 +1562,7 @@ def main(argv: list[str] | None = None) -> int:
         gold = load_gold(GOLD_PATH)
         gold_sha256 = hashlib.sha256(GOLD_PATH.read_bytes()).hexdigest()
         corpus_pin_digest = check_round1_corpus(PROCESSED_DIR, CORPUS_PIN_PATH)
+        withheld_absent = absent_withheld_files(PROCESSED_DIR)
         round1_documents = load_corpus_definition(CORPUS_ROUND1_PATH)["documents"]
         runs = load_round1_runs(args.round1, PROCESSED_DIR)
         reference = {q["index"]: q["question"] for q in runs[0]["questions"]} if runs else {}
@@ -1539,6 +1592,7 @@ def main(argv: list[str] | None = None) -> int:
             corpus_pin_digest=corpus_pin_digest,
             round2_folders=round2_folders,
             stability=stability,
+            withheld_absent=withheld_absent,
         )
         payload = {
             "generated_at": generated_at,
@@ -1550,6 +1604,8 @@ def main(argv: list[str] | None = None) -> int:
                 "document_count": len(round1_documents),
                 "documents_digest": document_list_digest(round1_documents),
             },
+            # 只在 withheld 文件不在本機時寫出（完整語料時 metrics.json 形狀不變）
+            **({"withheld_absent": withheld_absent} if withheld_absent else {}),
             "round2_status": round2_status,
             "round2_runs": round2_folders,
             "rows": rows,

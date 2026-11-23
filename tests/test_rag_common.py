@@ -9,11 +9,14 @@ import pytest
 
 import rag_common
 from rag_common import (
+    absent_withheld,
     corpus_digest,
     corpus_mismatches,
     describe_exception,
     display_path,
     load_corpus_pin,
+    load_withheld,
+    pin_status,
     processed_corpus_hashes,
 )
 
@@ -45,7 +48,12 @@ def test_other_messages_lose_repo_and_home_prefixes():
 
 def test_pin_file_matches_the_committed_processed_text():
     pinned = load_corpus_pin()
-    assert corpus_mismatches(processed_corpus_hashes(), pinned) == []
+    withheld = load_withheld(pinned=pinned)
+    actual = processed_corpus_hashes()
+    # withheld 文件不在時不算不一致；在時（讀者自備副本）必須完全相同
+    assert corpus_mismatches(actual, pinned, withheld) == []
+    if not absent_withheld(actual, withheld):
+        assert corpus_mismatches(actual, pinned) == []
     data = json.loads(rag_common.CORPUS_PIN_PATH.read_text(encoding="utf-8"))
     assert data["digest"] == corpus_digest(pinned)
     assert data["directory"] == "data/processed"
@@ -83,3 +91,50 @@ def test_malformed_pin_files_are_rejected(tmp_path, payload):
     path.write_text(json.dumps(payload), encoding="utf-8")
     with pytest.raises(ValueError):
         load_corpus_pin(path)
+
+
+# --- withheld documents -----------------------------------------------------
+
+
+def test_the_withheld_chapter_is_listed_with_its_pinned_hash():
+    pinned = load_corpus_pin()
+    withheld = load_withheld(pinned=pinned)
+    name = "a-historical-overview-of-hip-hop-dances-johnson-imani-kai.txt"
+    assert list(withheld) == [name]
+    assert withheld[name]["raw"] == "a-historical-overview-of-hip-hop-dances-johnson-imani-kai.pdf"
+    assert withheld[name]["sha256"] == pinned[name]
+    assert "data/SOURCES.md" in withheld[name]["reason"]
+    assert rag_common.WITHHELD_PATH == rag_common.ROOT / "experiments" / "withheld.json"
+
+
+def test_an_absent_withheld_file_is_not_a_mismatch_but_an_altered_copy_is():
+    pinned = {"a.txt": "1", "w.txt": "2"}
+    assert corpus_mismatches({"a.txt": "1"}, pinned, ["w.txt"]) == []
+    assert absent_withheld({"a.txt": "1"}, ["w.txt"]) == ["w.txt"]
+    assert corpus_mismatches({"a.txt": "1", "w.txt": "2"}, pinned, ["w.txt"]) == []
+    assert corpus_mismatches({"a.txt": "1", "w.txt": "own copy"}, pinned, ["w.txt"]) == ["w.txt"]
+    # 其他檔案的嚴格度不變：非 withheld 的缺檔仍是不一致
+    assert corpus_mismatches({"w.txt": "2"}, pinned, ["w.txt"]) == ["a.txt"]
+    assert corpus_mismatches({"a.txt": "1"}, pinned) == ["w.txt"]
+
+
+def test_pin_status_never_reports_a_corpus_with_withheld_gaps_as_the_pinned_one():
+    assert pin_status([]) is True
+    assert pin_status(["w.txt"]) == "withheld:1"
+    assert pin_status(["w.txt", "v.txt", "w.txt"]) == "withheld:2"
+
+
+@pytest.mark.parametrize(
+    ("entry", "match"),
+    [
+        ({"raw": "w.pdf", "processed": "w.txt", "sha256": "1" * 64}, "reason"),
+        ({"raw": "w.pdf", "processed": "other.txt", "sha256": "1" * 64, "reason": "x"}, "processed"),
+        ({"raw": "../w.pdf", "processed": "w.txt", "sha256": "1" * 64, "reason": "x"}, "processed"),
+        ({"raw": "w.pdf", "processed": "w.txt", "sha256": "0" * 64, "reason": "x"}, "corpus_pin"),
+    ],
+)
+def test_malformed_withheld_files_are_rejected(tmp_path, entry, match):
+    path = tmp_path / "withheld.json"
+    path.write_text(json.dumps({"documents": [entry]}), encoding="utf-8")
+    with pytest.raises(ValueError, match=match):
+        load_withheld(path, pinned={"w.txt": "1" * 64})

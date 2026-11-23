@@ -22,17 +22,19 @@
 |------|------|------|
 | Markdown（`.md`）| 39 份 | Wikipedia 條目、舞蹈資訊網站、賽事官網、社群文章、個人筆記 |
 | 純文字（`.txt`）| 1 份 | 個人整理的 Popping 術語摘錄 |
-| PDF（`.pdf`）| 2 份 | 學術論文（Dance Studies、Hip-Hop 舞蹈史） |
-| **合計** | **42 份** | |
+| PDF（`.pdf`）| 1 份 | 學術論文（Dance Studies） |
+| **合計** | **41 份** | |
 
-其中三份個人整理的中文筆記（`popping_glossary.md`、`popping_history_timeline.md`、`popping_style_taxonomy.md`）是在第一輪實驗（2026 年 4 月）之後才加入的，所以第一輪實驗的語料是 **39 份**。這一點是用重現實驗確認的：排除這三份後，今天的程式能逐筆重現第一輪全部 25 組檢索結果；納入時只有 11 組相同（見 [experiments/round1_reproduction.md](experiments/round1_reproduction.md)）。
+實驗用的語料其實是 **42 份**：另有一份 PDF 書章（Imani Kai Johnson，"A Historical Overview of Hip Hop Dances"，*The Cambridge Companion to Hip-Hop*，Cambridge University Press，2015）因著作權不隨本 repo 提供，但第一輪與第二輪實驗都用到它，鎖定指紋保留在 `experiments/withheld.json`（見第 5 節）。
+
+其中三份個人整理的中文筆記（`popping_glossary.md`、`popping_history_timeline.md`、`popping_style_taxonomy.md`）是在第一輪實驗（2026 年 4 月）之後才加入的，所以第一輪實驗的語料是 **39 份**（含上述書章）。這一點是用重現實驗確認的：排除這三份後，今天的程式能逐筆重現第一輪全部 25 組檢索結果；納入時只有 11 組相同（見 [experiments/round1_reproduction.md](experiments/round1_reproduction.md)）。
 
 資料涵蓋：Popping 起源（1970s Fresno）、各技術流派、重要人物傳記、賽事規則（HHI、Juste Debout、Red Bull Dance Your Style）、組織介紹（Infinite Force、Electric Boogaloos）、Funk 音樂文化背景，以及當代舞者（Marquese Scott、Salah）的風格分析。
 
 ### RAG 系統架構與技術選型
 
 ```
-data/raw/（.md / .txt / .pdf，42 份）
+data/raw/（.md / .txt / .pdf，repo 內 41 份）
   │  extract_clean_text()      移除 HTML 標籤、壓縮多餘空白；PDF 以 pypdf 抽字
   │  chunk_text()              段落感知遞迴切割（\n\n 優先）+ overlap
   │  embed_texts()             sentence-transformers 本地 384 維向量（每個 chunk 只讀前 128 tokens）
@@ -75,7 +77,7 @@ graph LR
 ```
 .
 ├── data/
-│   ├── raw/              # 原始文件（42 份：.md / .txt / .pdf）
+│   ├── raw/              # 原始文件（41 份：.md / .txt / .pdf；另 1 份書章不隨 repo 提供）
 │   ├── processed/        # 清理後純文字（已提交；實驗以這份文字建索引）
 │   └── .ingest_manifest.json  # 增量更新 SHA-256 hash 紀錄（.gitignore 排除）
 │
@@ -107,7 +109,7 @@ graph LR
 
 **重現檢查（2026 年 11 月）**：用今天的程式與同一份 39 份語料重跑 A–E 的檢索（不呼叫 LLM），25 組檢索的 chunk、順序與距離全部與第一輪記錄一致（距離差 ≤ 0.0005）。
 
-**第二輪（2026 年 11 月）**：以 E 為對照（E′），加跑 F（Hybrid Search）與 G（Query Expansion），每組重複 3 次，主要語料為同一份 39 份（與第一輪可直接比較），另在目前的 42 份語料上各跑 3 次。回答由 gpt-4.1-mini-2025-04-14 生成。評估指標在跑第二輪之前就寫進 `experiments/gold.json` 並提交。
+**第二輪（2026 年 11 月）**：以 E 為對照（E′），加跑 F（Hybrid Search）與 G（Query Expansion），每組重複 3 次，主要語料為同一份 39 份（與第一輪可直接比較），另在當時的 42 份語料（含現已不隨 repo 提供的書章）上各跑 3 次。回答由 gpt-4.1-mini-2025-04-14 生成。評估指標在跑第二輪之前就寫進 `experiments/gold.json` 並提交。
 
 | 組合 | Chunking | top-k / max_dist | 特殊策略 | Prompt 風格 |
 |------|----------|-----------------|--------|-------------|
@@ -212,7 +214,7 @@ Popping 歷史文章中有大量「A 人物→B 事件→C 影響」的連貫敘
 | Qdrant | REST API、高效能、Docker 或 cloud | ❌ 需 Docker 且非 Python-native |
 | FAISS | 純向量索引、速度最快 | ❌ 只負責向量搜尋，持久化與 metadata（來源檔、chunk 編號）都要自己管理 |
 
-以第一輪的 39 份語料、600/100 切割，共 1,248 個 chunks（目前 42 份為 1,279 個）；在 M 系列 Mac 上單次 top-5 查詢（不含問題的 embedding）中位數延遲約 1.2 ms。增量更新時以 `where={"source_file": ...}` 刪除舊 chunks，即利用 Chroma 的 metadata filter。
+以第一輪的 39 份語料、600/100 切割，共 1,248 個 chunks（含書章的 42 份為 1,279 個）；在 M 系列 Mac 上單次 top-5 查詢（不含問題的 embedding）中位數延遲約 1.2 ms。增量更新時以 `where={"source_file": ...}` 刪除舊 chunks，即利用 Chroma 的 metadata filter。
 
 ---
 
@@ -344,7 +346,9 @@ data/.ingest_manifest.json  ← SHA-256 hash 記錄表
 
 **保證**：無論執行幾次 `python data_update.py --rebuild`，ChromaDB 與 BM25 索引的狀態都完全由 `data/raw/` 的當前內容決定，不會累積重複 chunk，也不會殘留已刪除文件的舊向量。
 
-**可重現性：** 新版 pypdf 對其中一份 PDF 的抽字結果與當初不同，所以 `--rebuild` 會改寫已提交的 `data/processed/`。要以已提交的文字建索引時，請用 `python data_update.py --rebuild --reuse-processed`（不刪除、不改寫 `data/processed/`）。實驗程式一律使用已提交的文字，並先比對 `experiments/corpus_pin.json` 中的 SHA-256。
+**可重現性：** `--rebuild` 會從 `data/raw/` 重新抽字並改寫 `data/processed/`，抽字結果可能隨 pypdf 版本改變（例如 pypdf 7.0.0 對那份不隨 repo 提供的書章 PDF，抽出的文字就與當初鎖定的不同）。要以已提交的文字建索引時，請用 `python data_update.py --rebuild --reuse-processed`（不刪除、不改寫 `data/processed/`）。實驗程式一律使用已提交的文字，並先比對 `experiments/corpus_pin.json` 中的 SHA-256。
+
+那份書章列在 `experiments/withheld.json`：本機沒有它時，比對不把它算成不一致，但 `--corpus round1` 會拒絕執行（不會默默用 38 份冒充第一輪），`rag_eval.py` 也會略過引用它的第一輪組別（B、E）並在 `metrics.md` 註明；`current` 語料照常執行，但 `run.json` 的 `matches_pin` 記為 `"withheld:1"`，不記為 `true`。**要精確重現第一輪，必須自備這份書章**：把 PDF 放在 `data/raw/`、文字放在 `data/processed/`（或執行 `python data_update.py --extract-withheld` 從 PDF 抽字），文字必須與鎖定的 SHA-256 完全相同才會被接受。`experiments/` 中已提交的實驗輸出都是在有這份書章時產生的，沒有改動。
 
 ---
 
@@ -378,7 +382,7 @@ DEFAULT_QUESTIONS = [
 1. **問題對應章節**：每個問題的檢索結果直接對應 skill.md 的一個必要章節（`## Core Concepts`、`## Key Trends` 等），LLM 只需「填空」而非從無到有。這樣的設計讓輸出格式高度穩定。
 2. **人物與組織分開**：Popping 世界有大量人名（Boogaloo Sam、Popin' Pete）和組織名（Electric Boogaloos、Infinite Force），合在一題容易稀釋；分開兩題讓 LLM 有更充分的素材。
 3. **Example Q&A 前置驗證**：第 6 個問題直接要求 5 組問答，相當於對知識庫做了即時品質驗證——如果 RAG 找不到答案，LLM 會在 Q&A 中標注「資料未涵蓋」，讓使用者能清楚看到知識庫的實際覆蓋範圍。
-4. **Source References 確定性生成**：最後一章節（`## Source References`）不依賴 LLM，而是直接掃描 `data/raw/` 目錄，確定性地列出所有 42 份文件，消除 LLM 可能遺漏來源的幻覺風險。
+4. **Source References 確定性生成**：最後一章節（`## Source References`）不依賴 LLM，而是直接掃描 `data/raw/` 目錄，確定性地列出其中的所有文件，消除 LLM 可能遺漏來源的幻覺風險。
 
 8 次 RAG 查詢結果（top-k=8，比原本的 5 更多素材）統一送入 LiteLLM，強制按照規範格式輸出完整的 skill.md。
 
@@ -461,7 +465,7 @@ cp .env.example .env
 #   (B) 供應商金鑰：OPENAI_API_KEY + LITELLM_MODEL=gpt-4.1-mini，
 #       或 GEMINI_API_KEY + LITELLM_MODEL=gemini/gemini-2.5-flash
 
-# ⑤ 全量重建索引（處理 42 份原始文件，向量與 BM25 索引寫入 ./chroma_db/）
+# ⑤ 全量重建索引（處理 repo 內 41 份原始文件，向量與 BM25 索引寫入 ./chroma_db/）
 python data_update.py --rebuild --reuse-processed
 
 # ⑥ 測試 RAG 問答
@@ -479,6 +483,7 @@ python -m pytest
 
 ```bash
 # 重現第一輪的檢索（39 份語料，不呼叫 LLM），並與第一輪記錄逐筆比對
+# 需要自備不隨 repo 提供的書章（見 experiments/withheld.json）；沒有時 --corpus round1 會拒絕執行
 python experiment_runner.py --combos a b c d e --corpus round1 --retrieval-only --out experiments/round1_reproduction_run
 python rag_eval.py --check-reproduction experiments/round1_reproduction_run
 
@@ -536,11 +541,13 @@ python data_update.py --rebuild
 | 舞蹈文章與部落格（STEEZY、Dance Origin、Tropics of Meta、Fresno State News、Dance Consortium、Panic 39、societydance、Korean Culture 專欄、r/FunkStyle 討論串等） | Markdown | 公開網頁，教育用途非商業引用 | 13 份 |
 | 賽事頁面與規則（HHI 官方規則、Juste Debout ×2、Red Bull Dance Your Style、Popping Forever、EVERYDAY POPPING） | Markdown | 公開賽事頁面 | 6 份 |
 | 組織介紹（Infinite Force、Ladies of Hip Hop、Funk in Focus） | Markdown | 公開組織頁面 | 3 份 |
-| 學術論文（Guarato "Dance Articulated"；Johnson & Imani Kai "A Historical Overview of Hip Hop Dances"） | PDF | 公開學術出版，教育引用 | 2 份 |
+| 學術論文（Guarato，*Dance Articulated*） | PDF | CC BY 4.0（論文內載明） | 1 份 |
 | 個人筆記（popping-culture-notes、popping-terminology-snippet，以及第一輪之後加入的 glossary、history timeline、style taxonomy） | Markdown／純文字 | 個人著作 | 5 份 |
-| **合計** | | | **42 份** |
+| **合計** | | | **41 份** |
 
-所有資料均為合法公開來源或個人著作，無付費牆內容。
+實驗另用到一份書章：Imani Kai Johnson，"A Historical Overview of Hip Hop Dances"，收於 *The Cambridge Companion to Hip-Hop*（Cambridge University Press，2015），檔案為作者手稿版 PDF。它沒有開放授權，著作權屬 Cambridge University Press 與作者，因此**不隨本 repo 提供**（PDF 與抽出的文字都不在 repo 內）；它的 SHA-256 保留在 `experiments/withheld.json`，讓實驗紀錄保持完整。
+
+repo 內的文件取自公開網頁、開放授權的出版品，或我本人的筆記，沒有付費牆內容。其中只有 Wikipedia 條目（CC BY-SA 4.0）與 Guarato 論文（CC BY 4.0）有允許再散布的開放授權；其他網頁沒有標示開放授權，著作權仍屬原作者，收錄於此只為讓實驗可重現，不供再利用。
 
 每份檔案的標題、作者或發布者、原始網址與授權，列在 [`data/SOURCES.md`](data/SOURCES.md)（英文）。
 

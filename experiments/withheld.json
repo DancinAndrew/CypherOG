@@ -1,0 +1,11 @@
+{
+  "_note": "Documents that were part of the pinned corpus (corpus_pin.json) and, where listed there, of the round-1 corpus (corpus_round1.json), but are not distributed in this repository. Their hashes, document lists and the recorded experiment outputs are unchanged. When a withheld file is absent, the pin checks report it as withheld instead of as a mismatch, experiment_runner.py refuses --corpus round1, and rag_eval.py leaves out the round-1 combos that need it. A copy you supply yourself must match the pinned sha256 exactly or it is refused: put the file at data/raw/<raw> and its extracted text at data/processed/<processed>, or run `python data_update.py --extract-withheld`, which extracts the text and writes it only if it matches. Note: pypdf 7.0.0 does not reproduce the pinned text of this PDF (the pinned text was committed in March 2026, extracted with the pypdf version installed then), so extraction with a current pypdf is expected to be refused.",
+  "documents": [
+    {
+      "raw": "a-historical-overview-of-hip-hop-dances-johnson-imani-kai.pdf",
+      "processed": "a-historical-overview-of-hip-hop-dances-johnson-imani-kai.txt",
+      "sha256": "f0f10919442b2c476dcab2f0365c295dfc2d52a2acff8bc7b5f1731bf783fa3a",
+      "reason": "copyrighted book chapter, not redistributed; see data/SOURCES.md"
+    }
+  ]
+}

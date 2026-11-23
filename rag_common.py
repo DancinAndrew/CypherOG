@@ -25,6 +25,8 @@ MANIFEST_PATH = ROOT / "data" / ".ingest_manifest.json"
 CORPUS_PIN_PATH = ROOT / "experiments" / "corpus_pin.json"
 # round-1 索引實際收錄的 39 份 data/raw 文件（experiment_runner --corpus round1 使用）
 CORPUS_ROUND1_PATH = ROOT / "experiments" / "corpus_round1.json"
+# 有鎖定指紋、但因著作權不隨 repo 散布的文件（缺檔時視為 withheld，不視為不一致）
+WITHHELD_PATH = ROOT / "experiments" / "withheld.json"
 
 # 找不到或無法使用索引時的建議指令（不建議會改寫已提交 data/processed 的指令）
 REBUILD_HINT = (
@@ -133,9 +135,60 @@ def load_corpus_pin(path: Path | None = None) -> dict[str, str]:
     return dict(files)
 
 
-def corpus_mismatches(actual: Mapping[str, str], pinned: Mapping[str, str]) -> list[str]:
-    """回傳缺少、多出或內容不同的檔名（排序後）；空 list 代表與鎖定版本完全一致。"""
-    return sorted(name for name in set(actual) | set(pinned) if actual.get(name) != pinned.get(name))
+def corpus_mismatches(
+    actual: Mapping[str, str], pinned: Mapping[str, str], withheld: Iterable[str] = ()
+) -> list[str]:
+    """回傳缺少、多出或內容不同的檔名（排序後）；空 list 代表與鎖定版本一致。
+
+    withheld：不隨 repo 散布的 processed 檔名（experiments/withheld.json）。這些檔案「缺少」不算不一致
+    （請另用 absent_withheld 回報）；存在時仍須與鎖定指紋完全相同。
+    """
+    excused = set(absent_withheld(actual, withheld))
+    return sorted(
+        name
+        for name in set(actual) | set(pinned)
+        if actual.get(name) != pinned.get(name) and name not in excused
+    )
+
+
+def absent_withheld(actual: Iterable[str], withheld: Iterable[str]) -> list[str]:
+    """withheld 中不在 actual（檔名集合，或以檔名為鍵的 dict）裡的檔名，排序後回傳。"""
+    return sorted(set(withheld) - set(actual))
+
+
+def pin_status(absent: Iterable[str]) -> bool | str:
+    """run.json 的 matches_pin：所選文字都與鎖定指紋相同時為 True；另有 N 份 withheld 文件不在本機時
+    為 "withheld:N"，表示語料比鎖定版本少這幾份，不可當成完整的鎖定語料。"""
+    n = len(set(absent))
+    return True if n == 0 else f"withheld:{n}"
+
+
+def load_withheld(
+    path: Path | None = None, pinned: Mapping[str, str] | None = None
+) -> dict[str, dict[str, str]]:
+    """讀取 experiments/withheld.json，回傳 {processed 檔名: {"raw", "processed", "sha256", "reason"}}（新物件）。
+
+    每筆的 processed 必須等於 processed_name_for(raw)；給 pinned 時 sha256 必須等於 corpus_pin.json 的值。
+    結構不符時拋 ValueError。
+    """
+    data = json.loads((path if path is not None else WITHHELD_PATH).read_text(encoding="utf-8"))
+    entries = data.get("documents") if isinstance(data, dict) else None
+    if not isinstance(entries, list):
+        raise ValueError("withheld.json 缺少 documents list")
+    fields = ("raw", "processed", "sha256", "reason")
+    out: dict[str, dict[str, str]] = {}
+    for entry in entries:
+        if not isinstance(entry, dict) or not all(isinstance(entry.get(k), str) and entry[k] for k in fields):
+            raise ValueError("withheld.json 的每筆都必須有非空字串 raw、processed、sha256、reason")
+        raw, processed = entry["raw"], entry["processed"]
+        if "/" in raw or "\\" in raw or processed != processed_name_for(raw):
+            raise ValueError(f"withheld.json：{processed!r} 不是 data/raw 檔名 {raw!r} 對應的 processed 檔名")
+        if processed in out:
+            raise ValueError(f"withheld.json 重複列出 {processed!r}")
+        if pinned is not None and pinned.get(processed) != entry["sha256"]:
+            raise ValueError(f"withheld.json 的 {processed!r} 與 corpus_pin.json 的鎖定指紋不同")
+        out[processed] = {k: entry[k] for k in fields}
+    return out
 
 
 # ---------------------------------------------------------------------------

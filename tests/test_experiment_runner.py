@@ -8,12 +8,75 @@ from types import SimpleNamespace
 
 import pytest
 
+import data_update
 import experiment_runner as er
+import rag_common
 import rag_eval
 import rag_query
-from rag_common import document_list_digest, load_corpus_definition, load_corpus_pin, pinned_digest_for
+from rag_common import (
+    DATA_PROCESSED,
+    DATA_RAW,
+    document_list_digest,
+    load_corpus_definition,
+    load_corpus_pin,
+    load_withheld,
+    pinned_digest_for,
+)
 
 ROUND1_DOCS = load_corpus_definition()["documents"]
+
+# 不隨 repo 散布的文件（experiments/withheld.json）；公開 repo 中不存在，讀者可自備副本
+WITHHELD = load_withheld(pinned=load_corpus_pin())
+WITHHELD_RAW = sorted(entry["raw"] for entry in WITHHELD.values())
+CHAPTER_RAW = WITHHELD_RAW[0]
+CHAPTER_TXT = rag_common.processed_name_for(CHAPTER_RAW)
+
+
+def _absent_withheld() -> list[str]:
+    """本機 data/raw 或 data/processed 缺少的 withheld 文件（processed 檔名）。"""
+    return sorted(
+        name for name, entry in WITHHELD.items()
+        if not (DATA_RAW / entry["raw"]).is_file() or not (DATA_PROCESSED / name).is_file()
+    )
+
+
+@pytest.fixture(autouse=True)
+def reader_copy_of_withheld(monkeypatch):
+    """多數測試驗證的是完整鎖定語料下的行為，與 withheld 文件是否在本機無關：缺檔時（公開 repo），
+    假裝讀者已放入與鎖定指紋相同的副本（只改 experiment_runner 看到的檔案清單與指紋）。檔案在本機時不做事。
+    缺檔本身的行為由使用 without_withheld 的測試另外驗證。"""
+    absent = _absent_withheld()
+    if not absent:
+        return
+    pinned = load_corpus_pin()
+    raw_names = {WITHHELD[name]["raw"] for name in absent}
+    monkeypatch.setattr(
+        er,
+        "list_raw_documents",
+        lambda: sorted({*data_update.list_raw_documents(), *(DATA_RAW / n for n in raw_names)}),
+    )
+    monkeypatch.setattr(
+        er,
+        "processed_corpus_hashes",
+        lambda processed_dir=None: dict(
+            sorted({**rag_common.processed_corpus_hashes(processed_dir), **{n: pinned[n] for n in absent}}.items())
+        ),
+    )
+
+
+@pytest.fixture
+def without_withheld(monkeypatch):
+    """公開 repo 的狀態：withheld 文件不在 data/raw 與 data/processed（檔案在本機時也照樣隱藏）。"""
+    monkeypatch.setattr(
+        er, "list_raw_documents", lambda: [p for p in data_update.list_raw_documents() if p.name not in WITHHELD_RAW]
+    )
+    monkeypatch.setattr(
+        er,
+        "processed_corpus_hashes",
+        lambda processed_dir=None: {
+            k: v for k, v in rag_common.processed_corpus_hashes(processed_dir).items() if k not in WITHHELD
+        },
+    )
 
 CITE_KEYS = {
     "chunk_id",
@@ -947,3 +1010,64 @@ def test_skip_rebuild_fingerprints_only_the_selected_documents(tmp_path, monkeyp
         retrieval_only=True, environment=FAKE_ENV, corpus=corpus,
     )
     assert info["corpus_sha256"] == pinned_digest_for(ROUND1_DOCS, load_corpus_pin())
+
+
+# --- withheld documents (experiments/withheld.json) ---------------------------
+
+
+def test_round1_refuses_to_run_without_the_withheld_chapter(tmp_path, monkeypatch, capsys, without_withheld):
+    monkeypatch.setattr(er, "run_combo", lambda *a, **k: pytest.fail("no combo may run"))
+
+    with pytest.raises(ValueError, match=CHAPTER_RAW):
+        er.load_corpus_selection("round1")
+    assert er.main(["--combos", "e", "--corpus", "round1", "--out", str(tmp_path)]) == 2
+
+    err = capsys.readouterr().err
+    assert CHAPTER_RAW in err
+    assert "data/raw/" in err and "experiments/withheld.json" in err
+    assert "--extract-withheld" in err
+    assert "--corpus current" in err
+    assert not (tmp_path / "run.json").exists()
+
+
+def test_current_corpus_without_the_withheld_chapter_is_not_recorded_as_the_pinned_corpus(
+    tmp_path, monkeypatch, capsys, without_withheld
+):
+    monkeypatch.setattr(er, "run_combo", recording_run_combo([]))
+
+    assert er.main(["--combos", "e", "--corpus", "current", "--out", str(tmp_path)]) == 0
+
+    corpus = json.loads((tmp_path / "run.json").read_text(encoding="utf-8"))["corpus"]
+    assert corpus["document_count"] == 41
+    assert CHAPTER_RAW not in corpus["documents"]
+    assert corpus["matches_pin"] == "withheld:1"
+    assert corpus["withheld_absent"] == [CHAPTER_RAW]
+    assert corpus["processed_digest"] != load_corpus_pin_digest()
+    assert CHAPTER_RAW in capsys.readouterr().err
+
+
+def load_corpus_pin_digest() -> str:
+    return json.loads(er.CORPUS_PIN_PATH.read_text(encoding="utf-8"))["digest"]
+
+
+def test_the_full_current_corpus_matches_the_recorded_pin_digest(tmp_path, monkeypatch):
+    """withheld 文件在（或讀者自備相同副本）時，42 份的指紋必須等於已記錄的鎖定 digest。"""
+    monkeypatch.setattr(er, "run_combo", recording_run_combo([]))
+    assert er.main(["--combos", "e", "--corpus", "current", "--out", str(tmp_path)]) == 0
+    corpus = json.loads((tmp_path / "run.json").read_text(encoding="utf-8"))["corpus"]
+    assert corpus["matches_pin"] is True
+    assert "withheld_absent" not in corpus
+    assert corpus["processed_digest"] == load_corpus_pin_digest()
+
+
+@pytest.mark.parametrize("corpus", ("round1", "current"))
+def test_a_supplied_copy_that_differs_from_the_pin_is_refused(tmp_path, monkeypatch, capsys, corpus):
+    altered = {**er.processed_corpus_hashes(), CHAPTER_TXT: "0" * 64}
+    monkeypatch.setattr(er, "processed_corpus_hashes", lambda processed_dir=None: dict(altered))
+    monkeypatch.setattr(er, "run_combo", lambda *a, **k: pytest.fail("no combo may run"))
+
+    assert er.main(["--combos", "e", "--corpus", corpus, "--out", str(tmp_path)]) == 2
+    err = capsys.readouterr().err
+    assert CHAPTER_TXT in err
+    assert "--extract-withheld" in err
+    assert not (tmp_path / "run.json").exists()

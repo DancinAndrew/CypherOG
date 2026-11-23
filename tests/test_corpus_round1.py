@@ -15,6 +15,7 @@ from rag_common import (
     document_list_digest,
     load_corpus_definition,
     load_corpus_pin,
+    load_withheld,
     pinned_digest_for,
     processed_name_for,
 )
@@ -32,7 +33,9 @@ def supported_raw_files() -> set[str]:
 
 def test_round1_corpus_is_every_raw_file_minus_the_three_structured_notes():
     definition = load_corpus_definition(CORPUS_ROUND1_PATH)
-    raw = supported_raw_files()
+    # withheld 文件（experiments/withheld.json）屬於 round-1 語料，但不隨 repo 散布，可能不在 data/raw
+    withheld_raw = {entry["raw"] for entry in load_withheld().values()}
+    raw = supported_raw_files() | withheld_raw
 
     assert definition["name"] == "round1"
     assert set(STRUCTURED_NOTES) <= raw

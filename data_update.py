@@ -4,6 +4,8 @@
 支援 --rebuild 全量重建與增量更新（檔案 hash）；兩者結束時 BM25 索引都會與向量庫同步。
 --rebuild 會從 data/raw 重新抽取並改寫已提交的 data/processed；加 --reuse-processed 則直接以
 data/processed 的文字建索引，不改動 data/（與實驗及 experiments/corpus_pin.json 使用同一份文字）。
+--extract-withheld 只處理 experiments/withheld.json 列出、不隨 repo 散布的文件：把你放在 data/raw 的副本
+抽成文字，與鎖定的 sha256 相同才寫入 data/processed（不建索引、不動其他檔案）。
 """
 
 from __future__ import annotations
@@ -14,7 +16,7 @@ import json
 import re
 import shutil
 import sys
-from collections.abc import Callable, Collection
+from collections.abc import Callable, Collection, Mapping
 from pathlib import Path
 
 from rag_common import (
@@ -24,6 +26,8 @@ from rag_common import (
     DATA_RAW,
     MANIFEST_PATH,
     describe_exception,
+    load_corpus_pin,
+    load_withheld,
     embed_texts,
     get_chroma_collection,
     refresh_bm25_index,
@@ -375,6 +379,38 @@ def incremental_update(
     refresh_bm25_index(collection_name)
 
 
+def extract_withheld(withheld: Mapping[str, Mapping[str, str]] | None = None) -> dict[str, str]:
+    """為 withheld 文件（預設讀 experiments/withheld.json）從 data/raw 的自備副本產生 data/processed 文字。
+
+    回傳 {processed 檔名: 狀態}，狀態為 "not supplied"（data/raw 沒有副本）、"already present"
+    （data/processed 已有相同文字）或 "written"。抽出的文字與鎖定的 sha256 不同、或 data/processed 已有
+    不同的文字時拋 ValueError，且不寫入任何檔案。
+    """
+    entries = withheld if withheld is not None else load_withheld(pinned=load_corpus_pin())
+    status: dict[str, str] = {}
+    for name, entry in sorted(entries.items()):
+        raw = DATA_RAW / entry["raw"]
+        if not raw.is_file():
+            status[name] = "not supplied"
+            continue
+        out = _processed_path_for(raw)
+        if out.is_file():
+            if _sha256_file(out) != entry["sha256"]:
+                raise ValueError(f"data/processed/{name} 已存在但與鎖定的 sha256 不同；請先移除它再重試")
+            status[name] = "already present"
+            continue
+        text = extract_clean_text(raw)
+        if text_sha256(text) != entry["sha256"]:
+            raise ValueError(
+                f"{entry['raw']} 抽出的文字與鎖定的 sha256 不同（副本版本不同，或 pypdf 抽字結果改變）；"
+                "未寫入 data/processed，實驗也會拒絕使用它"
+            )
+        DATA_PROCESSED.mkdir(parents=True, exist_ok=True)
+        out.write_text(text, encoding="utf-8")
+        status[name] = "written"
+    return status
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description="從 data/raw 清理、chunk、embedding 並寫入 Chroma（可 --rebuild 全量重建）",
@@ -389,7 +425,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="搭配 --rebuild：以已提交的 data/processed 文字建索引，不刪除、不改寫 data/processed 與 manifest",
     )
+    p.add_argument(
+        "--extract-withheld",
+        action="store_true",
+        help="只為 experiments/withheld.json 的文件，從 data/raw 的自備副本寫出 data/processed 文字"
+        "（須與鎖定的 sha256 相同；不建索引）",
+    )
     args = p.parse_args(argv)
+    if args.extract_withheld and (args.rebuild or args.reuse_processed):
+        p.error("--extract-withheld 不能搭配 --rebuild 或 --reuse-processed")
     if args.reuse_processed and not args.rebuild:
         p.error("--reuse-processed 只能搭配 --rebuild 使用")
     return args
@@ -397,6 +441,15 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    if args.extract_withheld:
+        try:
+            status = extract_withheld()
+        except (OSError, ValueError) as e:
+            print(f"[data_update] 錯誤（{describe_exception(e)}）", file=sys.stderr)
+            return 1
+        for name, state in status.items():
+            print(f"{name}: {state}")
+        return 0
     try:
         if args.rebuild:
             rebuild_processed_and_index(reuse_processed=args.reuse_processed)

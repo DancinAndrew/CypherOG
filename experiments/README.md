@@ -9,6 +9,7 @@ Retrieval setups for CypherOG compared on five fixed questions (`QUESTIONS` in `
 | `combo_a/` … `combo_e/`, `summary.md` | **Round 1** (April 2026): the original outputs for setups A–E, kept unchanged as the record. `experiment_runner.py` refuses to write here. |
 | `corpus_round1.json` | The 39 documents the round-1 index contained, with the evidence (below). |
 | `corpus_pin.json` | SHA-256 of every committed `data/processed` text; experiments refuse to run if the text changed. |
+| `withheld.json` | Documents in the pin that this repository does not distribute: one copyrighted book chapter (Cambridge University Press), which round 1 and round 2 both used. Its pinned SHA-256 is kept; an absent copy is reported as withheld, not as a mismatch, and a copy you supply must match the hash. |
 | `round1_reproduction_run/`, `round1_reproduction.md` | Round-1 retrieval re-run with today's code (no LLM) and compared cell by cell with the recorded files: **25/25 match**. |
 | `gold.json` | The **pre-registered** metric definitions (member aliases for Q2, Juste Debout fact groups for Q4), committed before any round-2 run. |
 | `round2/<corpus>_corpus/run<N>/` | **Round 2** (November 2026): E′ (control), F (hybrid), G (query expansion), three runs on each corpus. `round2/environment.txt` lists the package versions. |
@@ -30,7 +31,7 @@ D differs from A in five settings at once (chunker, chunk size, top-k, cutoff, p
 
 ## How round 1 was pinned down
 
-The repository holds 42 documents, but round 1 indexed 39. Rebuilding round-1 retrieval without `popping_glossary.md`, `popping_history_timeline.md` and `popping_style_taxonomy.md` reproduces all 25 recorded retrievals (same chunks, same order, distances within 0.0005). With all 42 documents only 11 of 25 match, and every mismatch is exactly those three documents' chunks being inserted with nothing else changed, which rules out approximate-search noise. `rag_eval.py --check-reproduction` performs this comparison.
+The experiments used 42 documents (41 are in this repository; see `withheld.json`), but round 1 indexed 39. Rebuilding round-1 retrieval without `popping_glossary.md`, `popping_history_timeline.md` and `popping_style_taxonomy.md` reproduces all 25 recorded retrievals (same chunks, same order, distances within 0.0005). With all 42 documents only 11 of 25 match, and every mismatch is exactly those three documents' chunks being inserted with nothing else changed, which rules out approximate-search noise. `rag_eval.py --check-reproduction` performs this comparison.
 
 ## Metrics (pre-registered)
 
@@ -77,6 +78,8 @@ The default therefore stays E (dense, chain-of-thought); hybrid retrieval and qu
 - Round-1 E and round-2 E′ differ in the answering model, so compare F and G with E′, not with round 1.
 
 ## Reproduce
+
+Everything in this folder was produced with the withheld chapter present, and none of it changes. Without the chapter, `experiment_runner.py --corpus round1` refuses to run (it never relabels 38 documents as round 1), `rag_eval.py` scores round 1 without B and E (the two setups whose recorded Q4 cites it) and says so in `metrics.md`, and a `current` run records `"matches_pin": "withheld:1"` instead of `true`. Exact round-1 reproduction requires supplying the chapter: put the PDF in `data/raw/` and its text in `data/processed/` (or run `python data_update.py --extract-withheld`); runs accept the text only if it matches the pinned SHA-256. pypdf 7.0.0 does not reproduce the pinned text from the PDF, so a fresh extraction is expected to be refused.
 
 ```bash
 # Round-1 retrieval, no LLM; then compare with the recorded files
