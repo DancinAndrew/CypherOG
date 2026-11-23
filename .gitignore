@@ -6,4 +6,10 @@ __pycache__/
 *.py[cod]
 .env
 .DS_Store
-docs/
+docs/.pytest_cache/
+
+# Local agent tooling and generated output, kept out of the public repo
+.cursor/
+.claude/
+AGENTS.md
+skill.md
