@@ -542,6 +542,8 @@ python data_update.py --rebuild
 
 所有資料均為合法公開來源或個人著作，無付費牆內容。
 
+每份檔案的標題、作者或發布者、原始網址與授權，列在 [`data/SOURCES.md`](data/SOURCES.md)（英文）。
+
 ---
 
 ## 6. 系統限制與未來改進

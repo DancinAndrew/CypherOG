@@ -87,7 +87,7 @@ python rag_eval.py --check-reproduction experiments/round1_reproduction_run
 | `skill_builder.py` | Summarizes the knowledge base into an agent skill file through fixed questions |
 | `experiment_runner.py`, `rag_eval.py` | Rebuild each setup, run the five questions, score with pre-registered metrics |
 | `experiments/` | April outputs (`combo_a`–`combo_e`), reproduction check, November runs (`round2/`), metrics |
-| `data/raw`, `data/processed` | Source documents and their cleaned text (sources and licences in the [Chinese README](README.zh-TW.md#5-資料來源聲明data-sources-statement)) |
+| `data/raw`, `data/processed` | Source documents and their cleaned text (per-file sources, URLs and licences in [`data/SOURCES.md`](data/SOURCES.md); category summary in the [Chinese README](README.zh-TW.md#5-資料來源聲明data-sources-statement)) |
 | `tests/` | pytest suite (chunking, fusion, BM25, experiments, evaluation) |
 
 **Role:** individual project. I built the ingestion pipeline, retrieval and prompts. The November 2026 extension (retrieval fixes, tests, the evaluation harness and the follow-up experiments) was built with an AI coding agent (Claude Code) under my direction.
