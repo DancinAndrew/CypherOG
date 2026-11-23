@@ -15,7 +15,7 @@ Course assignment for *Generative AI Application Systems and Engineering* (indiv
 ## Pipeline
 
 ```mermaid
-flowchart LR
+flowchart TD
     R["data/raw<br/>42 docs: .md, .txt, .pdf"] --> C["Clean + chunk<br/>600 chars, paragraph-aware,<br/>100 overlap"]
     C --> E["Local embeddings<br/>multilingual MiniLM<br/>(sentence-transformers)"]
     E --> V[("ChromaDB<br/>cosine")]
